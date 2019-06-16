@@ -1,0 +1,28 @@
+body,html {
+  height: 100%;
+}
+body:before {
+  content: '';
+  display: block;
+  position: absolute;
+  /* background-image: url("https://images.wallpaperscraft.com/image/sea_surf_sunset_stones_100380_3840x2160.jpg");
+  background-attachment: fixed;
+  background-size: cover; */
+  filter: brightness(0.7);
+  -webkit-filter: brightness(0.7);
+  -moz-filter: brightness(0.7);
+  width: 100%;
+  height: 100%;
+}
+.login-form {
+  position: relative;
+  background: rgba(255,255,255,0.4);
+  width: 500px;
+  margin: 0 auto;
+  padding: 20px 30px 20px 30px;
+}
+@media all and (max-width: 600px) {
+  .login-form {
+    width: 80%;
+  }
+}
