@@ -11,14 +11,9 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.jsx?/,
         exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: ['env', 'react']
-          }
-        }
+        use: ["babel-loader"]
       },
       {
         test: /\.css$/,
@@ -26,10 +21,18 @@ module.exports = {
       }
     ]
   },
+  devServer: {
+    historyApiFallback: true
+  },
   plugins: [
     new webpack.ProvidePlugin({
       $: "jquery",
       jQuery: "jquery"
-    })
+    }),
+    new webpack.DefinePlugin({
+      'process.env': {
+          NODE_ENV: JSON.stringify('development')
+      }
+  })
   ]
 }

@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import "./login.css";
+import Navigation from './../Navigation/navigation.jsx';
 import $ from 'jquery';
 import {
   Form,
   FormGroup,
   Input,
   Label,
-  Button
+  Button,
+  Col
 } from 'reactstrap';
 
 class Login extends Component {
@@ -38,6 +40,7 @@ class Login extends Component {
   render() {
     return (
       <div className = "Login">
+        <Navigation />
         <div className = "login-form mt-5">
           <h2 className = "mb-5 text-center">Login</h2>
           <Form>

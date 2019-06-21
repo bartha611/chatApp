@@ -1,13 +1,13 @@
 body,html {
   height: 100%;
 }
-body:before {
+.Login:before {
   content: '';
   display: block;
   position: absolute;
-  /* background-image: url("https://images.wallpaperscraft.com/image/sea_surf_sunset_stones_100380_3840x2160.jpg");
+  background-image: url("https://images.wallpaperscraft.com/image/sea_surf_sunset_stones_100380_3840x2160.jpg");
   background-attachment: fixed;
-  background-size: cover; */
+  background-size: cover;
   filter: brightness(0.7);
   -webkit-filter: brightness(0.7);
   -moz-filter: brightness(0.7);
