@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import "./login.css";
 import Navigation from './../Navigation/navigation.jsx';
-import $ from 'jquery';
+import axios from 'axios';
 import {
   Form,
   FormGroup,
@@ -20,15 +20,21 @@ class Login extends Component {
     }
     this.handleChange = this.handleChange.bind(this);
   }
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleEnter.bind(this))
+  }
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleEnter.bind(this))
+  }
   handleChange(e) {
     this.setState({
       [e.target.name]: e.target.value
-    }, () => console.log(this.state))
+    })
   }
   handleSubmit(e) {
     e.preventDefault();
     const { username, password } = this.state;
-    $.ajax({
+    axios({
       url: '/login',
       method: 'POST',
       contentType: 'application/json',
@@ -36,6 +42,11 @@ class Login extends Component {
       success: (data) => console.log(data),
       error: () => console.log("error")
     })
+  }
+  handleEnter(e) {
+    if(e.keyCode === 13) {
+      this.handleSubmit(e)
+    }
   }
   render() {
     return (
@@ -52,7 +63,7 @@ class Login extends Component {
               <Label for = "password">Password</Label>
               <Input onChange = {this.handleChange} type = "password" placeholder = "********" name = "password" />
             </FormGroup>
-            <Button onClick = {this.handleSubmit.bind(this)}>Submit</Button>
+            <Button className = "mt-4" onKeyDown = {this.handleEnter.bind(this)} tabIndex="0" color = "secondary" size="lg" block onClick = {this.handleSubmit.bind(this)}>Submit</Button>
           </Form>
         </div>
       </div>

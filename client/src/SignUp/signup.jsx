@@ -39,8 +39,8 @@ class Signup extends Component {
       <div className = "Login">
         <Container>
           <Navigation />
-          <h2 className = "mb-5">Signup</h2>
           <div className="signupForm">
+            <h2 className = "mb-5 text-center">Sign-Up</h2>
             <Form>
               <FormGroup>
                 <Label for = "username">Username</Label>
