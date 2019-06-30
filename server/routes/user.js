@@ -1,33 +1,41 @@
-const express = require('express');
+const express = require("express");
 var router = express.Router();
-const bcrypt = require('bcrypt');
-const { User } = require('./../models/users');
+const bcrypt = require("bcrypt");
+const { User } = require("./../models/users");
 
-router.post('/login', async function(req,res) {
+router.post("/login", async function(req, res) {
   const { username, password } = req.body;
+  console.log(req.body);
   try {
-    let user = await User.findOne({where: {username: username}})
+    let user = await User.findOne({ where: { username: username } });
     const match = await bcrypt.compare(password, user.password);
-    if(!match) {
-      res.send('Incorrect password')
+    if (!match) {
+      res.send("Incorrect password");
     } else {
-      res.send('User logged in!!!!!!!!!!')
+      res.send("User logged in!!!!!!!!!!");
     }
-  } catch(err) {
+  } catch (err) {
     console.log(err);
   }
 });
 
-router.post('/register', async function(req,res) {
+router.post("/register", async function(req, res) {
   const { username, password, email } = req.body;
   try {
+    const user = await User.findOne({ username: username });
+    if (user) {
+      res.send("Username already taken");
+    }
     const hash = await bcrypt.hash(password, 10);
-    const user = await User.create({username: username, password: hash, email: email});
+    const user = await User.create({
+      username: username,
+      password: hash,
+      email: email
+    });
     res.send(user);
-  } catch(e) {
+  } catch (e) {
     res.send(e);
   }
-
-})
+});
 
 module.exports = router;

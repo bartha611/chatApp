@@ -1,0 +1,60 @@
+#main {
+  display: flex;
+  position: fixed;
+  width: 100%;
+}
+#sidebar {
+  background: #4B0082;
+  height: 100vh;
+  width: 200px;
+}
+#channelTitle {
+  color: silver;
+}
+#channelList {
+  list-style-type: none;
+  color: silver;
+  padding-left: 10px;
+}
+.message {
+  width: 30%;
+  height: 40px;
+  padding: 5px 10px 5px 10px;
+  margin-top: 10px;
+  background: yellow;
+  overflow-x: auto;
+}
+#messageBox {
+  display: flex;
+  width: 100%;
+  background: black;
+  flex-direction: column;
+  overflow-y: auto;
+}
+#chat {
+  margin-right: 20px;
+  margin-left: 20px;
+  height: calc(100% - 50px);
+  overflow-y: auto;
+}
+#client {
+  margin-right: 20px;
+  margin-left: 20px;
+  margin-top: auto;
+  height: 50px;
+  
+}
+#formbox {
+  position: relative;
+}
+textarea {
+  width: 100%;
+  padding-right: 30px;
+  border: 1px solid grey;
+  border-radius: 10px;
+}
+button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
