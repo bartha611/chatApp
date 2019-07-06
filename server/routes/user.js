@@ -2,22 +2,9 @@ const express = require("express");
 var router = express.Router();
 const bcrypt = require("bcrypt");
 const { User } = require("./../models/users");
+const userController = require('./../controllers/userController');
 
-router.post("/login", async function(req, res) {
-  const { username, password } = req.body;
-  console.log(req.body);
-  try {
-    let user = await User.findOne({ where: { username: username } });
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) {
-      res.send("Incorrect password");
-    } else {
-      res.send("User logged in!!!!!!!!!!");
-    }
-  } catch (err) {
-    console.log(err);
-  }
-});
+router.post("/login", userController.login);
 
 router.post("/register", async function(req, res) {
   const { username, password, email } = req.body;

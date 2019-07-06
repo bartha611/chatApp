@@ -10,5 +10,12 @@ const channelSchema = {
   name: {
     type: Sequelize.STRING,
     allowNull: false
+  },
+  teamId: {
+    type: Sequelize.INTEGER,
+    references: 'teams',
+    referencesKey: 'id'
   }
 };
+
+

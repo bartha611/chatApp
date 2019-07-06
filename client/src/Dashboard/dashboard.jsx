@@ -17,13 +17,13 @@ class Dashboard extends Component {
       messages: []
     };
     socket.on("message", msg => {
-      console.log("hello");
       this.setState(
         {
           messages: [...this.state.messages, msg]
         },
         () => {
           console.log(this.state.messages);
+          console.log(this.state.input);
         }
       );
     });
@@ -31,9 +31,14 @@ class Dashboard extends Component {
   handleEnter(e) {
     if (e.keyCode === 13) {
       e.preventDefault();
-      this.setState({
-        messages: [...this.state.messages, this.state.input]
-      }, () => {socket.emit("input", this.state.input);})
+      this.setState(
+        {
+          messages: [...this.state.messages, this.state.input]
+        },
+        () => {
+          socket.emit("input", this.state.input);
+        }
+      );
     }
   }
   handleChange(e) {
@@ -53,7 +58,6 @@ class Dashboard extends Component {
       );
     });
     var messages = this.state.messages.map((message, index) => {
-      console.log("rendered");
       return <div className="message">{message}</div>;
     });
     return (
@@ -66,23 +70,17 @@ class Dashboard extends Component {
         </nav>
         <div id="messageBox">
           <div id="chat">{messages}</div>
-          <div id="client">
+          <div id="footer">
             <div id="formbox">
               <Form>
                 <TextArea
                   name="message"
                   id="textbox"
-                  max
                   onChange={this.handleChange.bind(this)}
                   onKeyDown={this.handleEnter.bind(this)}
                 />
               </Form>
-              <Button
-                onClick={this.handleSubmit.bind(this)}
-                className="btn btn-success"
-              >
-                Submit
-              </Button>
+              <button id = "button" onClick={this.handleSubmit.bind(this)}>Submit</button>
             </div>
           </div>
         </div>

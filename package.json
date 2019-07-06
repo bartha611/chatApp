@@ -4,7 +4,7 @@
   "description": "Chat app to communicate with workers",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "node app.js",
     "build": "webpack --watch",
     "server-dev": "nodemon app.js"
@@ -15,10 +15,17 @@
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
+    "axios-mock-adapter": "^1.17.0",
+    "babel-jest": "^24.8.0",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.0.0",
+    "enzyme-adapter-react-16": "^1.14.0",
     "html-webpack-plugin": "^3.2.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^24.8.0",
+    "jest-enzyme": "^7.0.2",
     "nodemon": "^1.19.1",
+    "react-test-renderer": "^16.8.6",
     "style-loader": "^0.23.1",
     "webpack": "^4.34.0",
     "webpack-cli": "^3.3.4"
@@ -29,6 +36,7 @@
     "body-parser": "^1.19.0",
     "bootstrap": "^4.3.1",
     "dotenv": "^8.0.0",
+    "enzyme": "^3.10.0",
     "express": "^4.17.1",
     "express-session": "^1.16.2",
     "jquery": "^3.4.1",
@@ -41,5 +49,12 @@
     "sequelize": "^5.8.12",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0"
+  },
+  "jest": {
+    "setupFilesAfterEnv": ["<rootDir>/tests/setupFile.js"],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less)$": "identity-obj-proxy"
+    }
   }
 }
