@@ -18,4 +18,13 @@ const channelSchema = {
   }
 };
 
+const Channel = sequelize.define('Channel', channelSchema);
+
+Channel.sync();
+
+
+module.exports = {
+  Channel
+}
+
 

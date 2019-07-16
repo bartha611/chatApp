@@ -5,7 +5,7 @@ import "./dashboard.css";
 import TextArea from "react-textarea-autosize";
 import $ from "jquery";
 
-let socket = io.connect("http://localhost:3000");
+let socket = io.connect("http://localhost:3000/chat");
 
 var array = ["general", "random"];
 
@@ -27,6 +27,10 @@ class Dashboard extends Component {
         }
       );
     });
+  }
+  componentDidMount() {
+    const { teamId } = this.props.match.params.teamId;
+    console.log(teamId);
   }
   handleEnter(e) {
     if (e.keyCode === 13) {

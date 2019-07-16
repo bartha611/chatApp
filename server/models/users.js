@@ -24,7 +24,7 @@ const userSchema = {
   }
 }
 
-User = sequelize.define('User', userSchema);
+const User = sequelize.define('User', userSchema);
 
 User.sync()
 

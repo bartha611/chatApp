@@ -30,7 +30,7 @@ class Login extends Component {
     const { username, password } = this.state;
     axios({
       method: 'post',
-      url: '/user/login',
+      url: 'http://localhost:3000/user/login',
       data: {username: username, password: password}
     })
     .catch(error => {

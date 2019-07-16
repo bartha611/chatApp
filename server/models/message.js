@@ -13,14 +13,18 @@ const messageSchema = {
     type: Sequelize.TEXT,
     allowNull: false,
   },
+  date: {
+    type: Sequelize.DATE,
+    default: Sequelize.NOW
+  },
   userId: {
     type: Sequelize.INTEGER,
-    references: 'user',
+    references: 'User',
     referencesKey: 'id'
   },
   channelId: {
     type: Sequelize.INTEGER,
-    references: 'channel',
+    references: 'Channel',
     referencesKey: 'id'
   }
 }

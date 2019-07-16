@@ -1,19 +1,23 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
-const userRoutes = require('./server/routes/user');
-// const dashboardRoutes = require('./server/routes/dashboard');
+const userRoutes = require('./server/routes/userRoute');
+const dashboardControlller = require('./server/controllers/dashboardController');
 
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
-io.on('connection', function(socket) {
-  console.log('hello, you are connected');
-  socket.on('input', (inputUser) => {
-    console.log(inputUser);
-    socket.broadcast.emit("message", inputUser)})
-})
+io
+.of('/chat')
+.on('connection', dashboardControlller.respond);
+
+// io.on('connection', function(socket) {
+//   console.log('hello, you are connected');
+//   socket.on('input', (inputUser) => {
+//     console.log(inputUser);
+//     socket.broadcast.emit("message", inputUser)})
+// })
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));

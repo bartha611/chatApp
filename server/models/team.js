@@ -12,6 +12,13 @@ const teamSchema = {
   name: {
     type: Sequelize.STRING,
     allowNull: false
-  },
-  
+  }
+}
+
+const Team = sequelize.define('Team', teamSchema);
+
+Team.sync();
+
+module.exports = {
+  Team
 }
