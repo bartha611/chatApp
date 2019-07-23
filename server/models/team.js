@@ -12,6 +12,10 @@ const teamSchema = {
   name: {
     type: Sequelize.STRING,
     allowNull: false
+  },
+  open: {
+    type: Sequelize.BOOLEAN,
+    allowNull: false
   }
 }
 

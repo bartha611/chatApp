@@ -9,15 +9,23 @@ const userTeamSchema = {
     primaryKey: true,
     autoIncrement: true
   },
+  admin: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: 0
+  },
   userId: {
     type: Sequelize.INTEGER,
-    referencesKey: 'id',
-    references: 'User'
+    references: {
+      model: 'Users',
+      key: 'id'
+    }
   },
   teamId: {
     type: Sequelize.INTEGER,
-    referencesKey: 'id',
-    references: 'Team'
+    references: {
+      model: 'Teams',
+      key: 'id'
+    }
   }
 }
 

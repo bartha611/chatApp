@@ -37,3 +37,4 @@ exports.register = async function(req, res) {
     return res.status(404).send("Error in creation");
   }
 };
+
