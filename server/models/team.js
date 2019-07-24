@@ -9,5 +9,20 @@ const teamSchema = {
     primaryKey: true,
     autoIncrement: true
   },
+  name: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  open: {
+    type: Sequelize.BOOLEAN,
+    allowNull: false
+  }
+}
 
+const Team = sequelize.define('Team', teamSchema);
+
+Team.sync();
+
+module.exports = {
+  Team
 }

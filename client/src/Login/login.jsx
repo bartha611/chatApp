@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./login.css";
+import $ from 'jquery';
 import Navigation from "./../Navigation/navigation.jsx";
 import axios from "axios";
 import { Form, FormGroup, Input, Label, Button, Col } from "reactstrap";
@@ -28,13 +29,13 @@ class Login extends Component {
     e.preventDefault();
     const { username, password } = this.state;
     axios({
-      url: "/login",
-      method: "POST",
-      contentType: "application/json",
-      data: JSON.stringify({ username: username, password: password }),
-      success: data => console.log(data),
-      error: () => console.log("error")
-    });
+      method: 'post',
+      url: 'http://localhost:3000/user/login',
+      data: {username: username, password: password}
+    })
+    .catch(error => {
+      console.log(error)
+    })
   }
   handleEnter(e) {
     if (e.keyCode === 13) {
@@ -51,6 +52,7 @@ class Login extends Component {
             <FormGroup>
               <Label for="username">Username</Label>
               <Input
+                id = "username"
                 onChange={this.handleChange}
                 type="text"
                 placeholder="Enter Password"
@@ -60,6 +62,7 @@ class Login extends Component {
             <FormGroup>
               <Label for="password">Password</Label>
               <Input
+                id = "password"
                 onChange={this.handleChange}
                 type="password"
                 placeholder="********"
@@ -67,6 +70,7 @@ class Login extends Component {
               />
             </FormGroup>
             <Button
+              id = "submit"
               className="mt-4"
               onKeyDown={this.handleEnter.bind(this)}
               tabIndex="0"

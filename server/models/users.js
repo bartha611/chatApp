@@ -11,11 +11,11 @@ const userSchema = {
   },
   username: {
     type: Sequelize.STRING,
-    unique: true,
     allowNull: false
   },
   email: {
     type: Sequelize.STRING,
+    unique: true,
     allowNull: false
   },
   password: {
@@ -24,7 +24,7 @@ const userSchema = {
   }
 }
 
-User = sequelize.define('User', userSchema);
+const User = sequelize.define('User', userSchema);
 
 User.sync()
 

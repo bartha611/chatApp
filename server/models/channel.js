@@ -1,4 +1,6 @@
 const Sequelize = require("sequelize");
+const dotenv = require('dotenv');
+dotenv.config();
 const sequelize = new Sequelize(process.env.DATABASE_URL);
 
 const channelSchema = {
@@ -10,5 +12,21 @@ const channelSchema = {
   name: {
     type: Sequelize.STRING,
     allowNull: false
+  },
+  teamId: {
+    type: Sequelize.INTEGER,
+    references: 'teams',
+    referencesKey: 'id'
   }
 };
+
+const Channel = sequelize.define('Channel', channelSchema);
+
+Channel.sync();
+
+
+module.exports = {
+  Channel
+}
+
+

@@ -28,7 +28,7 @@ class Navigation extends Component {
     return (
       <div>
         <Container>
-          <Navbar color = "transparent" dark expand="md">
+          <Navbar color = "dark" dark expand="md">
             <NavbarBrand href = "/">Flack</NavbarBrand>
             <NavbarToggler onClick = {this.toggle} />
             <Collapse isOpen = {this.state.isOpen} navbar>
