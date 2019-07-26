@@ -24,7 +24,7 @@ export default class Home extends Component {
               <Route exact path = "/" component = {Navigation} />
               <Route path = "/login" component={Login} />
               <Route path = "/signup" component={Signup} />
-              <Route path = "/team/:teamId" component={Dashboard} />
+              <Route path = "/dashboard" component={Dashboard} />
               <Route path = "/createTeam" component = {CreateTeam} />
               <Route path = "/addTeamMember" component = {AddTeamMembers} />
             </Switch>

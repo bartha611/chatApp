@@ -2,66 +2,24 @@ import React, { useState } from "react";
 import Navigation from "../Navigation/navigation.jsx";
 import { Input, Form, FormGroup, Button, Label, Container } from "reactstrap";
 import axios from "axios";
-
-// class CreateTeam extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       team: "",
-//       open: false
-//     };
-//   }
-//   handleSubmit() {
-//     console.log(this.state);
-//   }
-//   render() {
-//     return (
-//       <div>
-//         <Navigation />
-//         <Container className="mt-5">
-//           <Form>
-//             <FormGroup>
-//               <Input
-//                 type="text"
-//                 id="team"
-//                 placeholder="Enter Teamname"
-//                 onChange={e => {
-//                   this.setState({ team: e.target.value });
-//                 }}
-//                 name="team"
-//               />
-//             </FormGroup>
-//             <FormGroup>
-//               <Input
-//                 type="text"
-//                 id="team"
-//                 placeholder="Enter Teamname"
-//                 onChange={e => {
-//                   this.setState({ team: e.target.value });
-//                 }}
-//                 name="team"
-//               />
-//             </FormGroup>
-//             <FormGroup check>
-//               <Label check>
-//                 <Input type="checkbox" onChange={() => this.setState({open: !this.state.open})} /> CHECK
-//                 BOX IF CHANNEL IS CLOSED TO SELECT EMAILS
-//               </Label>
-//             </FormGroup>
-//             <Button block className="mt-3" id="submit" onClick={this.handleSubmit.bind(this)}>
-//               Submit
-//             </Button>
-//           </Form>
-//         </Container>
-//       </div>
-//     );
-//   }
-// }
+import { Redirect } from "react-router-dom";
 
 function CreateTeam() {
+  const [teamid, setTeamId] = useState(null);
+  const handleChange = value => {
+    setTeamId(value);
+  };
+  return ( 
+    <div>
+      {!teamid ? <Team handleChange = {handleChange} /> : <Redirect to = {{pathname: '/addTeamMember', state: {team: teamid}}} />}
+    </div>
+  );
+}
+
+function Team(props) {
   const [open, setOpen] = useState(false);
-  const [team, setTeam] = useState("");
-  const [confirmTeam, setConfirmTeam] = useState("");
+  const [team, setTeam] = useState(null);
+  const [confirmTeam, setConfirmTeam] = useState(null);
   const handleSubmit = evt => {
     evt.preventDefault();
     axios
@@ -71,7 +29,7 @@ function CreateTeam() {
       })
       .then(response => {
         if (response.status === 200) {
-          console.log(response);
+          props.handleChange(response.data.id)
         }
       })
       .catch(err => {
@@ -93,11 +51,13 @@ function CreateTeam() {
             />
           </FormGroup>
           <FormGroup>
-            <Input type = "text"
-            id = "confirmTeam"
-            placeholder = "Confirm Teamname"
-            onChange = {e => setConfirmTeam(e.target.value)}
-            name = "confirmTeam" />
+            <Input
+              type="text"
+              id="confirmTeam"
+              placeholder="Confirm Teamname"
+              onChange={e => setConfirmTeam(e.target.value)}
+              name="confirmTeam"
+            />
           </FormGroup>
           <FormGroup check>
             <Label check>
@@ -105,13 +65,19 @@ function CreateTeam() {
               IF CHANNEL IS CLOSED TO SELECT EMAILS
             </Label>
           </FormGroup>
-          <Button block className="mt-3" id="submit" onClick={handleSubmit} disabled = {confirmTeam !== team}>
+          <Button
+            block
+            className="mt-3"
+            id="submit"
+            onClick={handleSubmit}
+            disabled={confirmTeam !== team}
+          >
             Submit
           </Button>
         </Form>
       </Container>
     </div>
-  );
-}
+  )
+} 
 
 export default CreateTeam;
