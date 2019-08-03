@@ -9,6 +9,10 @@ const teamSchema = {
     primaryKey: true,
     autoIncrement: true
   },
+  teamId: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
   name: {
     type: Sequelize.STRING,
     allowNull: false

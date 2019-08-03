@@ -4,15 +4,15 @@ const { userTeam } = require('../models/userTeam');
 exports.create = async function(req,res) {
   const { team, open } = req.body;
   try {
-    const old_team = await Team.findOne({where: { name: team}});
-    if(old_team) {
+    const oldTeam = await Team.findOne({where: { name: team}});
+    if(oldTeam) {
       return res.status(404).send('Team name has already been taken');
     }
-    const new_team = await Team.create({
+    const newTeam = await Team.create({
       name: team,
       open: open
     });
-    res.status(200).send(new_team);
+    res.status(200).send(newTeam);
   } catch(err) {
     return res.status(404).send(err);
   }

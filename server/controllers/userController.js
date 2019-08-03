@@ -12,12 +12,22 @@ exports.login = async function(req, res) {
     if (!match) {
       res.send("Incorrect password");
     } else {
-      res.send("User logged in!!!!!!!!!!");
+      req.session.user = username;
+      res.status(200).send("User logged in!!!!!!!!!!");
     }
   } catch (err) {
     console.log(err);
   }
 };
+
+exports.logout = function(req,res) {
+  req.session.destroy(err => {
+    if(err) {
+      return console.log(err);
+    }
+    res.redirect('/')
+  })
+}
 
 exports.register = async function(req, res) {
   const { username, password, email } = req.body;

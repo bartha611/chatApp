@@ -5,16 +5,20 @@ const sequelize = new Sequelize(process.env.DATABASE_URL);
 
 const channelSchema = {
   id: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.STRING,
     primaryKey: true,
     autoIncrement: true
+  },
+  channelId: {
+    type: Sequelize.STRING,
+    allowNull: false
   },
   name: {
     type: Sequelize.STRING,
     allowNull: false
   },
   teamId: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.STRING,
     references: 'teams',
     referencesKey: 'id'
   }

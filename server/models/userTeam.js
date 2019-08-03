@@ -9,10 +9,6 @@ const userTeamSchema = {
     primaryKey: true,
     autoIncrement: true
   },
-  admin: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: 0
-  },
   userId: {
     type: Sequelize.INTEGER,
     references: {

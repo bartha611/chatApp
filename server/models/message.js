@@ -19,12 +19,24 @@ const messageSchema = {
   },
   userId: {
     type: Sequelize.INTEGER,
-    references: 'User',
-    referencesKey: 'id'
+    references: {
+      model: 'Users',
+      key: 'id'
+    }
   },
   channelId: {
     type: Sequelize.INTEGER,
-    references: 'Channel',
-    referencesKey: 'id'
+    references: {
+      model: 'Channels',
+      key: 'id'
+    }
   }
+}
+
+const Message = sequelize.define('Message', messageSchema);
+
+Message.sync();
+
+module.exports = {
+  Message
 }
