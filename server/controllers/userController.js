@@ -10,13 +10,13 @@ exports.login = async function(req, res) {
     }
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
-      res.send("Incorrect password");
+      res.status(404).send('incorrect password');
     } else {
       req.session.user = username;
-      res.status(200).send("User logged in!!!!!!!!!!");
+      res.status(200).send(user);
     }
   } catch (err) {
-    console.log(err);
+    return res.status(404).send(err);
   }
 };
 

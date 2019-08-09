@@ -27,7 +27,7 @@ export function useSocket() {
     return () => socket.off('message')
   }, [message])
   const sendToSocket = input => {
-    setMessage(prevState => [...prevState,]);
+    setMessage(prevState => [...prevState, input]);
     socket.emit("input", input);
   }
   return [message, sendToSocket]

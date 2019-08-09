@@ -1,19 +1,21 @@
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-const DIR_PATH = __dirname + '/client/dist';
-const webpack = require('webpack');
+var HtmlWebpackPlugin = require("html-webpack-plugin");
+const DIR_PATH = __dirname + "/client/dist";
+const webpack = require("webpack");
 
 module.exports = {
-  entry: './client/src/index.js',
+  entry: ["babel-polyfill", "./client/index.js"],
   output: {
     filename: "bundle.js",
     path: DIR_PATH
   },
+  mode: "production",
+  resolve: { extensions: [".js", ".jsx"] },
   module: {
     rules: [
       {
         test: /\.jsx?/,
         exclude: /node_modules/,
-        use: ["babel-loader"]
+        use: ["babel-loader", "eslint-loader"]
       },
       {
         test: /\.css$/,
@@ -30,9 +32,9 @@ module.exports = {
       jQuery: "jquery"
     }),
     new webpack.DefinePlugin({
-      'process.env': {
-          NODE_ENV: JSON.stringify('development')
+      "process.env": {
+        NODE_ENV: JSON.stringify("development")
       }
-  })
+    })
   ]
-}
+};

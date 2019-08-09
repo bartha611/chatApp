@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from 'react-redux';
 import io from "socket.io-client";
 import { Form } from "reactstrap";
 import "./dashboard.css";
@@ -9,6 +10,7 @@ var array = ["general", "random"];
 
 function Dashboard(props) {
   const [input, setInput] = useState("");
+  const dispatch = useDispatch();
   const [message, sendToSocket] = useSocket();
   return (
     <div id="main">

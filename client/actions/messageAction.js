@@ -1,0 +1,18 @@
+import Axios from "axios";
+
+export function fetchMessages(channelId, userId) {
+  return async dispatch => {
+    dispatch({ type: 'FETCH_MESSAGES_BEGIN'});
+    try {
+      const response = await Axios.get('http:localhost:3000/messages', {
+        channelId: channelId,
+        userId: userId
+      })
+      dispatch({type: 'FETCH_MESSAGES_END', payload: response.data });
+      return response;
+    } catch(err) {
+      dispatch({ type: 'FETCH_MESSAGES_FAILURE'});
+      return err;
+    }
+  }
+}

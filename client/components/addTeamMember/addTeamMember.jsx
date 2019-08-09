@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import axios from "axios";
-import useFetch from "./../Hooks.js";
 import { Input, Form, FormGroup, Button, Alert, Container } from "reactstrap";
+import { useFetch } from "../Hooks.js";
 
 export default function AddTeamMembers() {
   const [email, setEmail] = useState("");
-  const [response,sendData] = useFetch('/userTeam/create', email)
+  const [response, sendData] = useFetch("/userTeam/create", email);
   return (
     <div>
       <Container>
@@ -19,11 +18,15 @@ export default function AddTeamMembers() {
               name="email1"
             />
           </FormGroup>
-          <Button onClick = {() => {sendData()}}>
+          <Button
+            onClick={() => {
+              sendData();
+            }}
+          >
             Submit
           </Button>
         </Form>
-        {response.error && <Alert color = "danger">{response.error}</Alert>}
+        {response.error && <Alert color="danger">{response.error}</Alert>}
       </Container>
     </div>
   );

@@ -1,90 +1,84 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import "./login.css";
-import $ from 'jquery';
-import Navigation from "./../Navigation/navigation.jsx";
-import axios from "axios";
-import { Form, FormGroup, Input, Label, Button, Col } from "reactstrap";
+import { Form, FormGroup, Input, Label, Button, Alert} from "reactstrap";
+import { fetchUser } from "../../actions/userAction"
+import Navigation from "../Navigation/navigation";
 
-class Login extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: "",
-      password: ""
-    };
-    this.handleChange = this.handleChange.bind(this);
-  }
-  componentDidMount() {
-    document.addEventListener("keydown", this.handleEnter.bind(this));
-  }
-  componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleEnter.bind(this));
-  }
-  handleChange(e) {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-  }
-  handleSubmit(e) {
-    e.preventDefault();
-    const { username, password } = this.state;
-    axios({
-      method: 'post',
-      url: 'http://localhost:3000/user/login',
-      data: {username: username, password: password}
-    })
-    .catch(error => {
-      console.log(error)
-    })
-  }
-  handleEnter(e) {
-    if (e.keyCode === 13) {
-      this.handleSubmit(e);
+
+function Login(props) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const user = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    console.log(user);
+    if(user.user) {
+      props.history.push('/')
     }
-  }
-  render() {
-    return (
-      <div className="Login">
-        <Navigation />
-        <div className="login-form mt-5">
-          <h2 className="mb-5 text-center">Login</h2>
-          <Form>
-            <FormGroup>
-              <Label for="username">Username</Label>
-              <Input
-                id = "username"
-                onChange={this.handleChange}
-                type="text"
-                placeholder="Enter Password"
-                name="username"
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label for="password">Password</Label>
-              <Input
-                id = "password"
-                onChange={this.handleChange}
-                type="password"
-                placeholder="********"
-                name="password"
-              />
-            </FormGroup>
-            <Button
-              id = "submit"
-              className="mt-4"
-              onKeyDown={this.handleEnter.bind(this)}
-              tabIndex="0"
-              color="secondary"
-              size="lg"
-              block
-              onClick={this.handleSubmit.bind(this)}
-            >
-              Submit
-            </Button>
-          </Form>
-        </div>
+  }, [user]);
+  const handleSubmit = () => {
+    dispatch(fetchUser(username,password, "login"));
+  };
+  return (
+    <div className="Login">
+      <Navigation />
+      <div className="login-form mt-5">
+        <h2 className="mb-5 text-center">Login</h2>
+        <Form method="post">
+          <FormGroup>
+            <Label for="username">Username</Label>
+            <Input
+              id="username"
+              onChange={e => {
+                setUsername(e.target.value);
+              }}
+              type="text"
+              placeholder="Enter Password"
+              name="username"
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label for="password">Password</Label>
+            <Input
+              id="password"
+              onChange={e => {
+                setPassword(e.target.value);
+              }}
+              type="password"
+              placeholder="********"
+              name="password"
+            />
+          </FormGroup>
+          <Button
+            id="submit"
+            className="mt-4"
+            onKeyDown={e => {
+              if (e.keyCode === 13) {
+                console.log(e.keyCode);
+                handleSubmit();
+              }
+            }}
+            tabIndex="0"
+            color="secondary"
+            size="lg"
+            block
+            onClick={() => {handleSubmit()}}
+          >
+            Submit
+          </Button>
+        </Form>
+        {user.error && <Alert className="mt-3" color="danger">{user.error}</Alert>}
       </div>
-    );
-  }
+    </div>
+  );
 }
-export default Login;
+
+Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired
+  }).isRequired
+}
+export default withRouter(Login);
