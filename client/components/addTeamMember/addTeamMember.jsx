@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Input, Form, FormGroup, Button, Alert, Container } from "reactstrap";
-import { useFetch } from "../Hooks.js";
+import { useFetch } from "../Hooks";
 
 export default function AddTeamMembers() {
   const [email, setEmail] = useState("");

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import { Input, Form, FormGroup, Button, Label, Container, Alert } from "reactstrap";
 import Navigation from "../Navigation/navigation";
 import { useFetch } from "../Hooks";
@@ -8,7 +8,7 @@ import { useFetch } from "../Hooks";
 function CreateTeam() {
   const [team, setTeam] = useState("");
   const [open, setOpen] = useState(false);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [response, sendData] = useFetch("/team/create", {
     team,
     open

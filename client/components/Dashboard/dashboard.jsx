@@ -1,36 +1,28 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from 'react-redux';
-import io from "socket.io-client";
+import React, { useState } from "react";
+// import { useDispatch } from 'react-redux';
+// import io from "socket.io-client";
 import { Form } from "reactstrap";
 import "./dashboard.css";
 import TextArea from "react-textarea-autosize";
-import { useSocket } from "./../Hooks";
+import { useSocket } from "../Hooks";
 
-var array = ["general", "random"];
 
-function Dashboard(props) {
+function Dashboard() {
   const [input, setInput] = useState("");
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [message, sendToSocket] = useSocket();
   return (
     <div id="main">
       <nav id="sidebar">
         <ul id="channelList">
           <h5 id="channelTitle">Channels</h5>
-          {array.map((channel, index) => {
-            return (
-              <li className="channels" key={index}>
-                {channel}
-              </li>
-            );
-          })}
         </ul>
       </nav>
       <div id="messageBox">
         <div id="chat">
-          {message.map((msg, index) => {
+          {message.map(msg => {
             return (
-              <div className="message" key={index}>
+              <div className="message">
                 {msg}
               </div>
             );
@@ -54,6 +46,7 @@ function Dashboard(props) {
               />
             </Form>
             <button
+              type="submit"
               id="button"
               onClick={() => {
                 sendToSocket(input);

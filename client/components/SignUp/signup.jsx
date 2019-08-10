@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useDispatch } from 'react-redux';
-import { Label, Form, FormGroup, Input, Container, Button } from "reactstrap";
+import { useDispatch, useSelector } from 'react-redux';
+import { Label, Form, FormGroup, Input, Container, Button, Alert } from "reactstrap";
 import Navigation from "../Navigation/navigation";
 import { signupUser } from '../../actions/userAction';
 import "./signup.css";
@@ -10,6 +10,7 @@ function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const user = useSelector(state => state.user);
   const dispatch = useDispatch();
   const handleSubmit = () => {
     if(confirmPassword === password) {
@@ -71,6 +72,7 @@ function Signup() {
             </Button>
           </Form>
         </div>
+        {user.error && <Alert color="danger">{user.error}</Alert>}
       </Container>
     </div>
   );

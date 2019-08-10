@@ -1,9 +1,8 @@
-var HtmlWebpackPlugin = require("html-webpack-plugin");
-const DIR_PATH = __dirname + "/client/dist";
+const DIR_PATH = `${__dirname  }/client/dist`;
 const webpack = require("webpack");
 
 module.exports = {
-  entry: ["babel-polyfill", "./client/index.js"],
+  entry: ["babel-polyfill", "./client/index.jsx"],
   output: {
     filename: "bundle.js",
     path: DIR_PATH

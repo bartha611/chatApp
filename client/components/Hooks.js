@@ -11,7 +11,7 @@ export function useFetch(url, payload) {
         setResponse(prevState => ({ ...prevState, data: res.data }));
       })
       .catch(error => {
-        setResponse(prevState => ({ ...prevState, error: error }));
+        setResponse(prevState => ({ ...prevState, error }));
       });
   }, [url, payload]);
   return [response,sendData]

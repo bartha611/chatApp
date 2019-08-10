@@ -13,15 +13,24 @@ function Login(props) {
   const [password, setPassword] = useState("");
   const user = useSelector(state => state.user);
   const dispatch = useDispatch();
+  const handleSubmit = () => {
+    dispatch(fetchUser(username,password));
+  };
   useEffect(() => {
-    console.log(user);
+    const handleEnter = e =>{
+      if(e.keyCode === 13) {
+        handleSubmit();
+      }
+    }
+    window.addEventListener('keydown', handleEnter)
+    return () => window.removeEventListener('keydown', handleEnter);
+  })
+  useEffect(() => {
+    console.log(user.error);
     if(user.user) {
       props.history.push('/')
     }
   }, [user]);
-  const handleSubmit = () => {
-    dispatch(fetchUser(username,password, "login"));
-  };
   return (
     <div className="Login">
       <Navigation />
@@ -70,7 +79,7 @@ function Login(props) {
             Submit
           </Button>
         </Form>
-        {user.error && <Alert className="mt-3" color="danger">{user.error}</Alert>}
+        {user.error && <Alert className="mt-3" color="danger">Username or Password invalid</Alert>}
       </div>
     </div>
   );

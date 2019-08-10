@@ -5,17 +5,17 @@ import {
   FETCH_USER_SUCCESS
 } from "../constants/userTypes";
 
-export function fetchUser(username, password, method) {
+export function fetchUser(username, password) {
   return async dispatch => {
     dispatch({ type: FETCH_USER_BEGIN });
     try {
-      const response = await axios.post(`http://localhost:3000/user/${method}`, {
+      const response = await axios.post(`http://localhost:3000/user/login`, {
         username,
         password
       });
       dispatch({ type: FETCH_USER_SUCCESS, payload: response.data });
     } catch (err) {
-      dispatch({ type: FETCH_USER_FAILURE, error: err.error.response.data });
+      dispatch({ type: FETCH_USER_FAILURE, error: err });
     }
   };
 }
