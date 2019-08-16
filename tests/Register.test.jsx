@@ -1,14 +1,14 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { shallow } from "enzyme";
+import { mount } from "enzyme";
 import React from "react";
-import Signup from './../client/src/SignUp/signup.jsx'
+import Signup from "../client/components/SignUp/signup"
 
 describe("handleChange working properly for all input fields", () => {
   let wrapper;
   let container;
   beforeEach(() => {
-    wrapper = shallow(<Signup />)
+    wrapper = mount(<Signup />)
   });
   it("username changes", () => {
     container = wrapper.find('#username');
@@ -40,7 +40,7 @@ describe('handleSubmit and axios working properly', () => {
   beforeEach(() => {
     instance = axios.create();
     mock = new MockAdapter(instance);
-    wrapper = shallow(<Signup />)
+    wrapper = mount(<Signup />)
   });
   it('handleSubmit working', () => {
     wrapper.simulate('change', {target: {name: 'username', value: 'adam'}});

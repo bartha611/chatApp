@@ -33,7 +33,7 @@ export default function Home() {
         </Switch>
       </Router>
     </Provider>
-  );
+)
 }
 
 render(<Home />, document.getElementById("app"));

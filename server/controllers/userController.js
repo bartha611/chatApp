@@ -1,48 +1,49 @@
-const { User } = require("./../models/users");
 const bcrypt = require("bcrypt");
+const { User } = require("./../models/users");
 
-exports.login = async function(req, res) {
+exports.login = async function login(req, res) {
   const { username, password } = req.body;
   try {
-    let user = await User.findOne({ where: { username: username } });
-    if (!user) {
+    const possibleUser = await User.findOne({ where: { username } });
+    if (!possibleUser) {
       return res.status(404).send("User doesn't exist");
     }
-    const match = await bcrypt.compare(password, user.password);
+    const match = await bcrypt.compare(password, possibleUser.password);
     if (!match) {
-      res.status(404).send('incorrect password');
-    } else {
+      return res.status(404).send('incorrect password');
+    } 
       req.session.user = username;
-      res.status(200).send(user);
-    }
+      return res.status(200).send('success');
+    
   } catch (err) {
     return res.status(404).send(err);
   }
 };
 
-exports.logout = function(req,res) {
+exports.logout = function logout(req,res) {
+  console.log("hello")
   req.session.destroy(err => {
     if(err) {
-      return console.log(err);
+      return res.status(404).send(err);
     }
-    res.redirect('/')
+    return res.status(200).send('success');
   })
 }
 
-exports.register = async function(req, res) {
+exports.register = async function register(req, res) {
   const { username, password, email } = req.body;
   try {
-    const user = await User.findOne({ where: { username: username } });
+    const user = await User.findOne({ where: { username } });
     if (user) {
       return res.status(404).send("User already exists");
     }
-    password = await bcrypt.hash(password, 10);
-    const user = await User.create({
-      username: username,
-      password: password,
-      email: email
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await User.create({
+      username,
+      hashedPassword,
+      email
     });
-    res.status(200).send(user);
+    return res.status(200).send(newUser);
   } catch (err) {
     return res.status(404).send("Error in creation");
   }

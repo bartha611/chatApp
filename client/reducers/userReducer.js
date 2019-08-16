@@ -1,28 +1,30 @@
-import {
-  FETCH_USER_BEGIN,
-  FETCH_USER_FAILURE,
-  FETCH_USER_SUCCESS
-} from "../constants/userTypes";
+import * as types from '../constants/userTypes';
 
 const currentState = {
   isLoading: false,
-  user: "",
+  authenticated: false,
   error: null
 };
 const userReducer = (state = currentState, action) => {
   switch (action.type) {
-    case FETCH_USER_BEGIN:
+    case types.FETCH_USER_BEGIN:
       return {
         ...state,
         isLoading: true
       };
-    case FETCH_USER_SUCCESS:
+    case types.FETCH_USER_SUCCESS:
       return {
         ...state,
         isLoading: false,
-        user: action.payload
+        authenticated: true
       };
-    case FETCH_USER_FAILURE:
+    case types.LOGOUT_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        authenticated: false
+      }
+    case types.FETCH_USER_FAILURE:
       return {
         ...state,
         isLoading: false,

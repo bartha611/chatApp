@@ -26,8 +26,7 @@ function Login(props) {
     return () => window.removeEventListener('keydown', handleEnter);
   })
   useEffect(() => {
-    console.log(user.error);
-    if(user.user) {
+    if(user.authenticated) {
       props.history.push('/')
     }
   }, [user]);
@@ -38,9 +37,10 @@ function Login(props) {
         <h2 className="mb-5 text-center">Login</h2>
         <Form method="post">
           <FormGroup>
-            <Label for="username">Username</Label>
+            <Label>Username</Label>
             <Input
               id="username"
+              data-value={username}
               onChange={e => {
                 setUsername(e.target.value);
               }}

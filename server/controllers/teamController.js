@@ -1,7 +1,7 @@
 const { Team } = require('../models/team');
 const { userTeam } = require('../models/userTeam');
 
-exports.create = async function(req,res) {
+exports.create = async function create(req,res) {
   const { team, open } = req.body;
   try {
     const oldTeam = await Team.findOne({where: { name: team}});
@@ -10,9 +10,9 @@ exports.create = async function(req,res) {
     }
     const newTeam = await Team.create({
       name: team,
-      open: open
+      open
     });
-    res.status(200).send(newTeam);
+    return res.status(200).send(newTeam);
   } catch(err) {
     return res.status(404).send(err);
   }
