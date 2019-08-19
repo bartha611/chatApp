@@ -21,7 +21,6 @@ exports.login = async function login(req, res) {
 };
 
 exports.logout = function logout(req,res) {
-  console.log("hello")
   req.session.destroy(err => {
     if(err) {
       return res.status(404).send(err);

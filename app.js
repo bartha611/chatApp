@@ -51,5 +51,4 @@ app.get('*', function(req,res) {
 });
 
 server.listen(PORT, () => {
-  console.log(`You are listening on port ${PORT}`)
 })

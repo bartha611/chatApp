@@ -19,9 +19,9 @@ Date:   Sun Jun 30 15:41:55 2019 -0500
 [32m+[m[32mvar io = require('socket.io')(server);[m
 [32m+[m
 [32m+[m[32mio.on('connection', function(socket) {[m
-[32m+[m[32m  console.log('hello, you are connected');[m
+[32m+[m[32m  d('hello, you are connected');[m
 [32m+[m[32m  socket.on('input', (inputUser) => {[m
-[32m+[m[32m    console.log(inputUser);[m
+[32m+[m[32m    d(inputUser);[m
 [32m+[m[32m    socket.broadcast.emit("message", inputUser)})[m
 [32m+[m[32m})[m
  [m
@@ -39,7 +39,7 @@ Date:   Sun Jun 30 15:41:55 2019 -0500
  [m
 [31m-app.listen(3000, () => {[m
 [32m+[m[32mserver.listen(3000, () => {[m
-   console.log("You are listening on port 3000")[m
+   d("You are listening on port 3000")[m
  })[m
 \ No newline at end of file[m
 [1mdiff --git a/client/dist/bundle.js b/client/dist/bundle.js[m

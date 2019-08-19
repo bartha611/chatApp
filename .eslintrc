@@ -1,7 +1,7 @@
 {
   "parser": "babel-eslint",
   "extends": ["airbnb", "prettier"],
-  "plugins": ["prettier"],
+  "plugins": ["prettier", "react"],
   "env": {
     "browser": true,
     "node": true,
@@ -9,6 +9,7 @@
   },
   "rules": {
     "linebreak-style": 0,
-    "no-console":"off"
+    "no-console":"off",
+    "react/prop-types": 0
   }
 }

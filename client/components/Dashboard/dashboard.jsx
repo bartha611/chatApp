@@ -1,16 +1,30 @@
-import React, { useState } from "react";
-// import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from "react";
+import { useDispatch } from 'react-redux';
 // import io from "socket.io-client";
 import { Form } from "reactstrap";
 import "./dashboard.css";
 import TextArea from "react-textarea-autosize";
 import { useSocket } from "../Hooks";
+import {addMessage} from '../../actions/messageAction';
 
 
 function Dashboard() {
   const [input, setInput] = useState("");
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [message, sendToSocket] = useSocket();
+  const handleSubmit = () => {
+    dispatch(addMessage(input));
+  }
+  useEffect(() => {
+    const handleEnter = (e) => {
+      if(e.keyCode === 13) {
+        e.preventDefault();
+        handleSubmit();
+      }
+    }
+    window.addEventListener('keydown', handleEnter);
+    return () => window.removeEventListener('keydown', handleEnter);
+  })
   return (
     <div id="main">
       <nav id="sidebar">

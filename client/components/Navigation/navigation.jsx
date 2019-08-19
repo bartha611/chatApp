@@ -18,7 +18,6 @@ export default function Navigation() {
   const user = useSelector(state => state.user);
   const dispatch = useDispatch();
   const handleClick = () => {
-    console.log("hello");
     dispatch(logoutUser());
   }
   return (

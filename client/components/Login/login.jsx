@@ -27,7 +27,7 @@ function Login(props) {
   })
   useEffect(() => {
     if(user.authenticated) {
-      props.history.push('/')
+      props.history.push('/createTeam')
     }
   }, [user]);
   return (
@@ -66,7 +66,6 @@ function Login(props) {
             className="mt-4"
             onKeyDown={e => {
               if (e.keyCode === 13) {
-                console.log(e.keyCode);
                 handleSubmit();
               }
             }}

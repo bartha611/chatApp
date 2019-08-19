@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from "react";
-// import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Input, Form, FormGroup, Button, Label, Container, Alert } from "reactstrap";
 import Navigation from "../Navigation/navigation";
-import { useFetch } from "../Hooks";
+import teamAction from '../../actions/teamAction';
 
 
-function CreateTeam() {
+function createTeam(props) {
   const [team, setTeam] = useState("");
   const [open, setOpen] = useState(false);
-  // const dispatch = useDispatch();
-  const [response, sendData] = useFetch("/team/create", {
-    team,
-    open
-  });
+  const response = useSelector(state => state.team);
+  const dispatch = useDispatch();
+  const handleSubmit = () => {
+    dispatch(teamAction(team,open));
+  }
   useEffect(() => {
-    if (response.status === 200) {
-      console.log("hello")
+    if(response.team) {
+      props.history.push('/dashboard');
     }
-  }, [response]);
+  })
   return (
     <div>
       <Navigation />
@@ -45,16 +45,16 @@ CHECK BOX
             className="mt-3"
             id="submit"
             onClick={() => {
-              sendData();
+              handleSubmit();
             }}
           >
             Submit
           </Button>
         </Form>
-        {response.error && <Alert color="danger">{response.error}</Alert>}
+        {response.error && <Alert color="danger">Could not create team</Alert>}
       </Container>
     </div>
   );
 }
 
-export default CreateTeam;
+export default createTeam;
