@@ -1,74 +1,125 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch } from 'react-redux';
-// import io from "socket.io-client";
+import io from "socket.io-client";
 import { Form } from "reactstrap";
 import "./dashboard.css";
 import TextArea from "react-textarea-autosize";
-import { useSocket } from "../Hooks";
-import {addMessage} from '../../actions/messageAction';
+import Navigation from '../Navigation/navigation';
+import {addMessageToSocket, addMessage} from '../../actions/messageAction';
 
+const client = io.connect('http://localhost:3000');
+const channelId = Math.floor(Math.random()*2);
+
+const totalTeams = [
+  "team 1",
+  "team 2",
+  "team 3",
+  "team 4",
+  "team 5",
+  "team 6",
+  "team 7",
+  "team 8",
+  "team 9",
+  "team 10",
+  "team 11",
+  "team 12",
+  "team 13",
+]
+const content = [
+  {user: "adam", time:"8:30 PM", message:"shdlkfjsadlkfdsajfkdsajfkajsdf"},
+  {user: "eric", time:"9:30 PM", message:"nuntana sucks"},
+  {user: "nuntana", time:"9:45 PM", message:"I agree.  I do suck"}
+]
 
 function Dashboard() {
   const [input, setInput] = useState("");
+  // const message = useSelector(state => state.messages);
+  // const team = useSelector(state => state.team);
+  const messageEnd = useRef(null);
   const dispatch = useDispatch();
-  const [message, sendToSocket] = useSocket();
   const handleSubmit = () => {
-    dispatch(addMessage(input));
+    dispatch(addMessageToSocket(channelId, input, client));
+    setInput('');
   }
+  // useEffect(() => {
+  //   messageEnd.current.scrollIntoView({behavior: "smooth"});
+  // }, [message])
   useEffect(() => {
-    const handleEnter = (e) => {
-      if(e.keyCode === 13) {
-        e.preventDefault();
-        handleSubmit();
-      }
-    }
-    window.addEventListener('keydown', handleEnter);
-    return () => window.removeEventListener('keydown', handleEnter);
-  })
+    client.emit("join", channelId);
+    client.on("message", msg => {
+      dispatch(addMessage(msg))
+    })
+    return () => client.off("message");
+  }, []);
   return (
     <div id="main">
-      <nav id="sidebar">
-        <ul id="channelList">
-          <h5 id="channelTitle">Channels</h5>
-        </ul>
-      </nav>
-      <div id="messageBox">
-        <div id="chat">
-          {message.map(msg => {
+      <Navigation />
+      <div id="board">
+        <nav id="sidebar">
+          <ul id="teamId">
+            <div className="dropdown">
+              <a href="#" className="btn btn-secondary container dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Team</a>
+              <div className="dropdown-menu" id="scrollable-menu">
+                {totalTeams.map(tm => {
+                  return (
+                    <a href="#" className="dropdown-item">{tm}</a>
+                  )
+                })}
+              </div>
+            </div>
+          </ul>
+          <ul className="channelList">
+            <h5 id="channelTitle">Channels</h5>
+                
+          </ul>
+        </nav>
+        <div id="messageBox">
+          <div id="chat">
+            {content.map(msg => {
             return (
               <div className="message">
-                {msg}
+                <span style={{color: "white"}} id="user">
+                  <b>{msg.user}</b>
+                  {' '}
+                </span>
+                <span style={{color: "grey"}} id="time">{msg.time}</span>
+                <div>
+                  {msg.message}
+                </div>
+                <hr style={{backgroundColor: "grey"}} />
               </div>
             );
           })}
-        </div>
-        <div id="footer">
-          <div id="formbox">
-            <Form>
-              <TextArea
-                name="message"
-                id="textbox"
-                value={input}
-                onChange={e => setInput(e.target.value)}
-                onKeyDown={e => {
-                  if (e.keyCode === 13) {
+            <div id="messageEnd" ref={messageEnd} />
+          </div>
+          <div id="footer">
+            <div id="formbox">
+              <Form>
+                <TextArea
+                  name="message"
+                  id="textbox"
+                  value={input}
+                  onChange={e => setInput(e.target.value)}
+                  onKeyDown={e => {
+                  if (e.keyCode === 13)
+                  {
                     e.preventDefault();
-                    sendToSocket(input);
-                    setInput("");
+                    handleSubmit();
                   }
                 }}
-              />
-            </Form>
-            <button
-              type="submit"
-              id="button"
-              onClick={() => {
-                sendToSocket(input);
-                setInput("");
+                />
+              </Form>
+              <button
+                type="submit"
+                id="button"
+                className="btn btn-success"
+                onClick={() => {
+                handleSubmit();
               }}
-            >
+              >
               Submit
-            </button>
+              </button>
+            </div>
           </div>
         </div>
       </div>

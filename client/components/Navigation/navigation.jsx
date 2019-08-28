@@ -6,27 +6,56 @@ import {
   Nav,
   NavLink,
   Navbar,
-  NavbarBrand,
   NavbarToggler,
   Collapse,
-  NavItem
+  NavItem,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
 } from "reactstrap";
 import {logoutUser} from '../../actions/userAction';
+import "./navigation.css"
+
+const teams = [
+  "team 1",
+  "team 2",
+  "team 3",
+  "team 3",
+  "team 3",
+  "team 3",
+  
+]
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const [dropDownOpen, setDropdown] = useState(false);
   const user = useSelector(state => state.user);
+  // const team = useSelector(state => state.team);
   const dispatch = useDispatch();
   const handleClick = () => {
     dispatch(logoutUser());
   }
   return (
     <div>
-      <Container>
-        <Navbar color="dark" dark expand="md">
-          <NavbarBrand href="/">Flack</NavbarBrand>
+      <Container fluid>
+        <Navbar id="navigation" color="dark" dark expand="md">
           <NavbarToggler onClick={() => setIsOpen(!isOpen)} />
           <Collapse isOpen={isOpen} navbar>
+            <Nav>
+              <Dropdown id="dropdown" isOpen={dropDownOpen} toggle={()=>setDropdown(!dropDownOpen)}>
+                <DropdownToggle caret color="dark">
+                  Dropdown
+                </DropdownToggle>
+                <DropdownMenu>
+                  {teams.map(tm => {
+                    return (
+                      <DropdownItem>{tm}</DropdownItem>
+                    )
+                  })}
+                </DropdownMenu>
+              </Dropdown>
+            </Nav>
             <Nav className="ml-auto" navbar>
               {!user.authenticated && (
               <NavItem>

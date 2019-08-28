@@ -1,14 +1,48 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+
 #main {
   display: flex;
+  flex-direction: column;
   position: fixed;
   width: 100%;
+  background: black;
+}
+#board {
+  display: flex;
+  flex-direction: row;
 }
 #sidebar {
   background: #4B0082;
   height: 100vh;
   width: 260px;
 }
-#channelTitle {
+#teamId {
+  position: relative;
+  width: 100%;
+  height: 400px;
+}
+#scrollable-menu {
+  overflow-x: hidden;
+  height: auto;
+  max-height: 200px;
+}
+ul {
+  padding: 15px;
+  margin: 0;
+}
+.teams {
+  width: 100%;
+  display: block;
+  color: darkgray;
+  font-family: 'Open Sans', sans-serif; 
+  list-style-type: none;
+  margin-left: auto;
+}
+.teams:hover {
+  background: green;
+  cursor: pointer;
+}
+.titles {
   color: silver;
 }
 #channelList {
@@ -21,16 +55,20 @@
   padding: 5px 10px 5px 10px;
   margin-top: 10px;
   overflow-x: auto;
+  color: white;
+  
 }
 #messageBox {
   display: flex;
-  min-height: 100vh;
+  height: 92vh;
   width: 100%;
   flex-direction: column;
   box-shadow: inset 0px 0px 5px #0000;
 }
 #chat {
   flex: 1;
+  height: 93vh;
+  overflow-y: scroll;
 }
 #footer {
   margin-right: 20px;

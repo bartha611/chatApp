@@ -17,15 +17,20 @@ const io = require('socket.io')(server);
 const userRoutes = require('./server/routes/userRoute');
 const teamRoutes = require('./server/routes/teamRoute');
 const userTeamRoutes = require('./server/routes/userTeamRoute');
-const dashboardController = require('./server/controllers/dashboardController');
+// const dashboardController = require('./server/controllers/dashboardController');
 
 
 
 const PORT = 3000;
 
-io
-.of('/chat')
-.on('connection', dashboardController.respond);
+io.on('connection', socket => {
+  socket.on('join', channel => {
+    socket.join(channel)
+  })
+  socket.on("input", ({ messageToSend, channelId}) => {
+    socket.broadcast.to(channelId).emit("message", messageToSend);
+  })
+});
 
 // middleware
 app.use(bodyParser.json());
@@ -46,7 +51,7 @@ app.use('/user', userRoutes);
 app.use('/team', teamRoutes);
 app.use('/userTeam', userTeamRoutes);
 
-app.get('*', function(req,res) {
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '/client/dist/index.html'))
 });
 

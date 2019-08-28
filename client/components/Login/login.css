@@ -23,9 +23,18 @@ body,html {
   width: 500px;
   margin: 0 auto;
   padding: 20px 30px 20px 30px;
+  animation: fadein 2s;
 }
 @media all and (max-width: 600px) {
   .login-form {
     width: 80%;
+  }
+}
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

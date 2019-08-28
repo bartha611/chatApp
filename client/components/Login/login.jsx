@@ -27,7 +27,7 @@ function Login(props) {
   })
   useEffect(() => {
     if(user.authenticated) {
-      props.history.push('/createTeam')
+      props.history.push('/dashboard')
     }
   }, [user]);
   return (
