@@ -3,6 +3,7 @@ import * as types from '../constants/userTypes';
 const currentState = {
   isLoading: false,
   authenticated: false,
+  team: [],
   error: null
 };
 const userReducer = (state = currentState, action) => {

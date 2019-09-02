@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import io from "socket.io-client";
 import { Form } from "reactstrap";
 import "./dashboard.css";
 import TextArea from "react-textarea-autosize";
 import Navigation from '../Navigation/navigation';
-import {addMessageToSocket, addMessage} from '../../actions/messageAction';
+import {addMessage} from '../../actions/messageAction';
 
 const client = io.connect('http://localhost:3000');
-const channelId = Math.floor(Math.random()*2);
+const channelId = 1
 
 const totalTeams = [
   "team 1",
@@ -25,25 +25,26 @@ const totalTeams = [
   "team 12",
   "team 13",
 ]
-const content = [
-  {user: "adam", time:"8:30 PM", message:"shdlkfjsadlkfdsajfkdsajfkajsdf"},
-  {user: "eric", time:"9:30 PM", message:"nuntana sucks"},
-  {user: "nuntana", time:"9:45 PM", message:"I agree.  I do suck"}
-]
+// const content = [
+//   {user: "adam", time:"8:30 PM", message:"shdlkfjsadlkfdsajfkdsajfkajsdf"},
+//   {user: "eric", time:"9:30 PM", message:"nuntana sucks"},
+//   {user: "nuntana", time:"9:45 PM", message:"I agree.  I do suck"}
+// ]
 
 function Dashboard() {
   const [input, setInput] = useState("");
-  // const message = useSelector(state => state.messages);
+  const message = useSelector(state => state.messages);
   // const team = useSelector(state => state.team);
   const messageEnd = useRef(null);
   const dispatch = useDispatch();
   const handleSubmit = () => {
-    dispatch(addMessageToSocket(channelId, input, client));
+    client.emit("input", {input, channelId});
     setInput('');
   }
-  // useEffect(() => {
-  //   messageEnd.current.scrollIntoView({behavior: "smooth"});
-  // }, [message])
+  useEffect(() => {
+    messageEnd.current.scrollIntoView({behavior: "smooth"});
+    console.log(message.messages);
+  }, [message])
   useEffect(() => {
     client.emit("join", channelId);
     client.on("message", msg => {
@@ -75,14 +76,14 @@ function Dashboard() {
         </nav>
         <div id="messageBox">
           <div id="chat">
-            {content.map(msg => {
+            {message.messages.map(msg => {
             return (
               <div className="message">
                 <span style={{color: "white"}} id="user">
                   <b>{msg.user}</b>
                   {' '}
                 </span>
-                <span style={{color: "grey"}} id="time">{msg.time}</span>
+                <span style={{color: "grey"}} id="time">{msg.date}</span>
                 <div>
                   {msg.message}
                 </div>

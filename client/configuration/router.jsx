@@ -2,7 +2,7 @@ import React from 'react';
 import {useSelector } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 
-export default function PrivateRoute({ component:Component, ...rest }) {
+export function PrivateUserRoute({ component:Component, ...rest }) {
   const user = useSelector(state => state.user);
   return (
     <Route
@@ -12,4 +12,9 @@ export default function PrivateRoute({ component:Component, ...rest }) {
       }
     />
   )
+}
+
+export function PrivateTeamRoute({component: Component, ...rest }) {
+  const user = useSelector(state => state.user);
+
 }

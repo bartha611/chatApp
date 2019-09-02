@@ -19,6 +19,26 @@ const teamRoutes = require('./server/routes/teamRoute');
 const userTeamRoutes = require('./server/routes/userTeamRoute');
 // const dashboardController = require('./server/controllers/dashboardController');
 
+// middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:false}));
+
+const sessionMiddleWare = session({
+  secret: process.env.SESSION_KEY,
+  resave: false,
+  saveUninitialized: false,
+  store: new MongoStore({
+    url: process.env.SESSION_STORE
+  })
+})
+
+app.use(sessionMiddleWare);
+app.use(express.static(`${__dirname  }/client/dist`));
+
+io.use((socket, next) => {
+  sessionMiddleWare(socket.request, socket.request.res, next)
+})
+
 
 
 const PORT = 3000;
@@ -27,29 +47,22 @@ io.on('connection', socket => {
   socket.on('join', channel => {
     socket.join(channel)
   })
-  socket.on("input", ({ messageToSend, channelId}) => {
-    socket.broadcast.to(channelId).emit("message", messageToSend);
+  socket.on("input", data => {
+    const date = new Date().toDateString();
+    console.log(socket.request.session.user);
+    const chatMessage = {
+      message: data.input,
+      user: socket.request.session.user,
+      date
+    }
+    io.in(data.channelId).emit("message", chatMessage);
   })
 });
 
-// middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:false}));
-app.use(session({
-  secret: process.env.SESSION_KEY,
-  resave: false,
-  saveUninitialized: false,
-  store: new MongoStore({
-    url: process.env.SESSION_STORE,
-    ttl: 60*60
-  })
-}))
-app.use(express.static(`${__dirname  }/client/dist`));
 
 // routes
 app.use('/user', userRoutes);
 app.use('/team', teamRoutes);
-app.use('/userTeam', userTeamRoutes);
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '/client/dist/index.html'))

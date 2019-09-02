@@ -18,11 +18,9 @@ export function fetchMessages(channelId, userId) {
     }
   }
 }
-export const addMessageToSocket = (channelId, messageToSend, socket) => {
-  return dispatch => {
-    socket.emit("input", {messageToSend, channelId});
-    dispatch({type: types.ADD_MESSAGE, payload: messageToSend });
-  }}
+export const addMessageToSocket = (channelId, message, socket) => {
+    socket.emit("input", {message, channelId});
+}
 export const addMessage = (message) => {
   return {
     type: types.ADD_MESSAGE,
