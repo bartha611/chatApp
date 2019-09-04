@@ -1,18 +1,27 @@
-import Axios from 'axios';
-import * as types from '../constants/teamConstants';
+import axios from "axios";
+import * as types from "../constants/teamConstants";
 
-const teamAction = (team, open) => {
+export const teamAction = (team, open) => {
   return async dispatch => {
-    dispatch({type: types.ADD_TEAM_BEGIN });
+    dispatch({ type: types.ADD_TEAM_BEGIN });
     try {
-      const response = Axios.post('http://localhost:3000/team/create', {
-        team, 
+      const response = await axios.post("http://localhost:3000/team/create", {
+        team,
         open
-      })
+      });
       dispatch({ type: types.ADD_TEAM_SUCCESS, payload: response.data });
-    } catch(err) {
-      dispatch({type: types.ADD_TEAM_FAILURE });
+    } catch (err) {
+      dispatch({ type: types.ADD_TEAM_FAILURE });
     }
-  }
-}
-export default teamAction;
+  };
+};
+export const fetchTeams = () => {
+  return async dispatch => {
+    try {
+      const response = await axios.get("http://localhost:3000/team/read");
+      dispatch({ type: types.FETCH_TEAMS, payload: response.data });
+    } catch (err) {
+      dispatch({ type: types.ADD_TEAM_FAILURE });
+    }
+  };
+};

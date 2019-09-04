@@ -6,25 +6,11 @@ import "./dashboard.css";
 import TextArea from "react-textarea-autosize";
 import Navigation from '../Navigation/navigation';
 import {addMessage} from '../../actions/messageAction';
+import { fetchTeams } from '../../actions/teamAction';
 
 const client = io.connect('http://localhost:3000');
 const channelId = 1
 
-const totalTeams = [
-  "team 1",
-  "team 2",
-  "team 3",
-  "team 4",
-  "team 5",
-  "team 6",
-  "team 7",
-  "team 8",
-  "team 9",
-  "team 10",
-  "team 11",
-  "team 12",
-  "team 13",
-]
 // const content = [
 //   {user: "adam", time:"8:30 PM", message:"shdlkfjsadlkfdsajfkdsajfkajsdf"},
 //   {user: "eric", time:"9:30 PM", message:"nuntana sucks"},
@@ -34,7 +20,7 @@ const totalTeams = [
 function Dashboard() {
   const [input, setInput] = useState("");
   const message = useSelector(state => state.messages);
-  // const team = useSelector(state => state.team);
+  const teams = useSelector(state => state.team);
   const messageEnd = useRef(null);
   const dispatch = useDispatch();
   const handleSubmit = () => {
@@ -43,9 +29,9 @@ function Dashboard() {
   }
   useEffect(() => {
     messageEnd.current.scrollIntoView({behavior: "smooth"});
-    console.log(message.messages);
   }, [message])
   useEffect(() => {
+    dispatch(fetchTeams());
     client.emit("join", channelId);
     client.on("message", msg => {
       dispatch(addMessage(msg))
@@ -61,9 +47,9 @@ function Dashboard() {
             <div className="dropdown">
               <a href="#" className="btn btn-secondary container dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Team</a>
               <div className="dropdown-menu" id="scrollable-menu">
-                {totalTeams.map(tm => {
+                {teams.team[0].map(tm => {
                   return (
-                    <a href="#" className="dropdown-item">{tm}</a>
+                    <a href="#" className="dropdown-item">{tm.name}</a>
                   )
                 })}
               </div>

@@ -5,7 +5,7 @@ import { Provider } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { PersistGate } from 'redux-persist/integration/react'
 import { store, persistor } from './reducers';
-import {PrivateUserRoute} from './configuration/router';
+import PrivateRoute from './configuration/router';
 
 // import Components
 import Login from "./components/Login/login";
@@ -25,8 +25,8 @@ export default function Home() {
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
             <Route path="/dashboard" component={Dashboard} />
-            <PrivateUserRoute path="/createTeam" component={createTeam} />
-            <PrivateUserRoute path="/addTeamMember" component={AddTeamMembers} />
+            <PrivateRoute path="/createTeam" component={createTeam} />
+            <PrivateRoute path="/addTeamMember" component={AddTeamMembers} />
           </Switch>
         </Router>
       </PersistGate>

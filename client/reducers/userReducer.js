@@ -1,4 +1,4 @@
-import * as types from '../constants/userTypes';
+import * as types from "../constants/userTypes";
 
 const currentState = {
   isLoading: false,
@@ -17,14 +17,16 @@ const userReducer = (state = currentState, action) => {
       return {
         ...state,
         isLoading: false,
-        authenticated: true
+        authenticated: true,
+        error: null
       };
     case types.LOGOUT_SUCCESS:
       return {
         ...state,
         isLoading: false,
-        authenticated: false
-      }
+        authenticated: false,
+        error: null
+      };
     case types.FETCH_USER_FAILURE:
       return {
         ...state,
