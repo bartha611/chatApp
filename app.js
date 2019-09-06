@@ -24,7 +24,7 @@ const sessionMiddleWare = session({
   resave: false,
   saveUninitialized: false,
   store: new MongoStore({
-    url: "mongodb://bartha:Winter2019@ds255917.mlab.com:55917/sessionstore"
+    url: process.env.STORE
   })
 });
 
@@ -34,8 +34,6 @@ app.use(express.static(`${__dirname}/client/dist`));
 io.use((socket, next) => {
   sessionMiddleWare(socket.request, socket.request.res, next);
 });
-
-const PORT = 3000;
 
 io.on("connection", socket => {
   socket.on("join", channel => {
