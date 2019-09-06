@@ -4,7 +4,8 @@ const currentState = {
   isLoading: false,
   authenticated: false,
   team: [],
-  error: null
+  loginError: false,
+  logoutError: false
 };
 const userReducer = (state = currentState, action) => {
   switch (action.type) {
@@ -18,20 +19,20 @@ const userReducer = (state = currentState, action) => {
         ...state,
         isLoading: false,
         authenticated: true,
-        error: null
+        loginError: null
       };
     case types.LOGOUT_SUCCESS:
       return {
         ...state,
         isLoading: false,
         authenticated: false,
-        error: null
+        logoutError: false
       };
     case types.FETCH_USER_FAILURE:
       return {
         ...state,
         isLoading: false,
-        error: action.error
+        loginError: true
       };
     default:
       return state;

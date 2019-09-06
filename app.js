@@ -55,14 +55,18 @@ io.on("connection", socket => {
 // routes
 app.use("/user", userRoutes);
 app.use("/team", teamRoutes);
+app.use("/channel", channelRoutes);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/client/dist/index.html"));
 });
 
 if (process.env.NODE_ENV !== "test") {
-  app.listen(PORT, () => {
-    console.log(`You are listening on port ${PORT}`);
+  // app.listen(PORT, () => {
+  //   console.log(`You are listening on port ${PORT}`);
+  // });
+  server.listen(3000, () => {
+    console.log("Socket is listening on port 8080");
   });
 }
 

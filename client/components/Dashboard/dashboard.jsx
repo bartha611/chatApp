@@ -5,33 +5,28 @@ import { Form } from "reactstrap";
 import "./dashboard.css";
 import TextArea from "react-textarea-autosize";
 import Navigation from '../Navigation/navigation';
-import {addMessage} from '../../actions/messageAction';
-import { fetchTeams } from '../../actions/teamAction';
+import {addMessageToSocket, addMessage} from '../../actions/messageAction';
 
 const client = io.connect('http://localhost:3000');
-const channelId = 1
+const channelId = Math.floor(Math.random()*2);
 
-// const content = [
-//   {user: "adam", time:"8:30 PM", message:"shdlkfjsadlkfdsajfkdsajfkajsdf"},
-//   {user: "eric", time:"9:30 PM", message:"nuntana sucks"},
-//   {user: "nuntana", time:"9:45 PM", message:"I agree.  I do suck"}
-// ]
 
 function Dashboard() {
   const [input, setInput] = useState("");
   const message = useSelector(state => state.messages);
-  const teams = useSelector(state => state.team);
+  console.log(message.messages);
+  const team = useSelector(state => state.team);
+  console.log(team.team[0]);
   const messageEnd = useRef(null);
   const dispatch = useDispatch();
   const handleSubmit = () => {
-    client.emit("input", {input, channelId});
+    dispatch(addMessageToSocket(channelId, input, client));
     setInput('');
   }
   useEffect(() => {
     messageEnd.current.scrollIntoView({behavior: "smooth"});
   }, [message])
   useEffect(() => {
-    dispatch(fetchTeams());
     client.emit("join", channelId);
     client.on("message", msg => {
       dispatch(addMessage(msg))
@@ -47,7 +42,7 @@ function Dashboard() {
             <div className="dropdown">
               <a href="#" className="btn btn-secondary container dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Team</a>
               <div className="dropdown-menu" id="scrollable-menu">
-                {teams.team[0].map(tm => {
+                {team.team[0].map(tm => {
                   return (
                     <a href="#" className="dropdown-item">{tm.name}</a>
                   )
@@ -56,8 +51,10 @@ function Dashboard() {
             </div>
           </ul>
           <ul className="channelList">
-            <h5 id="channelTitle">Channels</h5>
-                
+            <div className="channel">
+              <div id="channelTitle">Channels</div>
+              <div id="addChannel"><i className="fa fa-plus-circle" /></div>
+            </div>
           </ul>
         </nav>
         <div id="messageBox">
@@ -69,7 +66,7 @@ function Dashboard() {
                   <b>{msg.user}</b>
                   {' '}
                 </span>
-                <span style={{color: "grey"}} id="time">{msg.date}</span>
+                <span style={{color: "grey"}} id="time">{msg.time}</span>
                 <div>
                   {msg.message}
                 </div>

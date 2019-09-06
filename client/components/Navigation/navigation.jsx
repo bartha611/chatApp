@@ -38,7 +38,7 @@ export default function Navigation() {
   }
   return (
     <div>
-      <Container fluid>
+      <Container fluid id="container">
         <Navbar id="navigation" color="dark" dark expand="md">
           <NavbarToggler onClick={() => setIsOpen(!isOpen)} />
           <Collapse isOpen={isOpen} navbar>

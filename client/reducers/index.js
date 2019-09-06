@@ -6,6 +6,7 @@ import thunk from "redux-thunk";
 import messageReducer from "./messageReducer";
 import userReducer from "./userReducer";
 import teamReducer from "./teamReducer";
+import channelReducer from "./channelReducer";
 
 const persistConfig = {
   key: "root",
@@ -16,7 +17,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
   messages: messageReducer,
   user: userReducer,
-  team: teamReducer
+  team: teamReducer,
+  channel: channelReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
