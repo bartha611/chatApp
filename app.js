@@ -15,6 +15,7 @@ const io = require("socket.io")(server);
 // import routes
 const userRoutes = require("./server/routes/userRoute");
 const teamRoutes = require("./server/routes/teamRoute");
+const channelRoutes = require("./server/routes/channelRoute");
 // middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -24,7 +25,7 @@ const sessionMiddleWare = session({
   resave: false,
   saveUninitialized: false,
   store: new MongoStore({
-    url: process.env.STORE
+    url: process.env.SESSION_STORE
   })
 });
 
@@ -39,14 +40,14 @@ io.on("connection", socket => {
   socket.on("join", channel => {
     socket.join(channel);
   });
-  socket.on("input", data => {
+  socket.on("input", ({ input, channelId }) => {
     const date = new Date().toDateString();
     const chatMessage = {
-      message: data.input,
+      message: input,
       user: socket.request.session.user,
       date
     };
-    io.in(data.channelId).emit("message", chatMessage);
+    io.in(channelId).emit("message", chatMessage);
   });
 });
 

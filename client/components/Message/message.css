@@ -1,0 +1,39 @@
+.message {
+  overflow-wrap: break-word;
+  padding: 5px 10px 5px 10px;
+  margin-top: 10px;
+  overflow-x: auto;
+  color: white;
+  
+}
+#messageBox {
+  display: flex;
+  height: 92vh;
+  width: 100%;
+  flex-direction: column;
+  box-shadow: inset 0px 0px 5px #0000;
+}
+#chat {
+  flex: 1;
+  height: 93vh;
+  overflow-y: scroll;
+}
+#footer {
+  margin-right: 20px;
+  margin-left: 20px;
+  margin-top: auto;
+  height: auto;
+  
+}
+#formbox {
+  position: relative;
+}
+textarea {
+  width: 100%;
+  padding-right: 30px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  padding-left: 10px;
+  outline: none;
+  box-shadow: none;
+}

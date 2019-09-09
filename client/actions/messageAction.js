@@ -17,9 +17,6 @@ export function fetchMessages(channelId, userId) {
     }
   };
 }
-export const addMessageToSocket = (channelId, message, socket) => {
-  socket.emit("input", { message, channelId });
-};
 export const addMessage = message => {
   return {
     type: types.ADD_MESSAGE,

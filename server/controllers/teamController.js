@@ -4,7 +4,6 @@ exports.create = async (req, res) => {
   const { team, open } = req.body;
   const client = await pool.connect();
   const { userId } = req.session;
-  console.log(userId);
   try {
     const oldTeam = await client.query(`SELECT * FROM Teams WHERE name = $1`, [
       team

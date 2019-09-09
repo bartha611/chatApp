@@ -3,9 +3,9 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { PersistGate } from 'redux-persist/integration/react'
-import { store, persistor } from './reducers';
-import PrivateRoute from './configuration/router';
+import { PersistGate } from "redux-persist/integration/react";
+import { store, persistor } from "./reducers";
+import PrivateRoute from "./configuration/router";
 
 // import Components
 import Login from "./components/Login/login";
@@ -14,6 +14,8 @@ import Dashboard from "./components/Dashboard/dashboard";
 import createTeam from "./components/createTeam/createTeam";
 import AddTeamMembers from "./components/addTeamMember/addTeamMember";
 import Navigation from "./components/Navigation/navigation";
+import Sidebar from "./components/Sidebar/sidebar";
+import MessageBoard from "./components/Message/message";
 
 export default function Home() {
   return (
@@ -25,13 +27,15 @@ export default function Home() {
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
             <Route path="/dashboard" component={Dashboard} />
+            <Route path="/sidebar" component={Sidebar} />
+            <Route path="/message" component={MessageBoard} />
             <PrivateRoute path="/createTeam" component={createTeam} />
             <PrivateRoute path="/addTeamMember" component={AddTeamMembers} />
           </Switch>
         </Router>
       </PersistGate>
     </Provider>
-  )
+  );
 }
 
 render(<Home />, document.getElementById("app"));
