@@ -12,15 +12,15 @@ exports.create = async (req, res) => {
       WHERE c.name = $1`,
       [name]
     );
+    if (oldChannel.rows[0]) {
+      return res.status(404).send("Channel already taken");
+    }
     const teamId = await client.query(
       `SELECT id
       FROM teams
       WHERE name = $1`,
       [team]
     );
-    if (oldChannel.rows[0]) {
-      return res.status(404).send("Channel already taken");
-    }
     const response = await client.query(
       `INSERT INTO channel(shortid, name, teamId) VALUES ($1, $2, $3) RETURNING name`,
       [shortid.generate(), name, teamId.rows[0].id]

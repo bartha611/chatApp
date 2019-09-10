@@ -1,16 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Open+Sans&display=swap");
 
-#main {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  background: black;
-}
 #board {
   display: flex;
   flex-direction: row;
 }
-#teamId {
+/* #teamId {
   position: relative;
   text-align: center;
   width: 100%;
@@ -79,30 +73,4 @@ textarea {
   padding-left: 10px;
   outline: none;
   box-shadow: none;
-}
-#button {
-  position: absolute;
-  background-color: grey;
-  bottom: 6px;
-  right: 0;
-  height: 30px;
-  border: 1px solid black;
-  padding-bottom: 5px;
-  border-radius: 5px;
-}
-.channel {
-  display: flex;
-  justify-content: space-between;
-}
-#addChannel {
-  cursor: pointer;
-  color: silver;
-}
-#chatButton {
-  padding: 5px 10px 5px 10px;
-  background: #2ECC40;
-  font-size: 12px;
-  font-family: 'Times New Roman';
-  font-weight: bold;
-  text-align: center;
-}
+} */

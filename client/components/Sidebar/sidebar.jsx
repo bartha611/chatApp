@@ -1,24 +1,14 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import "./sidebar.css";
 
-import Navigation from "../Navigation/navigation";
-
-const channels = [];
-const team = [];
-for (let k = 0; k < 20; k += 1) {
-  channels.push(`channel ${String(k)}`);
-  team.push(`Team ${String(k)}`);
-}
-channels.push("alksdjflksafjdsa;lkfjsa;lkdjfd;lkjsad");
-
-const Sidebar = () => {
-  const teamState = useSelector(state => state.team);
-  console.log(teamState);
-  // const channels = useSelector(state => state.channel);
+const Sidebar = ({ addChannel, setAddChannel, team, channels }) => {
+  const handleClick = () => {
+    console.log(addChannel);
+    setAddChannel(!addChannel);
+    console.log(addChannel)
+  }
   return (
     <div>
-      <Navigation />
       <div id="sidebar">
         <ul id="teamList">
           <div data-toggle="dropdown">
@@ -41,11 +31,10 @@ const Sidebar = () => {
           <div className="title">Channel</div>
           {channels.map(ch => {
             return (
-              <a className="links" href="/login">
-                {ch}
-              </a>
+              <div>{ch}</div>
             );
           })}
+          <button onClick={() => {handleClick()}} type="button" className="btn btn-primary">Click me bitch</button>
         </ul>
       </div>
     </div>

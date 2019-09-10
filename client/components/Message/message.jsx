@@ -1,15 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Form } from "reactstrap";
 import TextArea from "react-textarea-autosize";
 import { addMessage } from "../../actions/messageAction";
 import "./message.css";
 
-const channelId = Math.floor(Math.random() * 3);
-
-const MessageBoard = ({ socket }) => {
+const MessageBoard = ({ socket, message, channelId }) => {
   const [input, setInput] = useState("");
-  const message = useSelector(state => state.message);
   const dispatch = useDispatch();
   const messageEnd = useRef(null);
   const handleSubmit = () => {
@@ -23,23 +20,26 @@ const MessageBoard = ({ socket }) => {
     });
     return () => socket.off("message");
   }, []);
+  useEffect(() => {
+    messageEnd.current.scrollIntoView({ behavior: 'smooth'})
+  }, [message])
   return (
     <div id="messageBox">
       <div id="chat">
-        {message.messages.map(msg => {
-          return (
-            <div className="message">
-              <span style={{ color: "white" }} id="user">
-                <b>{msg.user}</b>
-              </span>
-              <span style={{ color: "grey" }} id="time">
-                {msg.time}
-              </span>
-              <div>{msg.message}</div>
-              <hr style={{ backgroundColor: "grey" }} />
-            </div>
-          );
-        })}
+        {message.messages &&
+          message.messages.map(msg => {
+            return (
+              <div className="messageBlock">
+                <span className="user">
+                  <b>{msg.user}</b>
+                  {" "}
+                </span>
+                <span className="date">{msg.date}</span>
+                <div className="message">{msg.message}</div>
+                <hr style={{ backgroundColor: "grey" }} />
+              </div>
+            );
+          })}
         <div id="messageEnd" ref={messageEnd} />
       </div>
       <div id="footer">

@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=B612&display=swap');
 
 #sidebar {
-  height: 93vh;
+  height: 100vh;
   overflow-y: auto;
   width: 210px;
   background: darkslategray;
@@ -10,6 +10,10 @@
 #teamList {
   height: 50px;
   position: relative;
+}
+ul {
+  padding: 15px;
+  margin: 0;
 }
 .links {
   display: block;
