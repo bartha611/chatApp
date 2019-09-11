@@ -1,12 +1,8 @@
 import React from "react";
 import "./sidebar.css";
+import PropTypes from 'prop-types'
 
-const Sidebar = ({ addChannel, setAddChannel, team, channels }) => {
-  const handleClick = () => {
-    console.log(addChannel);
-    setAddChannel(!addChannel);
-    console.log(addChannel)
-  }
+const Sidebar = ({ channel, setChannel, team, channelList }) => {
   return (
     <div>
       <div id="sidebar">
@@ -29,16 +25,23 @@ const Sidebar = ({ addChannel, setAddChannel, team, channels }) => {
         </ul>
         <ul id="channels">
           <div className="title">Channel</div>
-          {channels.map(ch => {
+          {channelList.map(ch => {
             return (
               <div>{ch}</div>
             );
           })}
-          <button onClick={() => {handleClick()}} type="button" className="btn btn-primary">Click me bitch</button>
+          <button onClick={() => setChannel(!channel)} type="button" className="btn btn-primary">Click me bitch</button>
         </ul>
       </div>
     </div>
   );
 };
+
+Sidebar.propTypes = {
+  channel: PropTypes.bool.isRequired,
+  setChannel: PropTypes.func.isRequired,
+  team: PropTypes.string.isRequired,
+  channelList: PropTypes.arrayOf(PropTypes.string).isRequired,
+}
 
 export default Sidebar;

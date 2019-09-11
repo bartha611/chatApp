@@ -10,6 +10,7 @@ import AddChannel from "../addChannel/addChannel"
 
 const client = io.connect("http://localhost:3000");
 const channelId = Math.floor(Math.random() * 2);
+const teamName = "shit";
 
 const channels = [];
 for (let k = 0; k < 20; k++) {
@@ -18,17 +19,17 @@ for (let k = 0; k < 20; k++) {
 
 function Dashboard() {
   const message = useSelector(state => state.messages);
-  const [addChannel, setAddChannel] = useState(false);
+  const [channel, setChannel] = useState(false);
   const team = useSelector(state => state.team);
   return (
     <div>
-      {!addChannel && (
+      {!channel && (
         <div id="board">
           <Sidebar
-            addChannel={addChannel} 
-            setAddChannel={setAddChannel} 
+            channel={channel} 
+            setChannel={setChannel} 
             team={team.team} 
-            channels={channels}
+            channelList={channels}
           />
           <MessageBoard
             socket={client} 
@@ -37,11 +38,10 @@ function Dashboard() {
           />
         </div>
       )}
-      {addChannel && (
-        <AddChannel
-          addChannel={addChannel} 
-          setAddChannel={setAddChannel} 
-          team
+      {channel && (
+        <AddChannel 
+          setChannel={setChannel} 
+          team={teamName}
         />
       )}
     </div>

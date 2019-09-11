@@ -1,7 +1,7 @@
 import { mount } from 'enzyme';
 import React from 'react';
-// import axios from 'axios';
-// import MockAdapter from 'axios-mock-adapter';
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
@@ -9,6 +9,9 @@ import configureStore from 'redux-mock-store';
 import Login from '../client/components/Login/login';
 import 'babel-polyfill'
 
+const mock = new MockAdapter(axios);
+
+// mock redux store for testing
 const middleWare = [thunk];
 const mockStore = configureStore(middleWare);
 const initialState = {
@@ -17,6 +20,9 @@ const initialState = {
   error: null
 };
 const store = mockStore(initialState);
+
+// mock axios for testing
+
 
 
 describe('handleChange is operating properly', () => {
@@ -37,74 +43,21 @@ describe('handleChange is operating properly', () => {
         </BrowserRouter>
       </Provider>)
   })
-  it('enter calls handleSubmit properly', () => {
-    const spy = jest.spyOn(wrapper, 'handleSubmit');
+  it('enter calls handleSubmit properly', (done) => {
     const container = wrapper.find('#submit').at(1);
+    const userInput = wrapper.find("#username").at(1);
+    const passwordInput = wrapper.find("#password").at(1);
+    mock.onPost('http://localhost:3000/user/login').reply(200)
+    userInput.simulate('change', {target: {value: 'eric'}});
+    passwordInput.simulate('change', {target: {value: 'alskdfj'}})
     container.simulate('keydown', {key:'enter', keyCode: 13, which: 13});
-    expect(spy).toHaveBeenCalled(1);
+    setImmediate(() => {
+      const expectActions = [
+        {type: 'FETCH_USER_BEGIN'},
+        {type: 'FETCH_USER_SUCCESS'}
+      ]
+      expect(store.getActions()).toEqual(expectActions)
+      done()
+    })
   })
-  // it('username is setting properly', () => {
-  //   const wrapper = mount(
-  //     <Provider store={store}>
-  //       <BrowserRouter>
-  //         <Login />
-  //       </BrowserRouter>
-  //     </Provider>
-  //   )
-  //   const userInput = wrapper.find('#username').at(1);
-  //   const passwordInput = wrapper.find('#password');
-  //   const button = wrapper.find('')
-  //   passwordInput.simulate('change', {target: {value: 'hello'}})
-  //   userInput.simulate('change', {target: {value: 'adambarth'}});
-    
-    
-    
-    // expect(container.prop('data-value')).toBe('adambarth');
-    
-  })
-
-  // check if username 
-//   it('username checks', () => {
-//     const container = wrapper.find('#username');
-//     container.simulate('change', {target: {name: 'username', value: 'adambarth611'}});
-//     expect(wrapper.state('username')).toEqual('adambarth611');
-//   });
-  
-//   // check if password exists
-//   it('password checks', () => {
-//     const container = wrapper.find('#password');
-//     container.simulate('change', {target: {name: 'password', value: 'hello'}});
-//     expect(wrapper.state('password')).toEqual('hello');
-//   })
-// });
-
-// describe('axios post works', () => {
-//   let instance;
-//   let mock;
-//   let wrapper;
-//   beforeEach(() => {
-//     instance = axios.create();
-//     mock = new MockAdapter(instance);
-//     wrapper = shallow(<Login />)
-//   })
-//   it('correctly sets adapter', () => {
-//     expect(instance.defaults.adapter).toBeDefined();
-//   })
-//   it('axios post works', () => {
-//     mock.onPost('http:localhost:3000/user/login').reply(200);
-//     return instance.post('http:localhost:3000/user/login', {username: 'eric', password: 'a'})
-//     .then(response => {
-//       expect(response.status).toEqual(200);
-//     })
-//   })
-//   it('handleSubmit fires', () => {
-//     wrapper.find('#username').simulate('change', {target: {name: 'username', value: 'adambarth611'}});
-//     wrapper.find('#password').simulate('change', {target: {name: 'password', value: 'hello'}});
-//     const spy = jest.spyOn(wrapper.instance(), "handleSubmit");
-//     wrapper.update();
-//     wrapper.instance().forceUpdate();
-//     wrapper.find('#submit').simulate('click', {preventDefault: () => {}});
-//     expect(spy).toHaveBeenCalledTimes(1);
-//   })
-// })
-
+})

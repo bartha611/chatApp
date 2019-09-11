@@ -2,7 +2,7 @@ const shortid = require("shortid");
 const { pool } = require("../configuration/pool");
 
 exports.create = async (req, res) => {
-  const { name, team } = req.body;
+  const { name, team, description } = req.body;
   const client = await pool.connect();
   try {
     const oldChannel = await client.query(
@@ -22,12 +22,12 @@ exports.create = async (req, res) => {
       [team]
     );
     const response = await client.query(
-      `INSERT INTO channel(shortid, name, teamId) VALUES ($1, $2, $3) RETURNING name`,
-      [shortid.generate(), name, teamId.rows[0].id]
+      `INSERT INTO channel(shortid, name, description, teamId) VALUES ($1, $2, $3, $4) RETURNING name`,
+      [shortid.generate(), name, description, teamId.rows[0].id]
     );
+    console.log(response)
     return res.status(200).send(response.rows[0]);
   } catch (err) {
-    console.log(err);
-    return res.status(404).send("Error in creation");
+    return res.status(404).send("error in creation");
   }
 };

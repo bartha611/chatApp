@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import PropTypes from 'prop-types'
 import { Form } from "reactstrap";
 import TextArea from "react-textarea-autosize";
 import { addMessage } from "../../actions/messageAction";
@@ -73,5 +74,21 @@ const MessageBoard = ({ socket, message, channelId }) => {
     </div>
   );
 };
+
+MessageBoard.propTypes = {
+  socket: PropTypes.shape({
+    emit: PropTypes.func.isRequired,
+    on: PropTypes.func.isRequired,
+    off: PropTypes.func.isRequired
+  }).isRequired,
+  message: PropTypes.shape({
+    messages: PropTypes.arrayOf(PropTypes.shape({
+      user: PropTypes.string,
+      date: PropTypes.string,
+      message: PropTypes.string
+    }))
+  }).isRequired,
+  channelId: PropTypes.number.isRequired
+}
 
 export default MessageBoard;
