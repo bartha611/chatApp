@@ -41,7 +41,7 @@ const AddChannel = props => {
       </div>
       <div id="addchannel" className="col-md-6">
         <h2><b>Create Channel</b></h2>
-        <form>
+        <form className="mt-4">
           <div className="form-group">
             <label className="labels">Channel</label>
             <input type="text" className="form-control" placeholder="Channel" onChange={(e) => setName(e)} />

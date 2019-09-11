@@ -27,6 +27,12 @@ const channelReducer = (state = initalState, action) => {
         loading: false,
         error: true
       };
+    case types.FETCH_CHANNEL:
+      return {
+        ...state,
+        loading: false,
+        channels: action.payload
+      }
     default:
       return state;
   }

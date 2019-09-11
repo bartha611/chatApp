@@ -22,12 +22,16 @@ exports.create = async (req, res) => {
       [team]
     );
     const response = await client.query(
-      `INSERT INTO channel(shortid, name, description, teamId) VALUES ($1, $2, $3, $4) RETURNING name`,
+      `INSERT INTO channel(shortid, name, description, teamId) VALUES ($1, $2, $3, $4) RETURNING shortid, name`,
       [shortid.generate(), name, description, teamId.rows[0].id]
     );
-    console.log(response)
     return res.status(200).send(response.rows[0]);
   } catch (err) {
     return res.status(404).send("error in creation");
   }
 };
+
+exports.read = async (req,res) => {
+  const { team } = req.body;
+  const client = await pool.connect();
+}

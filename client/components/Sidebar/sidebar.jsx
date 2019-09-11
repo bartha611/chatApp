@@ -27,11 +27,13 @@ const Sidebar = ({ channel, setChannel, team, channelList }) => {
           <div className="title">Channel</div>
           {channelList.map(ch => {
             return (
-              <div>{ch}</div>
+              <div className="links">{ch}</div>
             );
           })}
-          <button onClick={() => setChannel(!channel)} type="button" className="btn btn-primary">Click me bitch</button>
         </ul>
+        <div className="mt-3" id="addChannelButton">
+          <button type="submit" className="container btn btn-primary" onClick={() => setChannel(!channel)}>Add Channel</button>
+        </div>
       </div>
     </div>
   );

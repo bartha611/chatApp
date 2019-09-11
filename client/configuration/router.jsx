@@ -1,6 +1,7 @@
 import React from 'react';
 import {useSelector } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types'
 
 export default function PrivateUserRoute({ component:Component, ...rest }) {
   const user = useSelector(state => state.user);
@@ -12,4 +13,8 @@ export default function PrivateUserRoute({ component:Component, ...rest }) {
       }
     />
   )
+}
+
+PrivateUserRoute.propTypes = {
+  component: PropTypes.element.isRequired
 }

@@ -22,7 +22,7 @@ export const addChannel = (name, team, description) => {
 export const fetchChannels = team => {
   return async dispatch => {
     try {
-      const response = await axios.get("http:localhost:3000/channel/read", {
+      const response = await axios.get("http://localhost:3000/channel/read", {
         team
       });
       dispatch({ type: types.FETCH_CHANNEL, payload: response.data });

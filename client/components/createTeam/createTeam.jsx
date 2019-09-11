@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Input, Form, FormGroup, Button, Label, Container, Alert } from "reactstrap";
+import PropTypes from 'prop-types'
 import Navigation from "../Navigation/navigation";
 import teamAction from '../../actions/teamAction';
 
@@ -55,6 +56,12 @@ CHECK BOX
       </Container>
     </div>
   );
+}
+
+createTeam.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired
+  }).isRequired
 }
 
 export default createTeam;
