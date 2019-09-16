@@ -14,7 +14,6 @@ import Dashboard from "./components/Dashboard/dashboard";
 import createTeam from "./components/createTeam/createTeam";
 import AddTeamMembers from "./components/addTeamMember/addTeamMember";
 import Navigation from "./components/Navigation/navigation";
-import Sidebar from "./components/Sidebar/sidebar";
 import MessageBoard from "./components/Message/message";
 
 export default function Home() {
@@ -26,8 +25,7 @@ export default function Home() {
             <Route exact path="/" component={Navigation} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
-            <Route path="/dashboard" component={Dashboard} />
-            <Route path="/sidebar" component={Sidebar} />
+            <Route path="/teams/:teamName" component={Dashboard} />
             <Route path="/message" component={MessageBoard} />
             <PrivateRoute path="/createTeam" component={createTeam} />
             <PrivateRoute path="/addTeamMember" component={AddTeamMembers} />

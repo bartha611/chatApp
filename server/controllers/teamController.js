@@ -1,3 +1,4 @@
+const shortid = require('shortid')
 const { pool } = require("../configuration/pool");
 
 exports.create = async (req, res) => {
@@ -12,8 +13,8 @@ exports.create = async (req, res) => {
       return res.status(404).send("Team name has already been taken");
     }
     await client.query("BEGIN");
-    const queryText = `INSERT INTO Teams (name, open) VALUES ($1, $2) RETURNING id`;
-    const { rows } = await client.query(queryText, [team, open]);
+    const queryText = `INSERT INTO Teams (name, open, shortId) VALUES ($1, $2, $3) RETURNING id`;
+    const { rows } = await client.query(queryText, [team, open, shortid.generate()]);
     const insertUserTeamText = `INSERT INTO userteams (userId, teamId) VALUES ($1, $2)`;
     await client.query(insertUserTeamText, [userId, rows[0].id]);
     await client.query("COMMIT");
@@ -30,7 +31,7 @@ exports.read = async (req, res) => {
   const { userId } = req.session;
   const client = await pool.connect();
   try {
-    const queryText = `SELECT t.name 
+    const queryText = `SELECT t.id,t.name 
     FROM Teams t 
     JOIN userteams ut ON (ut.teamId = t.id)  
     WHERE ut.userId = $1`;

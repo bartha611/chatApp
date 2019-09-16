@@ -11,6 +11,13 @@
   height: 50px;
   position: relative;
 }
+#titleGroup {
+  display: flex;
+  justify-content: space-between;
+}
+#addChannel {
+  cursor: pointer;
+}
 ul {
   padding: 15px;
   margin: 0;

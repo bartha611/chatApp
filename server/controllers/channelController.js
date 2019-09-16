@@ -28,10 +28,29 @@ exports.create = async (req, res) => {
     return res.status(200).send(response.rows[0]);
   } catch (err) {
     return res.status(404).send("error in creation");
+  } finally {
+    client.release()
   }
 };
 
 exports.read = async (req,res) => {
-  const { team } = req.body;
+  const { short } = req.body;
+  console.log(req.body);
   const client = await pool.connect();
+  try {
+    const teamId = await client.query(`
+    SELECT id
+    FROM teams
+    WHERE shortId = $1
+    `, [short])
+    console.log(teamId)
+    const queryText = `SELECT id, shortid, name, description FROM Channel WHERE teamId = $1`
+    const { rows } = await client.query(queryText, [teamId.rows[0].id]);
+    res.status(200).send(rows);
+  } catch (err) {
+    console.log(err)
+    res.status(404).send(err)
+  } finally {
+    client.release();
+  }
 }

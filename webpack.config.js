@@ -5,7 +5,8 @@ module.exports = {
   entry: ["babel-polyfill", "./client/index.jsx"],
   output: {
     filename: "bundle.js",
-    path: DIR_PATH
+    path: DIR_PATH,
+    publicPath: '/'
   },
   resolve: { extensions: [".js", ".jsx"] },
   devtool: 'source-map',
