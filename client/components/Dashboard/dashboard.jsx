@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector} from "react-redux";
 import io from "socket.io-client";
 import "./dashboard.css";
@@ -12,15 +12,18 @@ import AddChannel from "../addChannel/addChannel"
 const client = io.connect("http://localhost:3000");
 const channelId = Math.floor(Math.random() * 2);
 
-function Dashboard({ match }) {
+function Dashboard({ match}) {
   const message = useSelector(state => state.messages);
+  const teams = useSelector(state => state.team)
   const [channel, setChannel] = useState(false);
+  useEffect(() => {
+    console.log(teams);
+  }, [])
   return (
     <div>
       {!channel && (
         <div id="board">
           <Sidebar
-            channel={channel} 
             setChannel={setChannel} 
             team={match.params.teamName}
           />
@@ -46,6 +49,9 @@ Dashboard.propTypes = {
     params: PropTypes.shape({
       teamName: PropTypes.string.isRequired
     }).isRequired
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired
   }).isRequired
 }
 

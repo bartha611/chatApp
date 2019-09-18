@@ -6,6 +6,8 @@ import TextArea from "react-textarea-autosize";
 import { addMessage } from "../../actions/messageAction";
 import "./message.css";
 
+import { logoutUser } from '../../actions/userAction'
+
 const MessageBoard = ({ socket, message, channelId }) => {
   const [input, setInput] = useState("");
   const dispatch = useDispatch();
@@ -26,6 +28,9 @@ const MessageBoard = ({ socket, message, channelId }) => {
   }, [message])
   return (
     <div id="messageBox">
+      <div id="messageNavigation">
+        <button type="submit" onClick={() => dispatch(logoutUser())} className="btn btn-primary" id="logout">Logout</button>
+      </div>
       <div id="chat">
         {message.messages &&
           message.messages.map(msg => {

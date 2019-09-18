@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import "./login.css";
 import { Form, FormGroup, Input, Label, Button, Alert} from "reactstrap";
 import { fetchUser } from "../../actions/userAction"
+import { fetchTeams } from '../../actions/teamAction'
 import Navigation from "../Navigation/navigation";
 
 
@@ -12,9 +13,11 @@ function Login(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const user = useSelector(state => state.user);
+  const team = useSelector(state => state.team);
   const dispatch = useDispatch();
-  const handleSubmit = () => {
-    dispatch(fetchUser(username,password));
+  const handleSubmit = async () => {
+    await dispatch(fetchUser(username,password));
+    await dispatch(fetchTeams());
   };
   useEffect(() => {
     const handleEnter = e =>{
@@ -27,6 +30,7 @@ function Login(props) {
   })
   useEffect(() => {
     if(user.authenticated) {
+      console.log(team)
       props.history.push('/dashboard')
     }
   }, [user]);

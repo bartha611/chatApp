@@ -5,6 +5,8 @@ exports.create = async (req, res) => {
   const { team, open } = req.body;
   const client = await pool.connect();
   const { userId } = req.session;
+  console.log(req.session)
+  console.log(userId)
   try {
     const oldTeam = await client.query(`SELECT * FROM Teams WHERE name = $1`, [
       team
@@ -29,13 +31,15 @@ exports.create = async (req, res) => {
 
 exports.read = async (req, res) => {
   const { userId } = req.session;
+  console.log(userId);
   const client = await pool.connect();
   try {
-    const queryText = `SELECT t.id,t.name 
+    const queryText = `SELECT t.id,t.name,t.shortid,t.open
     FROM Teams t 
     JOIN userteams ut ON (ut.teamId = t.id)  
     WHERE ut.userId = $1`;
     const { rows } = await client.query(queryText, [userId]);
+    console.log(rows);
     res.status(200).send(rows);
   } catch (err) {
     res.status(404).send("Error retrieving teams");

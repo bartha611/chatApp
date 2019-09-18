@@ -34,16 +34,14 @@ exports.create = async (req, res) => {
 };
 
 exports.read = async (req,res) => {
-  const { short } = req.body;
-  console.log(req.body);
+  const param  = req.query.team;
   const client = await pool.connect();
   try {
     const teamId = await client.query(`
     SELECT id
     FROM teams
     WHERE shortId = $1
-    `, [short])
-    console.log(teamId)
+    `, [param])
     const queryText = `SELECT id, shortid, name, description FROM Channel WHERE teamId = $1`
     const { rows } = await client.query(queryText, [teamId.rows[0].id]);
     res.status(200).send(rows);

@@ -6,13 +6,12 @@ import PropTypes from 'prop-types'
 import { fetchChannels } from '../../actions/channelAction'
 
 
-const Sidebar = ({ channel, setChannel, team }) => {
+const Sidebar = ({ setChannel, team }) => {
   const dispatch = useDispatch();
   const channels = useSelector(state => state.channel);
   const teams = useSelector(state => state.team);
   const fetchTeamChannels = async () => {
     await dispatch(fetchChannels(team));
-    console.log(channels);
   }
   useEffect(() => {
     fetchTeamChannels();
@@ -30,7 +29,7 @@ const Sidebar = ({ channel, setChannel, team }) => {
               {teams.team.map(tm => {
                 return (
                   <a href="/login" className="dropdown-item">
-                    {tm}
+                    {tm.name}
                   </a>
                 );
               })}
@@ -40,7 +39,7 @@ const Sidebar = ({ channel, setChannel, team }) => {
         <ul id="channels">
           <div id="titleGroup">
             <div className="title">Channel</div>
-            <div id="addChannel" onClick={() => {setChannel(!channel)}}><i className="fa fa-plus-circle" /></div>
+            <div id="addChannel" onClick={() => {setChannel(true)}}><i className="fa fa-plus-circle" /></div>
           </div>
           {channels.channels.map(ch => {
             return (
@@ -48,16 +47,13 @@ const Sidebar = ({ channel, setChannel, team }) => {
             );
           })}
         </ul>
-        <div className="mt-3" id="addChannelButton">
-          <button type="submit" className="container btn btn-primary" onClick={() => fetchTeamChannels()}>Add Channel</button>
-        </div>
+
       </div>
     </div>
   );
 };
 
 Sidebar.propTypes = {
-  channel: PropTypes.bool.isRequired,
   setChannel: PropTypes.func.isRequired,
   team: PropTypes.string.isRequired,
 }
