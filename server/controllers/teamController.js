@@ -17,6 +17,8 @@ exports.create = async (req, res) => {
     await client.query("BEGIN");
     const queryText = `INSERT INTO Teams (name, open, shortId) VALUES ($1, $2, $3) RETURNING id`;
     const { rows } = await client.query(queryText, [team, open, shortid.generate()]);
+    const insertGeneralChannel = `INSERT INTO channel (shortid, name, teamid, description) VALUES ($1, $2, $3, $4)`;
+    await client.query(insertGeneralChannel, [shortid.generate(), "general", rows[0].id, "general channel"])
     const insertUserTeamText = `INSERT INTO userteams (userId, teamId) VALUES ($1, $2)`;
     await client.query(insertUserTeamText, [userId, rows[0].id]);
     await client.query("COMMIT");

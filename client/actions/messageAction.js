@@ -1,11 +1,11 @@
-import Axios from "axios";
+import axios from "axios";
 import * as types from "../constants/messageTypes";
 
 export function fetchMessages(channelId, userId) {
   return async dispatch => {
     dispatch({ type: types.FETCH_MESSAGES_BEGIN });
     try {
-      const response = await Axios.get("http://localhost:3000/messages", {
+      const response = await axios.get("http://localhost:3000/messages", {
         channelId,
         userId
       });
@@ -18,8 +18,15 @@ export function fetchMessages(channelId, userId) {
   };
 }
 export const addMessage = message => {
-  return {
-    type: types.ADD_MESSAGE,
-    payload: message
-  };
+  return async dispatch => {
+    dispatch({type: types.FETCH_MESSAGES_BEGIN });
+    try {
+      const response = await axios.post("http://localhost:3000/messages/create", {
+        message
+      })
+      dispatch({ type: types.ADD_MESSAGE, payload: response.data})
+    } catch(err) {
+      dispatch({ type: types.FETCH_MESSAGES_FAILURE})
+    }
+  }
 };

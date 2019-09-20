@@ -33,6 +33,7 @@ const messageReducer = (state = initialState, action) => {
     case ADD_MESSAGE:
       return {
         ...state,
+        loading: false,
         messages: [...state.messages, action.payload]
       };
     default:
