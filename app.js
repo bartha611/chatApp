@@ -16,6 +16,7 @@ const io = require("socket.io")(server);
 const userRoutes = require("./server/routes/userRoute");
 const teamRoutes = require("./server/routes/teamRoute");
 const channelRoutes = require("./server/routes/channelRoute");
+const messageRoutes = require("./server/routes/messageRoute")
 // middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -55,6 +56,7 @@ io.on("connection", socket => {
 app.use("/user", userRoutes);
 app.use("/team", teamRoutes);
 app.use("/channel", channelRoutes);
+app.use("/message", messageRoutes);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/client/dist/index.html"));

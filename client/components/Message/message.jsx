@@ -1,39 +1,59 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import PropTypes from 'prop-types'
-import { Form } from "reactstrap";
-import TextArea from "react-textarea-autosize";
-import { addMessage } from "../../actions/messageAction";
+import { useDispatch, useSelector } from "react-redux";
+import PropTypes from "prop-types";
+import { Alert } from "reactstrap";
+// import TextArea from "react-textarea-autosize";
+import { addMessage, fetchMessages } from "../../actions/messageAction";
 import "./message.css";
 
-import { logoutUser } from '../../actions/userAction'
+import Footer from "../footer/footer";
 
-const MessageBoard = ({ socket, message, channelId }) => {
+import { logoutUser } from "../../actions/userAction";
+
+const MessageBoard = ({ socket, channel }) => {
   const [input, setInput] = useState("");
   const dispatch = useDispatch();
+  const messages = useSelector(state => state.messages);
+  console.log(messages);
   const messageEnd = useRef(null);
-  const handleSubmit = () => {
-    socket.emit("input", { input, channelId });
+  const handleSubmit = async () => {
+    await dispatch(addMessage(input));
+    if (!messages.error) {
+      socket.emit("input", { input, channel });
+    }
     setInput("");
   };
   useEffect(() => {
-    socket.emit("join", channelId);
+    const fetch = async () => {
+      await dispatch(fetchMessages(channel));
+    }
+    fetch();
+  }, []);
+  useEffect(() => {
+    socket.emit("join", channel);
     socket.on("message", msg => {
       dispatch(addMessage(msg));
     });
     return () => socket.off("message");
   }, []);
   useEffect(() => {
-    messageEnd.current.scrollIntoView({ behavior: 'smooth'})
-  }, [message])
+    messageEnd.current.scrollIntoView({ behavior: "smooth" });
+  }, [messages.messages]);
   return (
     <div id="messageBox">
       <div id="messageNavigation">
-        <button type="submit" onClick={() => dispatch(logoutUser())} className="btn btn-primary" id="logout">Logout</button>
+        <button
+          type="submit"
+          onClick={() => dispatch(logoutUser())}
+          className="btn btn-primary"
+          id="logout"
+        >
+          Logout
+        </button>
       </div>
       <div id="chat">
-        {message.messages &&
-          message.messages.map(msg => {
+        {messages.messages &&
+          messages.messages.map(msg => {
             return (
               <div className="messageBlock">
                 <span className="user">
@@ -46,9 +66,19 @@ const MessageBoard = ({ socket, message, channelId }) => {
               </div>
             );
           })}
+        {messages.error && (
+          <div id="alert">
+            <Alert>Error in sending message</Alert>
+          </div>
+        )}
         <div id="messageEnd" ref={messageEnd} />
       </div>
-      <div id="footer">
+      <Footer 
+        handleSubmit={handleSubmit} 
+        setInput={setInput} 
+        input={input}
+      />
+      {/* <div id="footer">
         <div id="formbox">
           <Form>
             <TextArea
@@ -75,7 +105,7 @@ const MessageBoard = ({ socket, message, channelId }) => {
             Submit
           </button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
@@ -86,14 +116,7 @@ MessageBoard.propTypes = {
     on: PropTypes.func.isRequired,
     off: PropTypes.func.isRequired
   }).isRequired,
-  message: PropTypes.shape({
-    messages: PropTypes.arrayOf(PropTypes.shape({
-      user: PropTypes.string,
-      date: PropTypes.string,
-      message: PropTypes.string
-    }))
-  }).isRequired,
-  channelId: PropTypes.number.isRequired
-}
+  channel: PropTypes.string.isRequired
+};
 
 export default MessageBoard;

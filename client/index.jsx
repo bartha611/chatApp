@@ -26,7 +26,7 @@ export default function Home() {
             <Route exact path="/" component={Navigation} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
-            <PrivateRoute path="/teams/:teamName" component={Dashboard} />
+            <PrivateRoute path="/:teamName/:channelName" component={Dashboard} />
             <Route path="/message" component={MessageBoard} />
             <PrivateRoute path="/createTeam" component={createTeam} />
             <PrivateRoute path="/addTeamMember" component={AddTeamMembers} />

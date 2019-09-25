@@ -54,7 +54,9 @@ describe('handleChange is operating properly', () => {
     setImmediate(() => {
       const expectActions = [
         {type: 'FETCH_USER_BEGIN'},
-        {type: 'FETCH_USER_SUCCESS'}
+        {type: 'FETCH_USER_SUCCESS'},
+        {type: 'FETCH_CHANNEL_BEGIN'},
+        {type: 'FETCH_CHANNEL_SUCCESS'}
       ]
       expect(store.getActions()).toEqual(expectActions)
       done()
