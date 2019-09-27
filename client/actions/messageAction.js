@@ -1,31 +1,26 @@
-import axios from "axios";
 import * as types from "../constants/messageTypes";
 
+import httpAction from './httpAction';
+
 export function fetchMessages(shortId) {
-  return async dispatch => {
-    dispatch({ type: types.FETCH_MESSAGES_BEGIN });
-    try {
-      const response = await axios.get(`http://localhost:3000/message/read?shortid=${shortId}`, {
-      });
-      console.log(response);
-      dispatch({ type: types.FETCH_MESSAGES_END, payload: response.data });
-      return response;
-    } catch (err) {
-      dispatch({ type: types.FETCH_MESSAGES_FAILURE });
-      return err;
-    }
-  };
+  return httpAction({
+    endpoint: `/message/read?shortid=${shortId}`,
+    type: 'MESSAGES'
+  })
 }
-export const addMessage = message => {
-  return async dispatch => {
-    dispatch({type: types.FETCH_MESSAGES_BEGIN });
-    try {
-      const response = await axios.post("http://localhost:3000/message/create", {
-        message
-      })
-      dispatch({ type: types.ADD_MESSAGE, payload: response.data})
-    } catch(err) {
-      dispatch({ type: types.FETCH_MESSAGES_FAILURE})
-    }
-  }
+export const sendMessage = (message, shortid) => {
+  return httpAction({
+    verb: 'POST',
+    type: 'MESSAGES',
+    endpoint: '/message/create',
+    payload: {message, shortid},
+    operation: 'ADD'
+  })
 };
+
+export const addMessage = message => {
+  return({
+    type: types.ADD_MESSAGE,
+    payload: message
+  })
+}

@@ -39,6 +39,7 @@ io.use((socket, next) => {
 
 io.on("connection", socket => {
   socket.on("join", channel => {
+    console.log('connected')
     socket.join(channel);
   });
   socket.on("input", ({ input, channelId }) => {

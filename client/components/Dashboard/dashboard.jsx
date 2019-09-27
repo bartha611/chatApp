@@ -1,5 +1,4 @@
 import React, { useState} from "react";
-import io from "socket.io-client";
 import "./dashboard.css";
 import PropTypes from 'prop-types'
 
@@ -8,7 +7,6 @@ import MessageBoard from "../Message/message";
 import Sidebar from "../Sidebar/sidebar";
 import AddChannel from "../addChannel/addChannel"
 
-const client = io.connect("http://localhost:3000");
 
 function Dashboard({ match }) {
   const [channel, setChannel] = useState(false);
@@ -21,7 +19,6 @@ function Dashboard({ match }) {
             team={match.params.teamName}
           />
           <MessageBoard
-            socket={client} 
             channel={match.params.channelName} 
           />
         </div>

@@ -1,8 +1,8 @@
 import {
-  FETCH_MESSAGES_BEGIN,
-  FETCH_MESSAGES_END,
-  FETCH_MESSAGES_FAILURE,
-  ADD_MESSAGE
+  MESSAGES_FAILURE,
+  MESSAGES_RECEIVED,
+  MESSAGES_REQUEST,
+  ADD_MESSAGE_RECEIVED
 } from "../constants/messageTypes";
 
 const initialState = {
@@ -13,24 +13,24 @@ const initialState = {
 
 const messageReducer = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_MESSAGES_BEGIN:
+    case MESSAGES_REQUEST:
       return {
         ...state,
         isLoading: true
       };
-    case FETCH_MESSAGES_END:
+    case MESSAGES_RECEIVED:
       return {
         ...state,
         isLoading: false,
         messages: action.payload
       };
-    case FETCH_MESSAGES_FAILURE:
+    case MESSAGES_FAILURE:
       return {
         ...state,
         isLoading: false,
         error: true
       };
-    case ADD_MESSAGE:
+    case ADD_MESSAGE_RECEIVED:
       return {
         ...state,
         loading: false,

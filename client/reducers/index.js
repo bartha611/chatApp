@@ -8,6 +8,8 @@ import userReducer from "./userReducer";
 import teamReducer from "./teamReducer";
 import channelReducer from "./channelReducer";
 
+import fetchData from '../middleware'
+
 const persistConfig = {
   key: "root",
   storage: localStorage,
@@ -23,7 +25,7 @@ const rootReducer = combineReducers({
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-const store = createStore(persistedReducer, applyMiddleware(thunk));
+const store = createStore(persistedReducer, applyMiddleware(thunk, fetchData));
 const persistor = persistStore(store);
 
 export { store, persistor };
