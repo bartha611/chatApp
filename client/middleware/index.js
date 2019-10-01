@@ -6,12 +6,16 @@ const fetchData = store => {
   socket.on("message", data => {
     console.log("you got it right");
     store.dispatch({
-      type: "ADD_MESSAGE_RECEIVED",
+      type: "ADD_MESSAGES_RECEIVED",
       payload: data
     });
+    console.log(store.getState())
   });
   return next => action => {
     if (!action.verb) {
+      if (action.event) {
+        socket.emit(action.event, action.channel)
+      }
       return next(action);
     }
     const { verb, type, endpoint, payload, operation } = action;

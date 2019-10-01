@@ -7,12 +7,12 @@ export function fetchMessages(shortId) {
 }
 export const sendMessage = (message, shortid, username) => {
   const Time = new Date();
-  const date = Time.toUTCString();
+  const createdat = Time.toUTCString();
   return {
     verb: "POST",
     type: "MESSAGES",
     endpoint: "/message/create",
-    payload: { message, shortid, username, date },
+    payload: { message, shortid, username, createdat },
     event: "input",
     operation: "ADD"
   };

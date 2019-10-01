@@ -2,18 +2,12 @@ import axios from "axios";
 import * as types from "../constants/teamConstants";
 
 export const teamAction = (team, open) => {
-  return async dispatch => {
-    dispatch({ type: types.ADD_TEAM_BEGIN });
-    try {
-      const response = await axios.post("http://localhost:3000/team/create", {
-        team,
-        open
-      });
-      dispatch({ type: types.ADD_TEAM_SUCCESS, payload: response.data });
-    } catch (err) {
-      dispatch({ type: types.ADD_TEAM_FAILURE });
-    }
-  };
+  return {
+    verb: 'POST',
+    type: 'TEAM',
+    operation: 'ADD',
+    
+  }
 };
 export const fetchTeams = () => {
   return async dispatch => {

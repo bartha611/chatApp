@@ -29,8 +29,8 @@ function Login(props) {
     return () => window.removeEventListener('keydown', handleEnter);
   })
   useEffect(() => {
-    if(user.username.length > 0) {
-      console.log(team)
+    if(user.authenticated) {
+      console.log(team);
       props.history.push('/dashboard')
     }
   }, [user]);

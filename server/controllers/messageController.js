@@ -1,7 +1,7 @@
 const { pool } = require("../configuration/pool");
 
 exports.create = async (req, res) => {
-  const { username, message, shortid, date } = req.body;
+  const { username, message, shortid, createdat } = req.body;
   const client = await pool.connect();
   try {
     const channelId = await client.query(
@@ -17,9 +17,11 @@ exports.create = async (req, res) => {
       message,
       userId.rows[0].id,
       channelId.rows[0].id,
-      date
+      createdat
     ]);
-    return res.status(200).send(rows);
+    rows[0].username = username;
+    rows[0].createdat = createdat
+    return res.status(200).send(rows[0]);
   } catch (err) {
     console.log(err);
     return res.status(404).send("error in sending message");

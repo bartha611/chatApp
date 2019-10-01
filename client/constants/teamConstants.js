@@ -1,4 +1,4 @@
-export const ADD_TEAM_BEGIN = "ADD_TEAM_BEGIN";
-export const ADD_TEAM_FAILURE = "ADD_TEAM_FAILURE";
-export const ADD_TEAM_SUCCESS = "ADD_TEAM_SUCCESS";
+export const TEAM_REQUEST = "ADD_TEAM_BEGIN";
+export const TEAM_FAILURE = "ADD_TEAM_FAILURE";
+export const ADD_TEAM_RECEIVED = "ADD_TEAM_SUCCESS";
 export const FETCH_TEAMS = "FETCH_TEAMS";

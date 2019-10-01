@@ -13,7 +13,8 @@ function Dashboard({ match, history }) {
   const [channel, setChannel] = useState(false);
   const user = useSelector(state => state.user);
   useEffect(() => {
-    if (user.username.length === 0) {
+    if (!user.authenticated) {
+      console.log("hello")
       history.push('/login');
     }
   })
