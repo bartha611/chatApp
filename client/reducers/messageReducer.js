@@ -2,7 +2,7 @@ import {
   MESSAGES_FAILURE,
   MESSAGES_RECEIVED,
   MESSAGES_REQUEST,
-  ADD_MESSAGE_RECEIVED
+  ADD_MESSAGES_RECEIVED
 } from "../constants/messageTypes";
 
 const initialState = {
@@ -30,7 +30,7 @@ const messageReducer = (state = initialState, action) => {
         isLoading: false,
         error: true
       };
-    case ADD_MESSAGE_RECEIVED:
+    case ADD_MESSAGES_RECEIVED:
       return {
         ...state,
         loading: false,

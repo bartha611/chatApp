@@ -9,6 +9,10 @@ import {
   NavbarToggler,
   Collapse,
   NavItem,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
 } from "reactstrap";
 import {logoutUser} from '../../actions/userAction';
 import "./navigation.css"
@@ -16,7 +20,10 @@ import "./navigation.css"
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const team = useSelector(state => state.team);
   const user = useSelector(state => state.user);
+  console.log(user);
   const dispatch = useDispatch();
   const handleClick = () => {
     dispatch(logoutUser());
@@ -28,14 +35,14 @@ export default function Navigation() {
           <NavbarToggler onClick={() => setIsOpen(!isOpen)} />
           <Collapse isOpen={isOpen} navbar>
             <Nav className="ml-auto" navbar>
-              {!user.authenticated && (
+              {user.username.length === 0 && (
               <NavItem>
                 <NavLink tag={Link} to="/login">
                   Login
                 </NavLink>
               </NavItem>
               )}
-              {!user.authenticated && (
+              {user.username.length === 0 && (
               <NavItem>
                 <NavLink tag={Link} to="/signup">
                   SignUp
@@ -48,6 +55,35 @@ export default function Navigation() {
                     Logout
                   </NavLink>
                 </NavItem>
+              )}
+              {user.username.length === 0 && (
+                <NavItem>
+                  <NavLink tag={Link} to="/create">
+                    Create Team
+                  </NavLink>
+                </NavItem>
+              )}
+              {user.username.length > 0 && (
+                <Dropdown isOpen={dropdownOpen} toggle={setDropdownOpen(true)}>
+                  <DropdownToggle caret>
+                    <DropdownMenu>
+                      <DropdownItem>
+                        <NavLink tag={Link} to="/create">
+                          Create Team
+                        </NavLink>
+                      </DropdownItem>
+                      {team.team.map(tm => {
+                        return (
+                          <DropdownItem>
+                            <NavLink tag={Link} to={`/${tm.shortid}`}>
+                              {tm.name}
+                            </NavLink>
+                          </DropdownItem>
+                        )
+                      })}
+                    </DropdownMenu>
+                  </DropdownToggle>
+                </Dropdown>
               )}
             </Nav>
           </Collapse>

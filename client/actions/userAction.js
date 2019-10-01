@@ -1,47 +1,27 @@
-import axios from "axios";
-import * as types from "../constants/userTypes";
-
 export function fetchUser(username, password) {
-  return async dispatch => {
-    dispatch({ type: types.FETCH_USER_BEGIN });
-    try {
-      await axios.post(`http://localhost:3000/user/login`, {
-        username,
-        password
-      });
-      dispatch({ type: types.FETCH_USER_SUCCESS });
-    } catch (err) {
-      dispatch({ type: types.FETCH_USER_FAILURE });
-    }
+  return {
+    type: "USER",
+    verb: "POST",
+    endpoint: "/user/login",
+    payload: { username, password },
+    operation: "LOGIN"
   };
 }
 export function logoutUser() {
-  return async dispatch => {
-    dispatch({ type: types.FETCH_USER_BEGIN });
-    console.log("begin")
-    try {
-      await axios.post("http://localhost:3000/user/logout");
-      dispatch({ type: types.LOGOUT_SUCCESS });
-      console.log('success');
-    } catch (err) {
-      console.log("failure")
-      dispatch({ type: types.LOGOUT_FAILURE });
-    }
+  return {
+    type: "USER",
+    verb: "POST",
+    endpoint: "/user/logout",
+    operation: "LOGOUT"
   };
 }
 
 export function signupUser(username, email, password) {
-  return async dispatch => {
-    dispatch({ type: types.FETCH_USER_BEGIN });
-    try {
-      await axios.post("http://localhost:3000/user/register", {
-        username,
-        email,
-        password
-      });
-      dispatch({ type: types.FETCH_USER_SUCCESS });
-    } catch (err) {
-      dispatch({ type: types.FETCH_USER_FAILURE });
-    }
+  return {
+    type: "USER",
+    verb: "POST",
+    payload: { username, email, password },
+    endpoint: "/user/register",
+    operation: "CREATE"
   };
 }

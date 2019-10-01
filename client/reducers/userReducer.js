@@ -1,38 +1,44 @@
 import * as types from "../constants/userTypes";
 
 const currentState = {
-  isLoading: false,
-  authenticated: false,
+  userLoading: false,
+  username: "",
   team: [],
-  loginError: false,
-  logoutError: false
+  userError: null
 };
 const userReducer = (state = currentState, action) => {
   switch (action.type) {
-    case types.FETCH_USER_BEGIN:
+    case types.USER_REQUEST:
       return {
         ...state,
-        isLoading: true
+        userLoading: true
       };
-    case types.FETCH_USER_SUCCESS:
+    case types.LOGIN_USER_RECEIVED:
       return {
         ...state,
-        isLoading: false,
-        authenticated: true,
-        loginError: null
+        userLoading: false,
+        username: action.payload.username,
+        userError: null
       };
-    case types.LOGOUT_SUCCESS:
+    case types.LOGOUT_USER_RECEIVED:
       return {
         ...state,
-        isLoading: false,
-        authenticated: false,
-        logoutError: false
+        userLoading: false,
+        username: "",
+        userError: false
       };
-    case types.FETCH_USER_FAILURE:
+    case types.CREATE_USER_RECEIVED:
       return {
         ...state,
-        isLoading: false,
-        loginError: true
+        userLoading: false,
+        username: action.payload.username,
+        userError: false
+      };
+    case types.USER_FAILURE:
+      return {
+        ...state,
+        userLoading: false,
+        userError: true
       };
     default:
       return state;

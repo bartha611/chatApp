@@ -1,4 +1,4 @@
-const DIR_PATH = `${__dirname  }/client/dist`;
+const DIR_PATH = `${__dirname}/client/dist`;
 const webpack = require("webpack");
 
 module.exports = {
@@ -6,10 +6,11 @@ module.exports = {
   output: {
     filename: "bundle.js",
     path: DIR_PATH,
-    publicPath: '/'
+    publicPath: "/"
   },
+  mode: "production",
   resolve: { extensions: [".js", ".jsx"] },
-  devtool: 'source-map',
+  devtool: "source-map",
   module: {
     rules: [
       {

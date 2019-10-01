@@ -8,23 +8,23 @@ import "./message.css";
 
 import Footer from "../footer/footer";
 
-import { logoutUser } from '../../actions/userAction'
-
+import { logoutUser } from "../../actions/userAction";
 
 const MessageBoard = ({ channel }) => {
   const [input, setInput] = useState("");
   const dispatch = useDispatch();
   const messages = useSelector(state => state.messages);
+  const user = useSelector(state => state.user);
   const messageEnd = useRef(null);
   const handleSubmit = async () => {
-    await dispatch(sendMessage(input,channel));
+    await dispatch(sendMessage(input, channel, user.username));
     setInput("");
   };
   useEffect(() => {
     const fetch = async () => {
       await dispatch(fetchMessages(channel));
-    }
-    dispatch({type: 'STORE_JOIN', event: 'join', channel })
+    };
+    dispatch({ type: "STORE_JOIN", event: "join", channel });
     fetch();
   }, []);
   useEffect(() => {
@@ -33,7 +33,16 @@ const MessageBoard = ({ channel }) => {
   return (
     <div id="messageBox">
       <div id="messageNavigation">
-        <button type="button" onClick={() => dispatch(logoutUser())} className="btn btn-primary">Logout</button>
+        <button
+          type="button"
+          onClick={() => {
+            dispatch(logoutUser())
+            
+          }}
+          className="btn btn-primary"
+        >
+          Logout
+        </button>
       </div>
       <div id="chat">
         {messages.messages &&
@@ -57,11 +66,7 @@ const MessageBoard = ({ channel }) => {
         )}
         <div id="messageEnd" ref={messageEnd} />
       </div>
-      <Footer 
-        handleSubmit={handleSubmit} 
-        setInput={setInput} 
-        input={input}
-      />
+      <Footer handleSubmit={handleSubmit} setInput={setInput} input={input} />
     </div>
   );
 };

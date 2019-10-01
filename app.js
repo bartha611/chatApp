@@ -16,7 +16,7 @@ const io = require("socket.io")(server);
 const userRoutes = require("./server/routes/userRoute");
 const teamRoutes = require("./server/routes/teamRoute");
 const channelRoutes = require("./server/routes/channelRoute");
-const messageRoutes = require("./server/routes/messageRoute")
+const messageRoutes = require("./server/routes/messageRoute");
 // middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -39,17 +39,12 @@ io.use((socket, next) => {
 
 io.on("connection", socket => {
   socket.on("join", channel => {
-    console.log('connected')
+    console.log("connected");
     socket.join(channel);
   });
-  socket.on("input", ({ input, channelId }) => {
-    const date = new Date().toDateString();
-    const chatMessage = {
-      message: input,
-      user: socket.request.session.user,
-      date
-    };
-    io.in(channelId).emit("message", chatMessage);
+  socket.on("input", ({ shortid, ...rest }) => {
+    console.log(...rest);
+    socket.to(shortid).emit("message", ...rest);
   });
 });
 

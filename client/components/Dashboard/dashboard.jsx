@@ -1,4 +1,5 @@
-import React, { useState} from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector } from 'react-redux';
 import "./dashboard.css";
 import PropTypes from 'prop-types'
 
@@ -8,8 +9,14 @@ import Sidebar from "../Sidebar/sidebar";
 import AddChannel from "../addChannel/addChannel"
 
 
-function Dashboard({ match }) {
+function Dashboard({ match, history }) {
   const [channel, setChannel] = useState(false);
+  const user = useSelector(state => state.user);
+  useEffect(() => {
+    if (user.username.length === 0) {
+      history.push('/login');
+    }
+  })
   return (
     <div>
       {!channel && (
