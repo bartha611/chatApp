@@ -8,23 +8,23 @@ const initialState = {
 
 const teamReducer = (state = initialState, action) => {
   switch (action.type) {
-    case types.ADD_TEAM_BEGIN:
+    case types.TEAM_REQUEST:
       return {
         ...state,
         isLoading: true
       };
-    case types.ADD_TEAM_SUCCESS:
+    case types.ADD_TEAM_RECEIVED:
       return {
         ...state,
         isLoading: false,
         team: [...state.team, action.payload]
       };
-    case types.ADD_TEAM_FAILURE:
+    case types.TEAM_FAILURE:
       return {
         ...state,
         error: action.error
       };
-    case types.FETCH_TEAMS:
+    case types.TEAM_RECEIVED:
       return {
         ...state,
         team: [action.payload]

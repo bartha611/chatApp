@@ -19,7 +19,7 @@ const fetchData = store => {
       return next(action);
     }
     const { verb, type, endpoint, payload, operation } = action;
-    next({
+    store.dispatch({
       type: `${type}_REQUEST`
     });
     console.log(store.getState());
@@ -29,7 +29,7 @@ const fetchData = store => {
       data: payload
     })
       .then(response => {
-        next({
+        store.dispatch({
           type: !operation
             ? `${type}_RECEIVED`
             : `${operation}_${type}_RECEIVED`,
@@ -40,10 +40,11 @@ const fetchData = store => {
           socket.emit(action.event, action.payload);
         }
         console.log(store.getState());
+        return;
       })
       .catch(err => {
         console.log(err);
-        next({
+        store.dispatch({
           type: `${type}_FAILURE`
         });
         console.log(store.getState());

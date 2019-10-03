@@ -1,21 +1,16 @@
-import axios from "axios";
-import * as types from "../constants/teamConstants";
-
-export const teamAction = (team, open) => {
+export const teamAction = (team, open, username) => {
   return {
     verb: 'POST',
-    type: 'TEAM',
+    state: 'TEAM',
+    endpoint: '/team/create',
     operation: 'ADD',
-    
+    payload: { team, open, username }
   }
 };
-export const fetchTeams = () => {
-  return async dispatch => {
-    try {
-      const response = await axios.get("http://localhost:3000/team/read");
-      dispatch({ type: types.FETCH_TEAMS, payload: response.data });
-    } catch (err) {
-      dispatch({ type: types.ADD_TEAM_FAILURE });
-    }
-  };
+export const fetchTeams = (username) => {
+  return {
+    state: 'TEAM',
+    verb: 'GET',
+    endpoint: `/team/read?username=${username}`,
+  }
 };

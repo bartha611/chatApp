@@ -9,10 +9,12 @@ import configureStore from "redux-mock-store";
 import Login from "../client/components/Login/login";
 import "babel-polyfill";
 
+import fetchData from '../client/middleware'
+
 const mock = new MockAdapter(axios);
 
 // mock redux store for testing
-const middleWare = [thunk];
+const middleWare = [fetchData];
 const mockStore = configureStore(middleWare);
 const initialState = {
   isLoading: false,
@@ -54,15 +56,14 @@ describe("handleChange is operating properly", () => {
     setImmediate(() => {
       const expectActions = [
         {
-          type: "LOGIN_USER_REQUEST",
+          type: "USER",
+          verb: "POST",
           endpoint: "/user/login",
           operation: "LOGIN",
           payload: { password: "fakePassword", username: "fakeUser" }
-        },
-        { type: "LOGIN_USER_RECEIVED" },
-        { type: "FETCH_CHANNEL_BEGIN" },
-        { type: "FETCH_CHANNEL_SUCCESS" }
+        }
       ];
+      console.log(store.getState())
       expect(store.getActions()).toEqual(expectActions);
       done();
     });

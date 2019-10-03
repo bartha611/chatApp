@@ -8,26 +8,26 @@ const initalState = {
 
 const channelReducer = (state = initalState, action) => {
   switch (action.type) {
-    case types.ADD_CHANNEL_BEGIN:
+    case types.CHANNEL_REQUEST:
       return {
         ...state,
         loading: true,
         error: false
       };
-    case types.ADD_CHANNEL_SUCCESS:
+    case types.ADD_CHANNEL_RECEIVED:
       return {
         ...state,
         loading: false,
         error: false,
         channels: [...state.channels, action.payload]
       };
-    case types.ADD_CHANNEL_FAILURE:
+    case types.CHANNEL_FAILURE:
       return {
         ...state,
         loading: false,
         error: true
       };
-    case types.FETCH_CHANNEL:
+    case types.CHANNEL_RECEIVED:
       return {
         ...state,
         loading: false,

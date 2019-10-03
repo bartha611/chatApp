@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import "./login.css";
 import { Form, FormGroup, Input, Label, Button, Alert} from "reactstrap";
 import { fetchUser } from "../../actions/userAction"
-import { fetchTeams } from '../../actions/teamAction'
+// import { fetchTeams } from '../../actions/teamAction'
 import Navigation from "../Navigation/navigation";
 
 
@@ -17,7 +17,7 @@ function Login(props) {
   const dispatch = useDispatch();
   const handleSubmit = async () => {
     await dispatch(fetchUser(username,password));
-    await dispatch(fetchTeams());
+    // await dispatch(fetchTeams(username));
   };
   useEffect(() => {
     const handleEnter = e =>{
