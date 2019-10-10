@@ -9,12 +9,12 @@ const fetchData = store => {
       type: "ADD_MESSAGES_RECEIVED",
       payload: data
     });
-    console.log(store.getState())
+    console.log(store.getState());
   });
   return next => action => {
     if (!action.verb) {
       if (action.event) {
-        socket.emit(action.event, action.channel)
+        socket.emit(action.event, action.channel);
       }
       return next(action);
     }
@@ -36,7 +36,6 @@ const fetchData = store => {
           payload: response.data
         });
         if (action.event) {
-          console.log("hello there!!");
           socket.emit(action.event, action.payload);
         }
         console.log(store.getState());

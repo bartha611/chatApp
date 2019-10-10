@@ -15,6 +15,8 @@ function Signup() {
   const handleSubmit = () => {
     if(confirmPassword === password) {
       dispatch(signupUser(username,email,password));
+    } else {
+      console.log("hello there")
     }
   }
   return (

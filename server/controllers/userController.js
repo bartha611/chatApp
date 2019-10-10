@@ -26,7 +26,6 @@ exports.login = async (req, res) => {
     }
     req.session.userId = user.id;
     req.session.user = user.username;
-    console.log(req.session.user);
     return res.status(200).send(user.username);
   } catch (e) {
     return res.status(400).send("Error connecting to database");
@@ -46,8 +45,8 @@ exports.logout = (req, res) => {
 
 exports.register = async (req, res) => {
   const { username, password, email } = req.body;
+  const client = await pool.connect();
   try {
-    const client = await pool.connect();
     const response = await client.query(
       "SELECT * FROM USERS WHERE username = $1",
       [username]
@@ -60,9 +59,10 @@ exports.register = async (req, res) => {
       `INSERT INTO USERS (username, email, password) VALUES ($1, $2, $3) RETURNING username`,
       [username, email, hashedPassword]
     );
-    client.release();
     return res.status(200).send(result.rows[0]);
   } catch (err) {
     return res.status(404).send("Error in creation");
+  } finally {
+    client.release();
   }
 };

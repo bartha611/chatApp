@@ -4,7 +4,6 @@ const currentState = {
   userLoading: false,
   username: "",
   authenticated: false,
-  team: [],
   userError: null
 };
 const userReducer = (state = currentState, action) => {

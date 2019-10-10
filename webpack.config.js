@@ -1,5 +1,7 @@
 const DIR_PATH = `${__dirname}/client/dist`;
 const webpack = require("webpack");
+const MomentLocalesPlugin = require("moment-locales-webpack-plugin");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 module.exports = {
   entry: ["babel-polyfill", "./client/index.jsx"],
@@ -36,6 +38,9 @@ module.exports = {
       "process.env": {
         NODE_ENV: JSON.stringify("development")
       }
+    }),
+    new MomentLocalesPlugin({
+      localesToKeep: ["es-us", "ru"]
     })
   ]
 };
