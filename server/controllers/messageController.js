@@ -37,7 +37,7 @@ exports.read = async (req, res) => {
   const { shortid, zone } = req.query;
   const client = await pool.connect();
   try {
-    const queryText = `SELECT m.message, u.username, to_char(m.createdat AT TIME ZONE '${zone}', 'YYYY-MM-DD HH12:MI AM') AS createdat
+    const queryText = `SELECT m.message, u.username, to_char(m.createdat AT TIME ZONE '${zone}', 'YYYY-MM-DD HH:MI AM') AS createdat
     FROM messages m 
     JOIN users u ON (u.id = m.userid) 
     JOIN channel c ON (c.id = m.channelid)

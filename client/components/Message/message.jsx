@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import moment from 'moment'
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { Alert } from "reactstrap";
@@ -47,13 +48,18 @@ const MessageBoard = ({ channel }) => {
       <div id="chat">
         {messages.messages &&
           messages.messages.map(msg => {
+            const [date, time, meridian] = msg.createdat.split(' ');
+            const messageTime = `${time} ${meridian}`.replace(/^0/,'');
+            console.log(msg.createdat);
+            const messageDate = moment(date).format("MMMM D, YYYY");
+            console.log(messageDate)
             return (
               <div className="messageBlock">
                 <span className="user">
                   <b>{msg.username}</b>
                   {" "}
                 </span>
-                <span className="date">{msg.createdat}</span>
+                <span className="date">{messageTime}</span>
                 <div className="message">{msg.message}</div>
                 <hr style={{ backgroundColor: "grey" }} />
               </div>

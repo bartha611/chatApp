@@ -57,11 +57,15 @@ exports.read = async (req, res) => {
       `SELECT id FROM users WHERE username = $1`,
       [username]
     );
-    const queryText = `SELECT *
+    const queryText = `SELECT t.shortid, t.name, MAX(to_char(m.createdat, 'YYYY-MM-DD HH:MI')) AS last_updated
     FROM Teams t 
     JOIN userteams ut ON (ut.teamId = t.id)
     JOIN channel c ON (c.teamid = t.id)
-    WHERE ut.userId = $1`;
+    JOIN messages m ON (m.channelid = c.id)
+    WHERE ut.userId = $1
+    GROUP BY t.shortid, t.name
+    ORDER BY last_updated DESC
+    `;
     const { rows } = await client.query(queryText, [userId.rows[0].id]);
     res.status(200).send(rows);
   } catch (err) {
