@@ -33,15 +33,27 @@ textarea {
   margin-top: 10px;
   overflow-wrap: break-word;
   overflow-x: auto;
-  
 }
 .user {
   font-weight: bold;
   color: black;
 }
-.date {
+.time {
   color: hsl(195, 34%, 70%);
+  padding-left: 2px;
+  font-size: 10px;
 }
 .message {
   color: black;
+}
+h4 {
+  border-bottom: 1px solid #000;
+  text-align: center;
+  line-height: 0.1em;
+  font-size: 14px;
+  font-weight: bold;
+}
+h4 span {
+  padding: 0 10px;
+  background: #fff;
 }

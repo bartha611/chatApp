@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import moment from 'moment'
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { Alert } from "reactstrap";
 // import TextArea from "react-textarea-autosize";
 import { fetchMessages, sendMessage } from "../../actions/messageAction";
 import "./message.css";
+import createBoard from "../../helper/createBoard"
 
 import Footer from "../footer/footer";
 
@@ -37,8 +37,7 @@ const MessageBoard = ({ channel }) => {
         <button
           type="button"
           onClick={() => {
-            dispatch(logoutUser())
-            
+            dispatch(logoutUser());
           }}
           className="btn btn-primary"
         >
@@ -46,25 +45,7 @@ const MessageBoard = ({ channel }) => {
         </button>
       </div>
       <div id="chat">
-        {messages.messages &&
-          messages.messages.map(msg => {
-            const [date, time, meridian] = msg.createdat.split(' ');
-            const messageTime = `${time} ${meridian}`.replace(/^0/,'');
-            console.log(msg.createdat);
-            const messageDate = moment(date).format("MMMM D, YYYY");
-            console.log(messageDate)
-            return (
-              <div className="messageBlock">
-                <span className="user">
-                  <b>{msg.username}</b>
-                  {" "}
-                </span>
-                <span className="date">{messageTime}</span>
-                <div className="message">{msg.message}</div>
-                <hr style={{ backgroundColor: "grey" }} />
-              </div>
-            );
-          })}
+        {createBoard(messages)}
         {messages.error && (
           <div id="alert">
             <Alert>Error in sending message</Alert>
