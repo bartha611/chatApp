@@ -1,17 +1,10 @@
-export const addChannel = (name, team, description) => {
-  return {
-    type: 'CHANNEL',
-    verb: 'POST',
-    payload: {name, team, description},
-    endpoint: '/channel/create',
-    operation: 'ADD'
-  }
-};
+export const CHANNEL_REQUEST = "CHANNEL_REQUEST";
+export const FETCH_CHANNEL_RECEIVED = "FETCH_CHANNEL_RECEIVED";
+export const CHANNEL_FAILURE = "CHANNEL_FAILURE";
 
-export const fetchChannels = team => {
+export const fetchChannels = channels => {
   return {
-    type: 'CHANNEL',
-    verb: 'GET',
-    endpoint: `/channel/read?team=${team}`
-  }
+    type: FETCH_CHANNEL_RECEIVED,
+    channels
+  };
 };

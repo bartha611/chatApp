@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { Alert } from "reactstrap";
-// import TextArea from "react-textarea-autosize";
 import { fetchMessages, sendMessage } from "../../actions/messageAction";
 import "./message.css";
 import createBoard from "../../helper/createBoard"

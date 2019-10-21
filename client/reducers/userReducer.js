@@ -1,4 +1,9 @@
-import * as types from "../constants/userTypes";
+import {
+  USER_REQUEST,
+  LOGIN_RECEIVED,
+  LOGOUT_RECEIVED,
+  USER_FAILURE
+} from "../actions/userAction";
 
 const currentState = {
   userLoading: false,
@@ -8,21 +13,20 @@ const currentState = {
 };
 const userReducer = (state = currentState, action) => {
   switch (action.type) {
-    case types.USER_REQUEST:
+    case USER_REQUEST:
       return {
         ...state,
         userLoading: true
       };
-    case types.LOGIN_USER_RECEIVED:
-      console.log(action.payload);
+    case LOGIN_RECEIVED:
       return {
         ...state,
         userLoading: false,
-        username: action.payload,
+        username: action.username,
         authenticated: true,
         userError: null
       };
-    case types.LOGOUT_USER_RECEIVED:
+    case LOGOUT_RECEIVED:
       return {
         ...state,
         userLoading: false,
@@ -30,14 +34,7 @@ const userReducer = (state = currentState, action) => {
         authenticated: false,
         userError: false
       };
-    case types.CREATE_USER_RECEIVED:
-      return {
-        ...state,
-        userLoading: false,
-        username: action.payload.username,
-        userError: false
-      };
-    case types.USER_FAILURE:
+    case USER_FAILURE:
       return {
         ...state,
         userLoading: false,

@@ -1,27 +1,25 @@
-export function fetchUser(username, password) {
-  return {
-    type: "USER",
-    verb: "POST",
-    endpoint: "/user/login",
-    payload: { username, password },
-    operation: "LOGIN"
-  };
-}
-export function logoutUser() {
-  return {
-    type: "USER",
-    verb: "POST",
-    endpoint: "/user/logout",
-    operation: "LOGOUT"
-  };
-}
+export const LOGIN_RECEIVED = "LOGIN_REQUEST";
+export const LOGOUT_RECEIVED = "LOGOUT_REQUEST";
+export const USER_REQUEST = "USER_REQUEST";
+export const USER_FAILURE = "USER_FAILURE";
 
-export function signupUser(username, email, password) {
+export const userRequest = (url, payload) => {
   return {
-    type: "USER",
-    verb: "POST",
-    payload: { username, email, password },
-    endpoint: "/user/register",
-    operation: "CREATE"
+    type: USER_REQUEST,
+    url,
+    payload
   };
-}
+};
+
+export const loginUser = username => {
+  return {
+    type: LOGIN_RECEIVED,
+    username
+  };
+};
+
+export const logoutUser = () => {
+  return {
+    type: LOGOUT_RECEIVED
+  };
+};

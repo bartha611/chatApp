@@ -1,16 +1,18 @@
-export const teamAction = (team, open, username) => {
+export const TEAM_REQUEST = "TEAM_REQUEST";
+export const FETCH_TEAM_RECEIVED = "FETCH_TEAM_RECEIVED";
+export const CREATE_TEAM_RECEIVED = "CREATE_TEAM_RECEIVED";
+export const TEAM_FAILURE = "TEAM_FAILURE";
+
+export const teamRequest = url => {
   return {
-    verb: 'POST',
-    state: 'TEAM',
-    endpoint: '/team/create',
-    operation: 'ADD',
-    payload: { team, open, username }
-  }
+    type: TEAM_REQUEST,
+    url
+  };
 };
-export const fetchTeams = (username) => {
+
+export const fetchTeams = teams => {
   return {
-    state: 'TEAM',
-    verb: 'GET',
-    endpoint: `/team/read?username=${username}`,
-  }
+    type: FETCH_TEAM_RECEIVED,
+    teams
+  };
 };

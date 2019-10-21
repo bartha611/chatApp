@@ -2,7 +2,7 @@ import * as types from "../constants/teamConstants";
 
 const initialState = {
   isLoading: false,
-  team: [],
+  team: null,
   error: null
 };
 
@@ -27,7 +27,7 @@ const teamReducer = (state = initialState, action) => {
     case types.TEAM_RECEIVED:
       return {
         ...state,
-        team: [action.payload]
+        team: action.payload
       };
     default:
       return state;

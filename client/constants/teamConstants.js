@@ -1,4 +1,0 @@
-export const TEAM_REQUEST = "TEAM_REQUEST";
-export const TEAM_FAILURE = "TEAM_FAILURE";
-export const ADD_TEAM_RECEIVED = "ADD_TEAM_RECEIVED";
-export const TEAM_RECEIVED = "TEAM_RECEIVED";
