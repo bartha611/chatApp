@@ -6,22 +6,22 @@ import {
   Alert
 } from 'reactstrap'
 
-import { addChannel } from '../../actions/channelAction'
-
 import './addchannel.css'
 
 
 
-const AddChannel = props => {
+const AddChannel = ({ team, setChannel}) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const channelState = useSelector(state => state.channel);
   const dispatch = useDispatch();
-  const handleSubmit = async () => {
-    await dispatch(addChannel(name, props.team, description))
-    if (!channelState.error) {
-      props.history.push('/dashboard');
-    }
+  const handleSubmit = () => {
+    dispatch({
+      type: 'LOAD_CHANNEL',
+      operation: 'CREATE',
+      data: { name, team, description },
+      navigate: () => setChannel(false)
+    })
   }
   useEffect(() => {
     const handleEnter = (e) => {
@@ -36,7 +36,7 @@ const AddChannel = props => {
   })
   return (
     <div className="col-md-10 mt-5">
-      <div id="icon" onClick={() => props.setChannel(false)}>
+      <div id="icon" onClick={() => setChannel(false)}>
         <i className="fa fa-window-close fa-2x" />
       </div>
       <div id="addchannel" className="col-md-6">

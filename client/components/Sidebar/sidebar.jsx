@@ -3,18 +3,17 @@ import { useDispatch, useSelector } from 'react-redux'
 import "./sidebar.css";
 import PropTypes from 'prop-types'
 
-import { fetchChannels } from '../../actions/channelAction'
-
 
 const Sidebar = ({ setChannel, team }) => {
   const dispatch = useDispatch();
   const channels = useSelector(state => state.channel);
   const teams = useSelector(state => state.team);
-  const fetchTeamChannels = async () => {
-    await dispatch(fetchChannels(team));
-  }
   useEffect(() => {
-    fetchTeamChannels();
+    dispatch({
+      type: 'LOAD_CHANNEL',
+      operation: 'READ',
+      data: { team }
+    })
   }, [])
   return (
     <div>

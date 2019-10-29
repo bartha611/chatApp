@@ -1,10 +1,3 @@
-import {
-  USER_REQUEST,
-  LOGIN_RECEIVED,
-  LOGOUT_RECEIVED,
-  USER_FAILURE
-} from "../actions/userAction";
-
 const currentState = {
   userLoading: false,
   username: "",
@@ -13,12 +6,12 @@ const currentState = {
 };
 const userReducer = (state = currentState, action) => {
   switch (action.type) {
-    case USER_REQUEST:
+    case "USER_REQUEST":
       return {
         ...state,
         userLoading: true
       };
-    case LOGIN_RECEIVED:
+    case "USER_LOGIN":
       return {
         ...state,
         userLoading: false,
@@ -26,7 +19,7 @@ const userReducer = (state = currentState, action) => {
         authenticated: true,
         userError: null
       };
-    case LOGOUT_RECEIVED:
+    case "USER_LOGOUT":
       return {
         ...state,
         userLoading: false,
@@ -34,7 +27,7 @@ const userReducer = (state = currentState, action) => {
         authenticated: false,
         userError: false
       };
-    case USER_FAILURE:
+    case "USER_FAILURE":
       return {
         ...state,
         userLoading: false,

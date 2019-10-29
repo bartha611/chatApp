@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { Label, Form, FormGroup, Input, Container, Button, Alert } from "reactstrap";
 import Navigation from "../Navigation/navigation";
-import { signupUser } from '../../actions/userAction';
 import "./signup.css";
 
 function Signup() {
@@ -14,7 +13,12 @@ function Signup() {
   const dispatch = useDispatch();
   const handleSubmit = () => {
     if(confirmPassword === password) {
-      dispatch(signupUser(username,email,password));
+      dispatch({
+        type: 'LOAD_USER',
+        operation: 'CREATE',
+        data: { username, password, email },
+        navigate: '/'
+      })
     } else {
       console.log("hello there")
     }

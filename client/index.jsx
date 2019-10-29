@@ -2,10 +2,10 @@ import { render } from "react-dom";
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Provider } from "react-redux";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./reducers";
 import PrivateRoute from "./configuration/router";
+import history from './history';
 
 
 // import Components
@@ -21,7 +21,7 @@ export default function Home() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <Router>
+        <Router history={history}>
           <Switch>
             <Route exact path="/" component={Navigation} />
             <Route path="/login" component={Login} />

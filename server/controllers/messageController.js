@@ -21,7 +21,7 @@ exports.create = async (req, res) => {
       channelId.rows[0].id
     ]);
     rows[0].username = username;
-    console.log(rows[0].createdat);
+    rows[0].shortid = shortid;
     rows[0].createdat = moment(rows[0].createdat)
       .tz(zone)
       .format("YYYY-MM-DD h:mm A");

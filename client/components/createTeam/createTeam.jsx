@@ -1,24 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Input, Form, FormGroup, Button, Label, Container, Alert } from "reactstrap";
 import PropTypes from 'prop-types'
 import Navigation from "../Navigation/navigation";
-import teamAction from '../../actions/teamAction';
 
 
-function createTeam(props) {
+function createTeam() {
   const [team, setTeam] = useState("");
   const [open, setOpen] = useState(false);
   const response = useSelector(state => state.team);
   const dispatch = useDispatch();
   const handleSubmit = () => {
-    dispatch(teamAction(team,open));
+    dispatch({
+      type: 'LOAD_TEAM',
+      operation: 'CREATE',
+      data: { team, open }
+    })
   }
-  useEffect(() => {
-    if(response.team) {
-      props.history.push('/dashboard');
-    }
-  })
   return (
     <div>
       <Navigation />

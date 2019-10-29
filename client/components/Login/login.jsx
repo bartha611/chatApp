@@ -2,30 +2,23 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { withRouter } from 'react-router-dom';
 import "./login.css";
-import PropTypes from 'prop-types';
 import { Form, FormGroup, Input, Label, Button, Alert} from "reactstrap";
-import { fetchUser } from "../../actions/userAction"
 // import { fetchTeams } from '../../actions/teamAction'
 import Navigation from "../Navigation/navigation";
-import { fetchTeams } from "../../actions/teamAction";
 
 
-function Login({ history }) {   // eslint-disable-line no-unused-vars
+function Login() {   // eslint-disable-line no-unused-vars
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const user = useSelector(state => state.user);
-  const team = useSelector(state => state.team);
   const dispatch = useDispatch();
-  const handleSubmit = async () => {
-    await dispatch(fetchUser(username,password));
-    await dispatch(fetchTeams(username));
+  const handleSubmit = () => {
+    dispatch({
+      type: 'LOAD_USER',
+      operation: 'LOGIN',
+      data: { username, password }
+    })
   };
-  useEffect(() => {
-    if(user.authenticated) {
-      console.log(team.team[0].shortid)
-      history.push(`/${team.team[0].shortid}`)
-    }
-  })
   useEffect(() => {
     const handleEnter = e =>{
       if(e.keyCode === 13) {
@@ -89,10 +82,5 @@ function Login({ history }) {   // eslint-disable-line no-unused-vars
   );
 }
 
-Login.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired
-  }).isRequired
-}
 
 export default withRouter(Login);

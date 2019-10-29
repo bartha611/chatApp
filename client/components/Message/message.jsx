@@ -2,30 +2,33 @@ import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { Alert } from "reactstrap";
-import { fetchMessages, sendMessage } from "../../actions/messageAction";
 import "./message.css";
-import createBoard from "../../helper/createBoard"
+import createBoard from "../../helper/createBoard";
 
 import Footer from "../footer/footer";
-
-import { logoutUser } from "../../actions/userAction";
 
 const MessageBoard = ({ channel }) => {
   const [input, setInput] = useState("");
   const dispatch = useDispatch();
   const messages = useSelector(state => state.messages);
   const user = useSelector(state => state.user);
+  const { username } = user;
   const messageEnd = useRef(null);
-  const handleSubmit = async () => {
-    await dispatch(sendMessage(input, channel, user.username));
+  const handleSubmit = () => {
+    dispatch({
+      type: "LOAD_MESSAGE",
+      operation: "CREATE",
+      data: { input, channel, username }
+    });
     setInput("");
   };
   useEffect(() => {
-    const fetch = async () => {
-      await dispatch(fetchMessages(channel));
-    };
+    dispatch({
+      type: "LOAD_MESSAGE",
+      operation: "READ",
+      data: { channel }
+    });
     dispatch({ type: "STORE_JOIN", event: "join", channel });
-    fetch();
   }, []);
   useEffect(() => {
     messageEnd.current.scrollIntoView({ behavior: "smooth" });
@@ -36,7 +39,10 @@ const MessageBoard = ({ channel }) => {
         <button
           type="button"
           onClick={() => {
-            dispatch(logoutUser());
+            dispatch({
+              type: "LOAD_USER",
+              operation: "LOGOUT"
+            });
           }}
           className="btn btn-primary"
         >
