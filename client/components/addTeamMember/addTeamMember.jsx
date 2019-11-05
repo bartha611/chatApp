@@ -1,10 +1,15 @@
 import React, { useState } from "react";
-import { Input, Form, FormGroup, Button, Alert, Container } from "reactstrap";
-import { useFetch } from "../Hooks";
+import { useDispatch,useSelector } from 'react-redux'
+import { Input, Form, FormGroup, Button, Container, Alert } from "reactstrap";
 
 export default function AddTeamMembers() {
-  const [email, setEmail] = useState("");
-  const [response, sendData] = useFetch("/userTeam/create", email);
+  const [username, setUsername] = useState("");
+  const dispatch = useDispatch();
+  const member = useSelector(state => state.member);
+  const sendData = () => {
+    // TODO
+    
+  }
   return (
     <div>
       <Container>
@@ -12,9 +17,9 @@ export default function AddTeamMembers() {
           <FormGroup>
             <Input
               id="email1"
-              type="email"
-              placeholder="example@gmail.com"
-              onChange={event => setEmail(event.target.value)}
+              type="text"
+              placeholder="username"
+              onChange={event => setUsername(event.target.value)}
               name="email1"
             />
           </FormGroup>
@@ -26,8 +31,8 @@ export default function AddTeamMembers() {
             Submit
           </Button>
         </Form>
-        {response.error && <Alert color="danger">{response.error}</Alert>}
       </Container>
+
     </div>
   );
 }

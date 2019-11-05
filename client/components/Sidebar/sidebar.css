@@ -11,7 +11,7 @@
   height: 50px;
   position: relative;
 }
-#titleGroup {
+.titleGroup {
   display: flex;
   justify-content: space-between;
 }

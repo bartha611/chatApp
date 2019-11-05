@@ -16,7 +16,7 @@ exports.create = async (req, res) => {
       [username]
     );
     await client.query("BEGIN");
-    const queryText = `INSERT INTO Teams (name, open, shortId, userid) VALUES ($1, $2, $3, $4) RETURNING id`;
+    const queryText = `INSERT INTO Teams (name, open, shortId, userid) VALUES ($1, $2, $3, $4) RETURNING id, name, shortId`;
     const { rows } = await client.query(queryText, [
       team,
       open,
@@ -39,11 +39,11 @@ exports.create = async (req, res) => {
       channel.rows[0].id
     ]);
     await client.query("COMMIT");
-    return res.status(200).send("Success!!!");
+    return res.status(200).send(rows[0]);
   } catch (err) {
     await client.query("Rollback");
     console.log(err);
-    return res.status(404).send("Error in team creation");
+    return res.status(404).send(err);
   } finally {
     client.release();
   }

@@ -39,11 +39,12 @@ io.use((socket, next) => {
 
 io.on("connection", socket => {
   socket.on("join", channel => {
-    console.log("connected");
+    console.log(`connected to channel`);
     socket.join(channel);
   });
   socket.on("input", ({ shortid, ...rest }) => {
     console.log(rest);
+    console.log(shortid);
     socket.to(shortid).emit("message", rest);
   });
 });

@@ -14,7 +14,6 @@ import {
   // DropdownMenu,
   // DropdownItem
 } from "reactstrap";
-import {logoutUser} from '../../actions/userAction';
 import "./navigation.css"
 
 
@@ -25,7 +24,10 @@ export default function Navigation() {
   const user = useSelector(state => state.user);
   const dispatch = useDispatch();
   const handleClick = () => {
-    dispatch(logoutUser());
+    dispatch({
+      type: 'LOAD_USER',
+      operation: 'LOGOUT'
+    });
   }
   return (
     <div>

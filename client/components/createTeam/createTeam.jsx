@@ -14,7 +14,8 @@ function createTeam() {
     dispatch({
       type: 'LOAD_TEAM',
       operation: 'CREATE',
-      data: { team, open }
+      data: { team, open },
+      navigate: ({shortid}) => `/${shortid}`
     })
   }
   return (

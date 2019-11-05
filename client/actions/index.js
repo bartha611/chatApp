@@ -12,6 +12,7 @@ export const LOAD_USER = "LOAD_USER";
 export const LOAD_MESSAGE = "LOAD_MESSAGE";
 export const LOAD_CHANNEL = "LOAD_CHANNEL";
 export const LOAD_TEAM = "LOAD_TEAM";
+export const LOAD_MEMBER = "LOAD_MEMBER";
 
 // create constants for action events
 const createConstants = base => {
@@ -29,9 +30,10 @@ export const USER = createConstants("USER");
 export const MESSAGE = createConstants("MESSAGE");
 export const TEAM = createConstants("TEAM");
 export const CHANNEL = createConstants("CHANNEL");
+export const MEMBER = createConstants("MEMBER");
 
 const action = (type, payload = {}) => {
-  return { type, ...payload };
+  return { type, payload };
 };
 
 // create actions for dispatching in redux-saga
@@ -47,13 +49,4 @@ export const user = createAction(USER);
 export const message = createAction(MESSAGE);
 export const channel = createAction(CHANNEL);
 export const team = createAction(TEAM);
-
-// create loader actions for redux saga to watch for
-const loader = (domain, operation, data) => {
-  return action(`LOAD_${domain}`, { operation, data });
-};
-
-export const userLoader = loader.bind(null, "USER");
-export const messageLoader = loader.bind(null, "MESSAGE");
-export const channelLoader = loader.bind(null, "CHANNEL");
-export const teamLoader = loader.bind(null, "TEAM");
+export const member = createAction(MEMBER);

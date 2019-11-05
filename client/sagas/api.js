@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const callApi = (entity, operation, data) => {
+const callApi = (entity, operation, data = {}) => {
   const methods = {
     CREATE: () => axios.post(`/${entity}/create`, data),
     READ: () => axios.get(`/${entity}/read`, { params: data }),
@@ -9,9 +9,9 @@ const callApi = (entity, operation, data) => {
   };
   if (entity === "user") {
     methods.LOGIN = () => axios.post(`/user/login`, data);
-    methods.LOGOUT = () => axios.post(`/user/logout`, data);
+    methods.LOGOUT = () => axios.post(`/user/logout`);
   }
-  return methods[operation]
+  return methods[operation]()
     .then(response => {
       return response;
     })

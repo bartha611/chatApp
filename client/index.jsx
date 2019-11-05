@@ -6,6 +6,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./reducers";
 import PrivateRoute from "./configuration/router";
 import history from './history';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 // import Components
@@ -16,6 +17,7 @@ import createTeam from "./components/createTeam/createTeam";
 import AddTeamMembers from "./components/addTeamMember/addTeamMember";
 import Navigation from "./components/Navigation/navigation";
 import MessageBoard from "./components/Message/message";
+import Reroute from "./components/Reroute/reroute";
 
 export default function Home() {
   return (
@@ -26,10 +28,11 @@ export default function Home() {
             <Route exact path="/" component={Navigation} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
-            <PrivateRoute path="/:teamName/:channelName" component={Dashboard} />
             <Route path="/message" component={MessageBoard} />
             <PrivateRoute path="/createTeam" component={createTeam} />
             <PrivateRoute path="/addTeamMember" component={AddTeamMembers} />
+            <PrivateRoute exact path="/:teamName" component={Reroute} />
+            <PrivateRoute path="/:teamName/:channelName" component={Dashboard} />
           </Switch>
         </Router>
       </PersistGate>

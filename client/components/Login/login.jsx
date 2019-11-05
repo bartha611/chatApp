@@ -2,21 +2,24 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { withRouter } from 'react-router-dom';
 import "./login.css";
+import PropTypes from 'prop-types'
 import { Form, FormGroup, Input, Label, Button, Alert} from "reactstrap";
 // import { fetchTeams } from '../../actions/teamAction'
 import Navigation from "../Navigation/navigation";
 
 
-function Login() {   // eslint-disable-line no-unused-vars
+function Login(props) {   // eslint-disable-line no-unused-vars
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const user = useSelector(state => state.user);
+  const { history } = props;
   const dispatch = useDispatch();
   const handleSubmit = () => {
     dispatch({
       type: 'LOAD_USER',
       operation: 'LOGIN',
-      data: { username, password }
+      data: { username, password },
+      history
     })
   };
   useEffect(() => {
@@ -81,6 +84,11 @@ function Login() {   // eslint-disable-line no-unused-vars
     </div>
   );
 }
+
+Login.propTypes = {
+  history: PropTypes.func.isRequired
+}
+
 
 
 export default withRouter(Login);

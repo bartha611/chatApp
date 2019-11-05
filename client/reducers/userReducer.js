@@ -1,37 +1,37 @@
 const currentState = {
-  userLoading: false,
+  loading: false,
   username: "",
   authenticated: false,
-  userError: null
+  error: null
 };
 const userReducer = (state = currentState, action) => {
   switch (action.type) {
     case "USER_REQUEST":
       return {
         ...state,
-        userLoading: true
+        loading: true
       };
     case "USER_LOGIN":
       return {
         ...state,
-        userLoading: false,
-        username: action.username,
+        loading: false,
+        username: action.payload,
         authenticated: true,
-        userError: null
+        error: null
       };
     case "USER_LOGOUT":
       return {
         ...state,
-        userLoading: false,
+        loading: false,
         username: "",
         authenticated: false,
-        userError: false
+        error: false
       };
     case "USER_FAILURE":
       return {
         ...state,
-        userLoading: false,
-        userError: true
+        loading: false,
+        error: true
       };
     default:
       return state;

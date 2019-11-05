@@ -16,27 +16,28 @@ const createAsyncReducer = base => {
     [base]: [],
     error: false
   };
-  return (state = defaultState, { type, payload }) => {
-    switch (type) {
-      case `${base}_REQUEST`:
+  const entity = base.toUpperCase().replace(/S$/, "");
+  return (state = defaultState, action) => {
+    switch (action.type) {
+      case `${entity}_REQUEST`:
         return {
           ...state,
           loading: true
         };
-      case `${base}_CREATE`:
+      case `${entity}_CREATE`:
         return {
           ...state,
-          [base]: [...state[base], payload]
+          [base]: [...state[base], action.payload]
         };
-      case `${base}_READ`:
+      case `${entity}_READ`:
         return {
           ...state,
-          [base]: payload
+          [base]: action.payload
         };
-      case `${base}_DELETE`:
+      case `${entity}_DELETE`:
         return {
           ...state,
-          [base]: state[base].filter(x => x.id !== payload)
+          [base]: state[base].filter(x => x.id !== action.payload)
         };
       default:
         return state;

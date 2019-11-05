@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import moment from 'moment-timezone'
 import PropTypes from "prop-types";
 import { Alert } from "reactstrap";
 import "./message.css";
@@ -15,21 +16,23 @@ const MessageBoard = ({ channel }) => {
   const { username } = user;
   const messageEnd = useRef(null);
   const handleSubmit = () => {
+    const zone = moment.tz.guess();
     dispatch({
       type: "LOAD_MESSAGE",
       operation: "CREATE",
-      data: { input, channel, username }
+      data: { input, channel, username, zone }
     });
     setInput("");
   };
   useEffect(() => {
+    console.log("hello there")
     dispatch({
       type: "LOAD_MESSAGE",
       operation: "READ",
-      data: { channel }
+      data: { channel, zone: moment.tz.guess() }
     });
     dispatch({ type: "STORE_JOIN", event: "join", channel });
-  }, []);
+  }, [channel]);
   useEffect(() => {
     messageEnd.current.scrollIntoView({ behavior: "smooth" });
   }, [messages.messages]);
