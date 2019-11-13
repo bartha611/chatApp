@@ -17,6 +17,7 @@ const userRoutes = require("./server/routes/userRoute");
 const teamRoutes = require("./server/routes/teamRoute");
 const channelRoutes = require("./server/routes/channelRoute");
 const messageRoutes = require("./server/routes/messageRoute");
+const memberRoutes = require("./server/routes/memberRoute");
 // middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -39,12 +40,9 @@ io.use((socket, next) => {
 
 io.on("connection", socket => {
   socket.on("join", channel => {
-    console.log(`connected to channel`);
     socket.join(channel);
   });
   socket.on("input", ({ shortid, ...rest }) => {
-    console.log(rest);
-    console.log(shortid);
     socket.to(shortid).emit("message", rest);
   });
 });
@@ -54,6 +52,7 @@ app.use("/user", userRoutes);
 app.use("/team", teamRoutes);
 app.use("/channel", channelRoutes);
 app.use("/message", messageRoutes);
+app.use("/member", memberRoutes);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/client/dist/index.html"));

@@ -4,3 +4,5 @@
 npm-debug.log
 bundle.js
 bundle.js.map
+stats.json
+/client/dist/*.js*

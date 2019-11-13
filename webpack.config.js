@@ -1,18 +1,20 @@
 const DIR_PATH = `${__dirname}/client/dist`;
 const webpack = require("webpack");
 const MomentLocalesPlugin = require("moment-locales-webpack-plugin");
-const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
+const MomentTimezoneDataPlugin = require("moment-timezone-data-webpack-plugin");
+// const CompressionPlugin = require("compression-webpack-plugin");
 
 module.exports = {
   entry: ["babel-polyfill", "./client/index.jsx"],
   output: {
     filename: "bundle.js",
     path: DIR_PATH,
+    chunkFilename: "[name].bundle.js",
     publicPath: "/"
   },
+  devtool: "source-map",
   mode: "production",
   resolve: { extensions: [".js", ".jsx"] },
-  devtool: "source-map",
   module: {
     rules: [
       {
@@ -30,10 +32,6 @@ module.exports = {
     historyApiFallback: true
   },
   plugins: [
-    new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery"
-    }),
     new webpack.DefinePlugin({
       "process.env": {
         NODE_ENV: JSON.stringify("development")
@@ -41,6 +39,11 @@ module.exports = {
     }),
     new MomentLocalesPlugin({
       localesToKeep: ["es-us", "ru"]
+    }),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new MomentTimezoneDataPlugin({
+      matchZones: /^America/,
+      startYear: 2019
     })
   ]
 };

@@ -1,49 +1,63 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from 'react-redux';
-import { withRouter } from 'react-router-dom'
+import React, { useState, useEffect, Suspense, lazy } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
 import "./dashboard.css";
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
 
-// import components
-import MessageBoard from "../Message/message";
 import Sidebar from "../Sidebar/sidebar";
-import AddChannel from "../addChannel/addChannel"
+import MessageBoard from "../Message/message";
 
+const AddTeamMembers = lazy(() =>
+  import(
+    /* webpackChunkName: "AddTeamMembers" */ "../addTeamMember/addTeamMember"
+  )
+);
+const AddChannel = lazy(() =>
+  import(/* webpackChunkName: "AddChannel" */ "../addChannel/addChannel")
+);
 
-function Dashboard({ match, history }) {
-  const [channel, setChannel] = useState(false);
-  const [member, setMember] = useState(false);
-  const user = useSelector(state => state.user);
+function Dashboard() {
+  const [addChannel, setAddChannel] = useState(false);
+  const [addMember, setAddMember] = useState(false);
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const { team, channel } = useParams();
+  const { username } = useSelector(state => state.user);
   useEffect(() => {
-    if (!user.authenticated) {
-      console.log("hello")
-      history.push('/login');
-    }
-  })
+    dispatch({
+      type: "LOAD_INFO",
+      data: { username, team, channel },
+      history
+    });
+    dispatch({ type: "STORE_JOIN", event: "join", channel });
+  }, [team, channel]);
   return (
     <div>
-      {!channel && !member && (
+      {!addChannel && !addMember && (
         <div id="board">
           <Sidebar
-            setChannel={setChannel} 
-            team={match.params.teamName}
-            member={member}
-            setMember={false}
+            setChannel={setAddChannel}
+            setMember={setAddMember}
+            team={team}
             history={history}
           />
-          <MessageBoard
-            channel={match.params.channelName} 
-          />
+          <MessageBoard channel={channel} />
         </div>
       )}
-      {member && (
-        
+      {addMember && (
+        <Suspense fallback={<div>...Loading</div>}>
+          <AddTeamMembers
+            setMember={setAddMember}
+            team={team}
+            channel={channel}
+            history={history}
+          />
+        </Suspense>
       )}
-      {channel && (
-        <AddChannel 
-          setChannel={setChannel} 
-          team={match.params.teamName}
-        />
+      {addChannel && (
+        <Suspense fallback={<div>...Loading</div>}>
+          <AddChannel setChannel={setAddChannel} team={team} />
+        </Suspense>
       )}
     </div>
   );
@@ -59,8 +73,6 @@ Dashboard.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired
-}
+};
 
-
-
-export default withRouter(Dashboard);
+export default Dashboard;

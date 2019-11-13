@@ -14,16 +14,16 @@ const AddChannel = ({ team, setChannel, history }) => {
   const channelState = useSelector(state => state.channel);
   const dispatch = useDispatch();
   const handleSubmit = () => {
-    console.log(`team is ${team}`);
-    console.log(description);
     dispatch({
       type: "LOAD_CHANNEL",
       operation: "CREATE",
       data: { name, team, description },
-      navigation: ({ shortid }) => `/${team}/${shortid}`,
+      navigation: ({ shortid }) => {
+        setChannel(false)
+        return `/${team}/${shortid}`
+      },
       history
     });
-    setChannel(false);
   };
   useEffect(() => {
     const handleEnter = e => {

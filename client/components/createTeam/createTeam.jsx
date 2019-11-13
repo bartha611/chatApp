@@ -1,21 +1,25 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Input, Form, FormGroup, Button, Label, Container, Alert } from "reactstrap";
+import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Navigation from "../Navigation/navigation";
 
 
-function createTeam() {
+function createTeam({history}) {
   const [team, setTeam] = useState("");
   const [open, setOpen] = useState(false);
   const response = useSelector(state => state.team);
+  const user = useSelector(state => state.user);
+  const { username } = user;
   const dispatch = useDispatch();
   const handleSubmit = () => {
     dispatch({
       type: 'LOAD_TEAM',
       operation: 'CREATE',
-      data: { team, open },
-      navigate: ({shortid}) => `/${shortid}`
+      data: { team, open, username },
+      navigation: ({shortid}) => `/${shortid}`,
+      history
     })
   }
   return (
@@ -63,4 +67,4 @@ createTeam.propTypes = {
   }).isRequired
 }
 
-export default createTeam;
+export default withRouter(createTeam);

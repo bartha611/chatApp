@@ -27,6 +27,14 @@ const userReducer = (state = currentState, action) => {
         authenticated: false,
         error: false
       };
+    case "USER_CREATE":
+      return {
+        ...state,
+        loading: false,
+        username: action.payload,
+        authenticated: true,
+        error: false
+      };
     case "USER_FAILURE":
       return {
         ...state,

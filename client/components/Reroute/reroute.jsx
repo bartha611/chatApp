@@ -1,35 +1,30 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { withRouter } from 'react-router-dom'
-import PropTypes from 'prop-types'
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
+import { Spinner } from "reactstrap";
 
-const Reroute = ({match, history}) => {
-  const team = match.params.teamName;
+const Reroute = () => {
+  const { team } = useParams();
+  const history = useHistory();
+  const { username } = useSelector(state => state.user)
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch({
-      type: 'LOAD_CHANNEL',
-      operation: 'READ',
-      data: { team },
-      navigation: (teams) => `/${team}/${teams[0].shortid}`,
+      type: "LOAD_CHANNEL",
+      operation: "READ",
+      data: { team, username },
+      navigation: channels => `/${team}/${channels[0].shortid}`,
       history
-    })
-  }, [])
+    });
+  }, []);
   return (
-    <div>...Loading</div>
-  )
-}
+    <Spinner
+      size="lg"
+      style={{ margin: "0 auto", marginTop: "100px" }}
+      color="dark"
+    />
+  );
+};
 
-export default withRouter(Reroute)
-
-Reroute.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      teamName: PropTypes.string.isRequired
-    }).isRequired
-  }).isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired
-  }).isRequired
-}
+export default Reroute;
 

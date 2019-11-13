@@ -13,10 +13,13 @@ const callApi = (entity, operation, data = {}) => {
   }
   return methods[operation]()
     .then(response => {
-      return response;
+      console.log(response);
+      return { data: response.data };
     })
     .catch(error => {
-      return error;
+      console.log(error);
+      console.log(entity);
+      return { error: error.response };
     });
 };
 
@@ -24,3 +27,4 @@ export const userApi = callApi.bind(null, "user");
 export const channelApi = callApi.bind(null, "channel");
 export const messageApi = callApi.bind(null, "message");
 export const teamApi = callApi.bind(null, "team");
+export const memberApi = callApi.bind(null, "member");

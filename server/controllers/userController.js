@@ -51,6 +51,7 @@ exports.register = async (req, res) => {
       "SELECT * FROM USERS WHERE username = $1",
       [username]
     );
+    console.log(response);
     if (response.rows[0]) {
       return res.status(404).send("User already exists");
     }

@@ -13,12 +13,13 @@ export const LOAD_MESSAGE = "LOAD_MESSAGE";
 export const LOAD_CHANNEL = "LOAD_CHANNEL";
 export const LOAD_TEAM = "LOAD_TEAM";
 export const LOAD_MEMBER = "LOAD_MEMBER";
+export const LOAD_INFO = "LOAD_INFO";
 
 // create constants for action events
 const createConstants = base => {
   const constants =
     base === "USER"
-      ? [REQUEST, LOGIN, LOGOUT, FAILURE]
+      ? [REQUEST, LOGIN, LOGOUT, FAILURE, CREATE]
       : [REQUEST, CREATE, READ, UPDATE, DELETE, FAILURE];
   return constants.reduce((acc, cur) => {
     acc[cur] = `${base}_${cur}`;
@@ -33,6 +34,7 @@ export const CHANNEL = createConstants("CHANNEL");
 export const MEMBER = createConstants("MEMBER");
 
 const action = (type, payload = {}) => {
+  console.log(type);
   return { type, payload };
 };
 
@@ -41,7 +43,7 @@ const createAction = constant => {
   return {
     request: () => action(constant[REQUEST]),
     success: (operation, payload) => action(constant[operation], payload),
-    failure: () => action(constant[FAILURE])
+    failure: error => action(constant[FAILURE], { error })
   };
 };
 

@@ -1,10 +1,21 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from 'react-redux';
-import { Label, Form, FormGroup, Input, Container, Button, Alert } from "reactstrap";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  Label,
+  Form,
+  FormGroup,
+  Input,
+  Container,
+  Button,
+  Alert
+} from "reactstrap";
+import { withRouter } from "react-router-dom";
+import PropTypes from "prop-types";
 import Navigation from "../Navigation/navigation";
+
 import "./signup.css";
 
-function Signup() {
+function Signup({ history }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,17 +23,18 @@ function Signup() {
   const user = useSelector(state => state.user);
   const dispatch = useDispatch();
   const handleSubmit = () => {
-    if(confirmPassword === password) {
+    if (confirmPassword === password) {
       dispatch({
-        type: 'LOAD_USER',
-        operation: 'CREATE',
+        type: "LOAD_USER",
+        operation: "CREATE",
         data: { username, password, email },
-        navigate: '/'
-      })
+        navigation: "/",
+        history
+      });
     } else {
-      console.log("hello there")
+      console.log("hello there");
     }
-  }
+  };
   return (
     <div className="Login">
       <Container>
@@ -70,17 +82,19 @@ function Signup() {
                 name="confirmPassword"
               />
             </FormGroup>
-            <Button
-              id="submit"
-              onClick={() => handleSubmit()}
-            >
+            <Button id="submit" onClick={() => handleSubmit()}>
               Submit
             </Button>
           </Form>
         </div>
-        {user.error && <Alert color="danger">{user.error}</Alert>}
+        {user.error && <Alert color="danger">User already exists</Alert>}
       </Container>
     </div>
   );
 }
-export default Signup;
+
+Signup.propTypes = {
+  history: PropTypes.func.isRequired
+};
+
+export default withRouter(Signup);

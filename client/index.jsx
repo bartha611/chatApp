@@ -1,23 +1,43 @@
 import { render } from "react-dom";
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./reducers";
 import PrivateRoute from "./configuration/router";
-import history from './history';
-import 'bootstrap/dist/css/bootstrap.min.css';
-
+import "bootstrap/dist/css/bootstrap.min.css";
+import history from './configuration/history'
 
 // import Components
-import Login from "./components/Login/login";
-import Signup from "./components/SignUp/signup";
-import Dashboard from "./components/Dashboard/dashboard";
-import createTeam from "./components/createTeam/createTeam";
-import AddTeamMembers from "./components/addTeamMember/addTeamMember";
-import Navigation from "./components/Navigation/navigation";
-import MessageBoard from "./components/Message/message";
-import Reroute from "./components/Reroute/reroute";
+
+
+import Navigation from './components/Navigation/navigation'
+
+const Login = lazy(() =>
+  import(/* webpackChunkName: "Login" */ "./components/Login/login")
+);
+const Signup = lazy(() =>
+  import(/* webpackChunkName: "Signup" */ "./components/SignUp/signup")
+);
+const Dashboard = lazy(() =>
+  import(/* webpackChunkName: "Dashboard" */ "./components/Dashboard/dashboard")
+);
+const createTeam = lazy(() =>
+  import(
+    /* webpackChunkName: "CreateTeam" */ "./components/createTeam/createTeam"
+  )
+);
+const Reroute = lazy(() =>
+  import(/* webpackChunkName: "Reroute" */ "./components/Reroute/reroute")
+);
+
+function waitComponent(Component) {
+  return props => (
+    <Suspense fallback={<div>...Loading</div>}>
+      <Component {...props} />
+    </Suspense>
+  );
+}
 
 export default function Home() {
   return (
@@ -25,14 +45,25 @@ export default function Home() {
       <PersistGate loading={null} persistor={persistor}>
         <Router history={history}>
           <Switch>
-            <Route exact path="/" component={Navigation} />
-            <Route path="/login" component={Login} />
-            <Route path="/signup" component={Signup} />
-            <Route path="/message" component={MessageBoard} />
-            <PrivateRoute path="/createTeam" component={createTeam} />
-            <PrivateRoute path="/addTeamMember" component={AddTeamMembers} />
-            <PrivateRoute exact path="/:teamName" component={Reroute} />
-            <PrivateRoute path="/:teamName/:channelName" component={Dashboard} />
+            <Route exact path="/">
+              <Navigation />
+            </Route>
+            <Route path="/login">
+              {waitComponent(Login)}
+            </Route>
+            <Route path="/signup">
+              {waitComponent(Signup)}
+            </Route>
+            <PrivateRoute
+              path="/createteam"
+              component={waitComponent(createTeam)}
+            />
+            <PrivateRoute exact path="/:team">
+              {waitComponent(Reroute)}
+            </PrivateRoute>
+            <PrivateRoute path="/:team/:channel">
+              {waitComponent(Dashboard)}
+            </PrivateRoute>
           </Switch>
         </Router>
       </PersistGate>

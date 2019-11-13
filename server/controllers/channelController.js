@@ -36,7 +36,7 @@ exports.create = async (req, res) => {
 };
 
 exports.read = async (req, res) => {
-  const { team } = req.query;
+  const { team, username } = req.query;
   const client = await pool.connect();
   try {
     const teamId = await client.query(
@@ -47,14 +47,29 @@ exports.read = async (req, res) => {
     `,
       [team]
     );
+    if (teamId.rowCount === 0) {
+      return res.status(404).send("Team doesn't exist");
+    }
     const queryText = `SELECT * 
-    FROM Channel 
-    WHERE teamId = $1
+    FROM channel 
+    WHERE teamId = $1 AND teamId IN 
+    (SELECT t.id
+      FROM teams t
+      JOIN userteams ut ON (ut.teamid = t.id)
+      JOIN users u ON (u.id = ut.userid)
+      WHERE u.username = $2)
     ORDER BY createdat ASC`;
-    const { rows } = await client.query(queryText, [teamId.rows[0].id]);
-    res.status(200).send(rows);
+    const response = await client.query(queryText, [
+      teamId.rows[0].id,
+      username
+    ]);
+    console.log(response);
+    if (response.rowCount === 0) {
+      return res.status(404).send("User not authorized");
+    }
+    return res.status(200).send(response.rows);
   } catch (err) {
-    res.status(404).send(err);
+    return res.status(404).send(err);
   } finally {
     client.release();
   }

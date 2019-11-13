@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 
-const createBoard = ({ messages }) => {
+const createBoard = (messages) => {
   const boardHTMLObject = [];
   let messageBlock = [];
   let previousDate = "";

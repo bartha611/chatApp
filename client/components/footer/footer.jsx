@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux'
+import moment from 'moment-timezone'
 import TextArea from 'react-textarea-autosize'
 import { Form } from 'reactstrap';
 import PropTypes from 'prop-types'
 
-const Footer = ({handleSubmit, setInput, input}) => {
+const Footer = ({channel}) => {
+  const [input, setInput] = useState("")
+  const dispatch = useDispatch();
+  const { username } = useSelector(state => state.user)
+  const handleSubmit = () => {
+    const zone = moment.tz.guess();
+    dispatch({
+      type: "LOAD_MESSAGE",
+      operation: "CREATE",
+      data: { input, channel, username, zone}
+    })
+    setInput("");
+  }
   return (
     <div id="footer">
       <div id="formbox">
@@ -37,9 +51,7 @@ const Footer = ({handleSubmit, setInput, input}) => {
 }
 
 Footer.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
-  input: PropTypes.string.isRequired,
-  setInput: PropTypes.func.isRequired
+  channel: PropTypes.string.isRequired
 }
 
 export default Footer;

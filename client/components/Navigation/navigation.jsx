@@ -57,9 +57,9 @@ export default function Navigation() {
                   </NavLink>
                 </NavItem>
               )}
-              {!user.authenticated && (
+              {user.authenticated && (
                 <NavItem>
-                  <NavLink tag={Link} to="/create">
+                  <NavLink tag={Link} to="/createteam">
                     Create Team
                   </NavLink>
                 </NavItem>
