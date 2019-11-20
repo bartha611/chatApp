@@ -6,12 +6,11 @@ import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./reducers";
 import PrivateRoute from "./configuration/router";
 import "bootstrap/dist/css/bootstrap.min.css";
-import history from './configuration/history'
+import history from "./configuration/history";
 
 // import Components
 
-
-import Navigation from './components/Navigation/navigation'
+import Navigation from "./components/Navigation/navigation";
 
 const Login = lazy(() =>
   import(/* webpackChunkName: "Login" */ "./components/Login/login")
@@ -48,22 +47,21 @@ export default function Home() {
             <Route exact path="/">
               <Navigation />
             </Route>
-            <Route path="/login">
-              {waitComponent(Login)}
-            </Route>
-            <Route path="/signup">
-              {waitComponent(Signup)}
-            </Route>
+            <Route path="/login">{waitComponent(Login)}</Route>
+            <Route path="/signup">{waitComponent(Signup)}</Route>
             <PrivateRoute
               path="/createteam"
               component={waitComponent(createTeam)}
             />
-            <PrivateRoute exact path="/:team">
-              {waitComponent(Reroute)}
-            </PrivateRoute>
-            <PrivateRoute path="/:team/:channel">
-              {waitComponent(Dashboard)}
-            </PrivateRoute>
+            <PrivateRoute
+              exact 
+              path="/:team"
+              component={waitComponent(Reroute)}
+            />
+            <PrivateRoute
+              path="/:team/:channel"
+              component={waitComponent(Dashboard)}
+            />
           </Switch>
         </Router>
       </PersistGate>

@@ -26,7 +26,7 @@ function* fetchEntity(
     if (redirect) {
       history.push(redirect);
     }
-    entity.failure(error);
+    yield put(entity.failure(error));
   }
 }
 
@@ -54,7 +54,9 @@ function* watchUser() {
     const user = yield select(state => state.user);
     if (operation === "LOGIN" && user.error === null) {
       const { username } = user;
-      const navigate = teams => `/${teams[0].shortid}`;
+      const navigate = teams => {
+        return teams.length === 0 ? "/" : `/${teams[0].shortid}`;
+      };
       yield call(fetchTeam, "READ", { username }, navigate, history);
     }
   }
@@ -80,8 +82,10 @@ function* watchMessage() {
 
 function* watchMembers() {
   while (true) {
-    const { operation, data } = yield take(actions.LOAD_MEMBER);
-    yield call(fetchMember, operation, data);
+    const { operation, data, navigation, history } = yield take(
+      actions.LOAD_MEMBER
+    );
+    yield call(fetchMember, operation, data, navigation, history);
   }
 }
 

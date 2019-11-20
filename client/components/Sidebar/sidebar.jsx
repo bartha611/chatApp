@@ -48,7 +48,13 @@ const Sidebar = ({ setChannel, team, setMember }) => {
         </div>
         {channels.channels.map(ch => {
           return (
-            <Link className="links" to={`/${team}/${ch.shortid}`}>
+            <Link
+              className="links"
+              to={{
+                pathname: `/${team}/${ch.shortid}`,
+                state: { description: ch.description, name: ch.name }
+              }}
+            >
               {ch.name}
             </Link>
           );
@@ -60,7 +66,6 @@ const Sidebar = ({ setChannel, team, setMember }) => {
           <div
             id="addMember"
             onClick={() => {
-              console.log("hello there member");
               setMember(true);
             }}
           >

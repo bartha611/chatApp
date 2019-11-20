@@ -43,6 +43,9 @@ io.on("connection", socket => {
     socket.join(channel);
   });
   socket.on("input", ({ shortid, ...rest }) => {
+    console.log("hello there");
+    console.log(rest);
+    console.log(shortid);
     socket.to(shortid).emit("message", rest);
   });
 });

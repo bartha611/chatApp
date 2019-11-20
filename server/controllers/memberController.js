@@ -18,6 +18,13 @@ exports.create = async (req, res) => {
     if (teamId.rows[0].length === 0) {
       return res.status(404).send("Team doesn't exist");
     }
+    const existingMember = await client.query(
+      `SELECT id FROM userteams WHERE userid = $1 AND teamid = $2`,
+      [userId.rows[0].id, teamId.rows[0].id]
+    );
+    if (existingMember.rowCount !== 0) {
+      return res.status(404).send("User already in team");
+    }
     const queryText = `INSERT INTO userteams (userid, teamid) VALUES ($1, $2)`;
     await client.query(queryText, [userId.rows[0].id, teamId.rows[0].id]);
     return res.status(200).send("success!!!");

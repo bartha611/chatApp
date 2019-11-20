@@ -55,7 +55,7 @@ CHECK BOX
             Submit
           </Button>
         </Form>
-        {response.error && <Alert color="danger">Could not create team</Alert>}
+        {response.error && <Alert color="danger">Could not create Team</Alert>}
       </Container>
     </div>
   );

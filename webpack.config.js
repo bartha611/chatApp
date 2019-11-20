@@ -2,7 +2,8 @@ const DIR_PATH = `${__dirname}/client/dist`;
 const webpack = require("webpack");
 const MomentLocalesPlugin = require("moment-locales-webpack-plugin");
 const MomentTimezoneDataPlugin = require("moment-timezone-data-webpack-plugin");
-// const CompressionPlugin = require("compression-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   entry: ["babel-polyfill", "./client/index.jsx"],
@@ -32,11 +33,16 @@ module.exports = {
     historyApiFallback: true
   },
   plugins: [
+    new HtmlWebpackPlugin({
+      template: "./client/index.html",
+      title: "Flack"
+    }),
     new webpack.DefinePlugin({
       "process.env": {
         NODE_ENV: JSON.stringify("development")
       }
     }),
+    new CleanWebpackPlugin(),
     new MomentLocalesPlugin({
       localesToKeep: ["es-us", "ru"]
     }),
