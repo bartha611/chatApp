@@ -10,7 +10,9 @@ import history from "./configuration/history";
 
 // import Components
 
-import Navigation from "./components/Navigation/navigation";
+const Homepage = lazy(() => 
+  import(/* webpackChunkName: "Homepage" */ "./components/Home/Home")
+)
 
 const Login = lazy(() =>
   import(/* webpackChunkName: "Login" */ "./components/Login/login")
@@ -45,7 +47,7 @@ export default function Home() {
         <Router history={history}>
           <Switch>
             <Route exact path="/">
-              <Navigation />
+              {waitComponent(Homepage)}
             </Route>
             <Route path="/login">{waitComponent(Login)}</Route>
             <Route path="/signup">{waitComponent(Signup)}</Route>

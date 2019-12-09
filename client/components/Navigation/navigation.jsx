@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
+import Proptypes from "prop-types";
 import {
   Container,
   Nav,
@@ -9,50 +10,59 @@ import {
   NavbarToggler,
   Collapse,
   NavItem,
-  // Dropdown,
-  // DropdownToggle,
-  // DropdownMenu,
-  // DropdownItem
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownItem,
+  DropdownMenu
 } from "reactstrap";
-import "./navigation.css"
+import "./navigation.css";
 
-
-export default function Navigation() {
+export default function Navigation({ history }) {
   const [isOpen, setIsOpen] = useState(false);
-  // const [dropdownOpen, setDropdownOpen] = useState(false);
-  // const team = useSelector(state => state.team);
   const user = useSelector(state => state.user);
+  const { teams } = useSelector(state => state.team);
   const dispatch = useDispatch();
   const handleClick = () => {
     dispatch({
-      type: 'LOAD_USER',
-      operation: 'LOGOUT'
+      type: "LOAD_USER",
+      operation: "LOGOUT"
     });
-  }
+  };
   return (
     <div>
       <Container fluid id="container">
         <Navbar id="navigation" color="dark" dark expand="md">
           <NavbarToggler onClick={() => setIsOpen(!isOpen)} />
           <Collapse isOpen={isOpen} navbar>
+            <Nav className="mr-auto">
+              <NavItem>
+                <NavLink tag={Link} to="/">
+                  Flack
+                </NavLink>
+              </NavItem>
+            </Nav>
             <Nav className="ml-auto" navbar>
               {!user.authenticated && (
-              <NavItem>
-                <NavLink tag={Link} to="/login">
-                  Login
-                </NavLink>
-              </NavItem>
+                <NavItem>
+                  <NavLink tag={Link} to="/login">
+                    Login
+                  </NavLink>
+                </NavItem>
               )}
               {!user.authenticated && (
-              <NavItem>
-                <NavLink tag={Link} to="/signup">
-                  SignUp
-                </NavLink>
-              </NavItem>
-)}
+                <NavItem>
+                  <NavLink tag={Link} to="/signup">
+                    SignUp
+                  </NavLink>
+                </NavItem>
+              )}
               {user.authenticated && (
                 <NavItem>
-                  <NavLink onClick={() => {handleClick()}}>
+                  <NavLink
+                    onClick={() => {
+                      handleClick();
+                    }}
+                  >
                     Logout
                   </NavLink>
                 </NavItem>
@@ -64,28 +74,24 @@ export default function Navigation() {
                   </NavLink>
                 </NavItem>
               )}
-              {/* {user.authenticated && (
-                <Dropdown isOpen={dropdownOpen} toggle={setDropdownOpen(true)}>
-                  <DropdownToggle caret>
-                    <DropdownMenu>
-                      <DropdownItem>
-                        <NavLink tag={Link} to="/create">
-                          Create Team
-                        </NavLink>
-                      </DropdownItem>
-                      {team.team.map(tm => {
-                        return (
-                          <DropdownItem>
-                            <NavLink tag={Link} to={`/${tm.shortid}`}>
-                              {tm.name}
-                            </NavLink>
-                          </DropdownItem>
-                        )
-                      })}
-                    </DropdownMenu>
+              {user.authenticated && (
+                <UncontrolledDropdown nav inNavbar>
+                  <DropdownToggle nav caret>
+                    Teams
                   </DropdownToggle>
-                </Dropdown>
-              )} */}
+                  <DropdownMenu right>
+                    {teams.map(tm => {
+                      return (
+                        <DropdownItem
+                          onClick={() => history.push(`/${tm.shortid}`)}
+                        >
+                          {tm.name}
+                        </DropdownItem>
+                      );
+                    })}
+                  </DropdownMenu>
+                </UncontrolledDropdown>
+              )}
             </Nav>
           </Collapse>
         </Navbar>
@@ -93,3 +99,9 @@ export default function Navigation() {
     </div>
   );
 }
+
+Navigation.propTypes = {
+  history: Proptypes.shape({
+    push: Proptypes.func.isRequired
+  }).isRequired
+};
