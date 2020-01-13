@@ -12,15 +12,17 @@ const AddChannel = ({ team, setChannel, history }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const channelState = useSelector(state => state.channel);
+  const user = useSelector(state => state.user);
+  const { username } = user;
   const dispatch = useDispatch();
   const handleSubmit = () => {
     dispatch({
       type: "LOAD_CHANNEL",
       operation: "CREATE",
-      data: { name, team, description },
+      data: { username, name, team, description },
       navigation: ({ shortid }) => {
-        setChannel(false)
-        return `/${team}/${shortid}`
+        setChannel(false);
+        return `/${team}/${shortid}`;
       },
       history
     });

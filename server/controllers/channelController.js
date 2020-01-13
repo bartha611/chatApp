@@ -2,7 +2,7 @@ const shortid = require("shortid");
 const { pool } = require("../configuration/pool");
 
 exports.create = async (req, res) => {
-  const { name, team, description } = req.body;
+  const { username, name, team, description } = req.body;
   console.log(`name: ${name} team: ${team} description: ${description}`);
   const client = await pool.connect();
   try {
@@ -22,13 +22,27 @@ exports.create = async (req, res) => {
       WHERE shortid = $1`,
       [team]
     );
+    const userId = await client.query(
+      `SELECT id
+      FROM users 
+      WHERE username = $1`,
+      [username]
+    );
+    await client.query("BEGIN");
     const response = await client.query(
       `INSERT INTO channel(shortid, name, description, teamId) VALUES ($1, $2, $3, $4) RETURNING id, shortid, name, description`,
       [shortid.generate(), name, description, teamId.rows[0].id]
     );
+    const newMessageText = `INSERT INTO messages(message,userid, channelid) VALUES ($1, $2, $3)`;
+    await client.query(newMessageText, [
+      `Joined ${response.rows[0].name}`,
+      userId.rows[0].id,
+      response.rows[0].id
+    ]);
+    await client.query("COMMIT");
     return res.status(200).send(response.rows[0]);
   } catch (err) {
-    console.log(err);
+    await client.query("Rollback");
     return res.status(404).send(err);
   } finally {
     client.release();
@@ -63,7 +77,6 @@ exports.read = async (req, res) => {
       teamId.rows[0].id,
       username
     ]);
-    console.log(response);
     if (response.rowCount === 0) {
       return res.status(404).send("User not authorized");
     }

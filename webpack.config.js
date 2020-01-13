@@ -3,6 +3,7 @@ const webpack = require("webpack");
 const MomentLocalesPlugin = require("moment-locales-webpack-plugin");
 const MomentTimezoneDataPlugin = require("moment-timezone-data-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const CompressionPlugin = require("compression-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
@@ -13,7 +14,6 @@ module.exports = {
     chunkFilename: "[name].bundle.js",
     publicPath: "/"
   },
-  devtool: "source-map",
   mode: "production",
   resolve: { extensions: [".js", ".jsx"] },
   module: {
@@ -37,6 +37,7 @@ module.exports = {
     historyApiFallback: true
   },
   plugins: [
+    new CompressionPlugin(),
     new HtmlWebpackPlugin({
       template: "./client/index.html",
       title: "Flack"
