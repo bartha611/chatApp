@@ -37,8 +37,8 @@ function Signup({ history }) {
   };
   return (
     <div className="Login">
+      <Navigation />
       <Container>
-        <Navigation />
         <div className="signupForm">
           <h2 className="mb-5 text-center">Sign-Up</h2>
           <Form>

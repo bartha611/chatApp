@@ -51,17 +51,18 @@ exports.register = async (req, res) => {
       "SELECT * FROM USERS WHERE username = $1",
       [username]
     );
-    console.log(response);
     if (response.rows[0]) {
+      console.log(response.rows[0].id);
       return res.status(404).send("User already exists");
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const result = await client.query(
-      `INSERT INTO USERS (username, email, password) VALUES ($1, $2, $3) RETURNING username`,
+      `INSERT INTO USERS (username, email, password) VALUES ($1, $2, $3) RETURNING username `,
       [username, email, hashedPassword]
     );
-    return res.status(200).send(result.rows[0]);
+    return res.status(200).send(result.rows[0].username);
   } catch (err) {
+    console.log(err);
     return res.status(404).send("Error in creation");
   } finally {
     client.release();

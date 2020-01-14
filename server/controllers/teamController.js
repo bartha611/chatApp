@@ -3,6 +3,7 @@ const { pool } = require("../configuration/pool");
 
 exports.create = async (req, res) => {
   const { team, open, username } = req.body;
+  console.log(username);
   const client = await pool.connect();
   try {
     const oldTeam = await client.query(`SELECT id FROM Teams WHERE name = $1`, [
@@ -15,6 +16,7 @@ exports.create = async (req, res) => {
       `SELECT id FROM users WHERE username = $1`,
       [username]
     );
+    console.log(userId);
     await client.query("BEGIN");
     const queryText = `INSERT INTO Teams (name, open, shortId, userid) VALUES ($1, $2, $3, $4) RETURNING id, name, shortId`;
     const { rows } = await client.query(queryText, [
