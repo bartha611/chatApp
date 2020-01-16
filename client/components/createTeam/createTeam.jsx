@@ -18,16 +18,13 @@ function createTeam({ history }) {
   const [team, setTeam] = useState("");
   const [open, setOpen] = useState(false);
   const response = useSelector(state => state.team);
-  const user = useSelector(state => state.user);
-  console.log(user);
-  const { username } = user;
   const dispatch = useDispatch();
   const handleSubmit = () => {
     if (team !== "") {
       dispatch({
         type: "LOAD_TEAM",
         operation: "CREATE",
-        data: { team, open, username },
+        data: { team, open },
         navigation: ({ shortid }) => `/${shortid}`,
         history
       });

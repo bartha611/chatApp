@@ -12,14 +12,16 @@ const userReducer = (state = currentState, action) => {
         loading: true
       };
     case "USER_LOGIN":
+      localStorage.setItem("token", action.payload.jwt);
       return {
         ...state,
         loading: false,
-        username: action.payload,
+        username: action.payload.user,
         authenticated: true,
         error: null
       };
     case "USER_LOGOUT":
+      localStorage.removeItem("token");
       return {
         ...state,
         loading: false,
@@ -28,10 +30,11 @@ const userReducer = (state = currentState, action) => {
         error: false
       };
     case "USER_CREATE":
+      localStorage.setItem("token", action.payload.jwt);
       return {
         ...state,
         loading: false,
-        username: action.payload,
+        username: action.payload.user,
         authenticated: true,
         error: false
       };

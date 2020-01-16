@@ -1,13 +1,16 @@
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
 
-export function isAuthenticated(req,res,next) {
-  if(req.session.user) {
-    return next()
-  }
-  return res.redirect('/')
-}
+dotenv.config();
 
-export function teamAuthentication(req,res,next) {
-  // Todo finish authentication for team
-  console.log('hello')
-  return next()
-}
+const authenticate = (req, res, next) => {
+  const authToken = req.headers.authorization || null;
+  const token = authToken && authToken.split(" ")[1];
+  jwt.verify(token, process.env.ACCESS_SECRET_TOKEN, (err, decoded) => {
+    if (err) return res.sendStatus(403);
+    req.username = decoded.username;
+    return next();
+  });
+};
+
+module.exports = authenticate;

@@ -1,6 +1,15 @@
 import axios from "axios";
 
+axios.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem(
+  "token"
+)}`;
+
 const callApi = (entity, operation, data = {}) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+  }
+
   const methods = {
     CREATE: () => axios.post(`/${entity}/create`, data),
     READ: () => axios.get(`/${entity}/read`, { params: data }),

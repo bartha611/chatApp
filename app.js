@@ -2,7 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const dotenv = require("dotenv");
-const compression = require("compression");
 
 dotenv.config();
 // session creation
@@ -11,7 +10,7 @@ const MongoStore = require("connect-mongo")(session);
 
 const app = express();
 const server = require("http").createServer(app);
-const io = require("socket.io")(server).listen(5000);
+const io = require("socket.io")(server);
 
 // import routes
 const userRoutes = require("./server/routes/userRoute");
@@ -34,11 +33,6 @@ const sessionMiddleWare = session({
 
 app.use(sessionMiddleWare);
 app.use(express.static(`${__dirname}/client/dist`));
-app.use(
-  compression({
-    level: 2
-  })
-);
 
 io.use((socket, next) => {
   sessionMiddleWare(socket.request, socket.request.res, next);
@@ -49,9 +43,6 @@ io.on("connection", socket => {
     socket.join(channel);
   });
   socket.on("input", ({ shortid, ...rest }) => {
-    console.log("hello there");
-    console.log(rest);
-    console.log(shortid);
     socket.to(shortid).emit("message", rest);
   });
 });
@@ -72,7 +63,7 @@ if (process.env.NODE_ENV !== "test") {
   //   console.log(`You are listening on port ${PORT}`);
   // });
   server.listen(3000, () => {
-    console.log("Socket is listening on port 8080");
+    console.log(`Server running on port 3000`);
   });
 }
 

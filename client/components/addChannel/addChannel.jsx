@@ -12,14 +12,12 @@ const AddChannel = ({ team, setChannel, history }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const channelState = useSelector(state => state.channel);
-  const user = useSelector(state => state.user);
-  const { username } = user;
   const dispatch = useDispatch();
   const handleSubmit = () => {
     dispatch({
       type: "LOAD_CHANNEL",
       operation: "CREATE",
-      data: { username, name, team, description },
+      data: { name, team, description },
       navigation: ({ shortid }) => {
         setChannel(false);
         return `/${team}/${shortid}`;
@@ -30,7 +28,6 @@ const AddChannel = ({ team, setChannel, history }) => {
   useEffect(() => {
     const handleEnter = e => {
       if (e.keyCode === 13) {
-        console.log("hello there");
         e.preventDefault();
         handleSubmit();
       }
