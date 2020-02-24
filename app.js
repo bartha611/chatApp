@@ -59,9 +59,6 @@ app.get("*", (req, res) => {
 });
 
 if (process.env.NODE_ENV !== "test") {
-  // app.listen(PORT, () => {
-  //   console.log(`You are listening on port ${PORT}`);
-  // });
   server.listen(3000, () => {
     console.log(`Server running on port 3000`);
   });

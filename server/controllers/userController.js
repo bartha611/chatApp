@@ -14,7 +14,7 @@ exports.login = async (req, res) => {
   const client = await pool.connect();
   try {
     const response = await client.query(
-      `SELECT * FROM Users WHERE username = $1`,
+      `SELECT * FROM Person WHERE username = $1`,
       [username]
     );
     if (!response.rows[0]) {
@@ -59,7 +59,7 @@ exports.register = async (req, res) => {
   const client = await pool.connect();
   try {
     const response = await client.query(
-      "SELECT * FROM USERS WHERE username = $1",
+      "SELECT * FROM Person WHERE username = $1",
       [username]
     );
     if (response.rows[0]) {
@@ -67,7 +67,7 @@ exports.register = async (req, res) => {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const result = await client.query(
-      `INSERT INTO USERS (username, email, password) VALUES ($1, $2, $3) RETURNING username `,
+      `INSERT INTO Person (username, email, password) VALUES ($1, $2, $3) RETURNING username `,
       [username, email, hashedPassword]
     );
     const accessToken = jwt.sign(
@@ -94,13 +94,13 @@ exports.delete = async (req, res) => {
   const { username } = req;
   try {
     const userId = await client.query(
-      `SELECT id FROM users WHERE username=$1`,
+      `SELECT id FROM Person WHERE username=$1`,
       [username]
     );
     if (userId.rows[0].length === 0) {
       return res.sendStatus(404);
     }
-    await client.query(`DELETE FROM users WHERE id = $1`, [userId.rows[0].id]);
+    await client.query(`DELETE FROM Person WHERE id = $1`, [userId.rows[0].id]);
     return res.sendStatus(200);
   } catch (err) {
     console.log(err);
