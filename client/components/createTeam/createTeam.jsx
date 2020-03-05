@@ -32,7 +32,7 @@ function createTeam({ history }) {
   };
   return (
     <div>
-      <Navigation />
+      <Navigation history={history} />
       <Container className="mt-5">
         <div id="createTeam">
           <Form method="post">

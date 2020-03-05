@@ -1,7 +1,7 @@
 import io from "socket.io-client";
 
 const socketMiddleware = ({ dispatch, getState }) => {
-  const socket = io.connect("http://localhost:3000");
+  const socket = io.connect();
   socket.on("message", data => {
     console.log("hello there message socket");
     dispatch({

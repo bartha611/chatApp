@@ -50,7 +50,8 @@ exports.create = async (req, res) => {
 };
 
 exports.read = async (req, res) => {
-  const { team, username } = req.query;
+  const { team } = req.query;
+  const { username } = req;
   const client = await pool.connect();
   try {
     const teamId = await client.query(
@@ -78,11 +79,27 @@ exports.read = async (req, res) => {
       username
     ]);
     if (response.rowCount === 0) {
-      return res.status(404).send("User not authorized");
+      return res.status(403).send("User not authorized");
     }
     return res.status(200).send(response.rows);
   } catch (err) {
     return res.status(404).send(err);
+  } finally {
+    client.release();
+  }
+};
+
+exports.delete = async (req, res) => {
+  const { id } = req.params;
+  const client = pool.connect();
+  try {
+    await client.query("BEGIN");
+    await client.query("DELETE FROM message WHERE channelId = $1", [id]);
+    await client.query("DELETE FROM channel WHERE id = $1", [id]);
+    await client.query("COMMIT");
+  } catch (err) {
+    await client.query("ROLLBACK");
+    res.sendStatus(500).send("Couldn't delete channel");
   } finally {
     client.release();
   }

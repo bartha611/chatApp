@@ -2,10 +2,13 @@ const supertest = require("supertest");
 const http = require("http");
 const app = require("../../app");
 
-jest.mock("../../server/middleware", () => (req, res, next) => {
-  req.username = "eric";
-  next();
-});
+jest.mock(
+  "../../server/middleware/userAuthenticate",
+  () => (req, res, next) => {
+    req.username = "eric";
+    next();
+  }
+);
 
 describe("team controller working properly", () => {
   let server;
@@ -23,19 +26,33 @@ describe("team controller working properly", () => {
   });
   describe("can create a team", () => {
     it("creates a team", async () => {
-      const query = { team: "fakeTeam1", open: false };
-      const result = await request
+      const query = { team: "fakeTeam", open: false };
+      request
         .post("/team/create")
         .set("Content-Type", "application/x-www-form-urlencoded")
-        .send(query);
-      console.log(result.res);
-      expect(result.status).toBe(200);
+        .send(query)
+        .expect(response => {
+          expect(response.status).toBe(200);
+          ({ id } = response.body);
+        });
+    });
+  });
+  describe("READ teams is working properly", () => {
+    it("queries data with correct data", () => {
+      request
+        .get("/team/read")
+        .set("Content-Type", "application/x-www-form-urlencoded")
+        .expect(response => {
+          expect(response.status).toBe(200);
+          expect(response.body.name).toBe("fakeTeam");
+        });
     });
   });
   describe("can delete a team", () => {
     it("deletes a team", async () => {
-      const result = await request.del(`/team/delete/${id}`);
-      expect(result.status).toBe(200);
+      request.del(`/team/delete/${id}`).expect(response => {
+        expect(response.status).toBe(200);
+      });
     });
   });
 });

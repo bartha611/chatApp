@@ -3,7 +3,8 @@ const moment = require("moment-timezone");
 const { pool } = require("../configuration/pool");
 
 exports.create = async (req, res) => {
-  const { username, input, channel, zone } = req.body;
+  const { input, channel, zone } = req.body;
+  const { username } = req;
   const client = await pool.connect();
   try {
     const channelId = await client.query(
@@ -38,7 +39,7 @@ exports.read = async (req, res) => {
   const { channel, zone } = req.query;
   const client = await pool.connect();
   try {
-    const queryText = `SELECT m.message, u.username, to_char(m.createdat AT TIME ZONE '${zone}' , 'YYYY-MM-DD HH:MI AM') AS createdat, c.description, c.name
+    const queryText = `SELECT m.id, m.message, u.username, to_char(m.createdat AT TIME ZONE '${zone}' , 'YYYY-MM-DD HH:MI AM') AS createdat, c.description, c.name
     FROM message m 
     JOIN person u ON (u.id = m.userid) 
     JOIN channel c ON (c.id = m.channelid)
@@ -49,6 +50,20 @@ exports.read = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(404).send(`Error in retrieving messages from ${channel}`);
+  } finally {
+    client.release();
+  }
+};
+
+exports.delete = async (req, res) => {
+  const { id } = req.params;
+  const client = await pool.connect();
+  try {
+    const queryText = `DELETE FROM message WHERE id = $1`;
+    await client.query(queryText, [id]);
+    return res.sendStatus(200);
+  } catch (err) {
+    return res.sendStatus(500).send("Error in deleting message");
   } finally {
     client.release();
   }
