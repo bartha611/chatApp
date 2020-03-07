@@ -5,27 +5,27 @@ exports.create = async (req, res) => {
   const client = await pool.connect();
   try {
     const userId = await client.query(
-      `SELECT id FROM users WHERE username = $1`,
+      `SELECT id FROM person WHERE username = $1`,
       [username]
     );
     if (userId.rows.length === 0) {
       return res.status(404).send("User does not exist");
     }
     const teamId = await client.query(
-      `SELECT id FROM teams WHERE shortid = $1`,
+      `SELECT id FROM team WHERE shortid = $1`,
       [team]
     );
     if (teamId.rows[0].length === 0) {
       return res.status(404).send("Team doesn't exist");
     }
     const existingMember = await client.query(
-      `SELECT id FROM userteams WHERE userid = $1 AND teamid = $2`,
+      `SELECT id FROM userteam WHERE userid = $1 AND teamid = $2`,
       [userId.rows[0].id, teamId.rows[0].id]
     );
     if (existingMember.rowCount !== 0) {
       return res.status(404).send("User already in team");
     }
-    const queryText = `INSERT INTO userteams (userid, teamid) VALUES ($1, $2)`;
+    const queryText = `INSERT INTO userteam (userid, teamid) VALUES ($1, $2)`;
     await client.query(queryText, [userId.rows[0].id, teamId.rows[0].id]);
     return res.status(200).send("success!!!");
   } catch (err) {
@@ -41,14 +41,14 @@ exports.read = async (req, res) => {
   const client = await pool.connect();
   try {
     const queryText = `SELECT u.id, u.username
-    FROM users u
-    JOIN userteams ut ON (ut.userid = u.id)
-    JOIN teams t ON (t.id = ut.teamid)
+    FROM person u
+    JOIN userteam ut ON (ut.userid = u.id)
+    JOIN team t ON (t.id = ut.teamid)
     WHERE t.shortid = $1 AND t.shortid IN 
     (SELECT t.shortid
-      FROM teams t
-      JOIN userteams ut ON (ut.teamid = t.id)
-      JOIN users u ON (ut.userid = u.id)
+      FROM team t
+      JOIN userteam ut ON (ut.teamid = t.id)
+      JOIN person u ON (ut.userid = u.id)
       WHERE u.username = $2
       )
     `;

@@ -2,7 +2,8 @@ const shortid = require("shortid");
 const { pool } = require("../configuration/pool");
 
 exports.create = async (req, res) => {
-  const { username, name, team, description } = req.body;
+  const { name, team, description } = req.body;
+  const { username } = req;
   console.log(`name: ${name} team: ${team} description: ${description}`);
   const client = await pool.connect();
   try {
@@ -18,13 +19,13 @@ exports.create = async (req, res) => {
     }
     const teamId = await client.query(
       `SELECT id
-      FROM teams
+      FROM team
       WHERE shortid = $1`,
       [team]
     );
     const userId = await client.query(
       `SELECT id
-      FROM users 
+      FROM person 
       WHERE username = $1`,
       [username]
     );
@@ -33,7 +34,7 @@ exports.create = async (req, res) => {
       `INSERT INTO channel(shortid, name, description, teamId) VALUES ($1, $2, $3, $4) RETURNING id, shortid, name, description`,
       [shortid.generate(), name, description, teamId.rows[0].id]
     );
-    const newMessageText = `INSERT INTO messages(message,userid, channelid) VALUES ($1, $2, $3)`;
+    const newMessageText = `INSERT INTO message(message,userid, channelid) VALUES ($1, $2, $3)`;
     await client.query(newMessageText, [
       `Joined ${response.rows[0].name}`,
       userId.rows[0].id,
@@ -42,6 +43,7 @@ exports.create = async (req, res) => {
     await client.query("COMMIT");
     return res.status(200).send(response.rows[0]);
   } catch (err) {
+    console.log(err);
     await client.query("Rollback");
     return res.status(404).send(err);
   } finally {
@@ -51,13 +53,14 @@ exports.create = async (req, res) => {
 
 exports.read = async (req, res) => {
   const { team } = req.query;
+  console.log(team);
   const { username } = req;
   const client = await pool.connect();
   try {
     const teamId = await client.query(
       `
     SELECT id
-    FROM teams
+    FROM team
     WHERE shortId = $1
     `,
       [team]
@@ -69,9 +72,9 @@ exports.read = async (req, res) => {
     FROM channel 
     WHERE teamId = $1 AND teamId IN 
     (SELECT t.id
-      FROM teams t
-      JOIN userteams ut ON (ut.teamid = t.id)
-      JOIN users u ON (u.id = ut.userid)
+      FROM team t
+      JOIN userteam ut ON (ut.teamid = t.id)
+      JOIN person u ON (u.id = ut.userid)
       WHERE u.username = $2)
     ORDER BY createdat ASC`;
     const response = await client.query(queryText, [
@@ -79,10 +82,12 @@ exports.read = async (req, res) => {
       username
     ]);
     if (response.rowCount === 0) {
+      console.log(username);
       return res.status(403).send("User not authorized");
     }
     return res.status(200).send(response.rows);
   } catch (err) {
+    console.log(err);
     return res.status(404).send(err);
   } finally {
     client.release();

@@ -15,7 +15,7 @@ exports.create = async (req, res) => {
       `SELECT id FROM person WHERE username=$1`,
       [username]
     );
-    const queryText = `INSERT INTO message (message, userid, channelid, teamid) VALUES ($1, $2, $3, $4) RETURNING message, createdAt`;
+    const queryText = `INSERT INTO message (message, userid, channelid, teamid) VALUES ($1, $2, $3, $4) RETURNING id, message, createdAt`;
     const { rows } = await client.query(queryText, [
       input,
       userId.rows[0].id,

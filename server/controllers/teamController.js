@@ -43,6 +43,7 @@ exports.create = async (req, res) => {
     await client.query("COMMIT");
     return res.status(200).send(rows[0]);
   } catch (err) {
+    console.log(err);
     await client.query("Rollback");
     return res.status(404).send(err);
   } finally {
