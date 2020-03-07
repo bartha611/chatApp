@@ -18,6 +18,8 @@ const teamRoutes = require("./server/routes/teamRoute");
 const channelRoutes = require("./server/routes/channelRoute");
 const messageRoutes = require("./server/routes/messageRoute");
 const memberRoutes = require("./server/routes/memberRoute");
+
+const PORT = 8080;
 // middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -59,8 +61,8 @@ app.get("*", (req, res) => {
 });
 
 if (process.env.NODE_ENV !== "test") {
-  server.listen(3000, () => {
-    console.log(`Server running on port 3000`);
+  server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
   });
 }
 

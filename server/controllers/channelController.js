@@ -53,7 +53,6 @@ exports.create = async (req, res) => {
 
 exports.read = async (req, res) => {
   const { team } = req.query;
-  console.log(team);
   const { username } = req;
   const client = await pool.connect();
   try {

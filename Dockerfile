@@ -1,8 +1,9 @@
 FROM node:10.13-alpine
-ENV NODE_ENV production
-WORKDIR /usr/src/app
-COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
-RUN npm install --production --silent && mv node_modules ../
-COPY . .
-EXPOSE 3000
-CMD npm start
+RUN mkdir -p /home/adam/chatapp/node_modules && chown -R adam:adam /home/adam/chatapp
+WORKDIR /home/adam/chatapp
+COPY package*.json ./
+USER adam
+RUN npm install
+COPY --chown=adam:adam . .
+EXPOSE 8080
+CMD ["node", "app.js"]
