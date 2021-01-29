@@ -5,8 +5,6 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 // session creation
-const session = require("express-session");
-const MongoStore = require("connect-mongo")(session);
 
 const app = express();
 const server = require("http").createServer(app);
@@ -24,24 +22,10 @@ const PORT = 8080;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-const sessionMiddleWare = session({
-  secret: "lsadjflksajfjsafkdsaj",
-  resave: false,
-  saveUninitialized: false,
-  store: new MongoStore({
-    url: process.env.SESSION_STORE
-  })
-});
-
-app.use(sessionMiddleWare);
 app.use(express.static(`${__dirname}/client/dist`));
 
-io.use((socket, next) => {
-  sessionMiddleWare(socket.request, socket.request.res, next);
-});
-
-io.on("connection", socket => {
-  socket.on("join", channel => {
+io.on("connection", (socket) => {
+  socket.on("join", (channel) => {
     socket.join(channel);
   });
   socket.on("input", ({ shortid, ...rest }) => {
@@ -57,7 +41,7 @@ app.use("/message", messageRoutes);
 app.use("/member", memberRoutes);
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "/client/dist/index.html"));
+  res.sendFile(path.join(__dirname, "/dist/index.html"));
 });
 
 if (process.env.NODE_ENV !== "test") {

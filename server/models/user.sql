@@ -1,6 +1,0 @@
-CREATE TABLE if not exists person (
-  id SERIAL PRIMARY KEY,
-  username VARCHAR (60) NOT NULL UNIQUE,
-  email VARCHAR NOT NULL UNIQUE,
-  password VARCHAR NOT NULL
-)

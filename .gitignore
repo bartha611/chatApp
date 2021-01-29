@@ -1,4 +1,5 @@
 /node_modules/
+/dist/*
 .env
 .vscode
 npm-debug.log
@@ -7,3 +8,7 @@ bundle.js.map
 stats.json
 /client/dist/*.js*
 /client/dist/*.jpg*
+.next
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

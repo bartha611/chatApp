@@ -1,8 +1,0 @@
-CREATE TABLE IF NOT EXISTS Message (
-  id SERIAL PRIMARY KEY,
-  message text NOT NULL,
-  createdAt timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  userId INTEGER REFERENCES person,
-  channelId INTEGER REFERENCES channel,
-  teamId INTEGER REFERENCES team
-)
