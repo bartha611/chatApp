@@ -1,3 +1,5 @@
+const faker = require("faker");
+
 exports.seed = async function(knex) {
   await knex("userteams").del();
   const totalUserTeams = 500;
@@ -11,7 +13,7 @@ exports.seed = async function(knex) {
         return x.userId === userId && x.teamId === teamId;
       }).length === 0;
     if (unique) {
-      fakeUserTeams.push({ userId, teamId });
+      fakeUserTeams.push({ userId, teamId, role: faker.name.jobTitle() });
       i++;
     }
   } while (i < totalUserTeams);

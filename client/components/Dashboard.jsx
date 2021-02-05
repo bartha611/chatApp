@@ -13,9 +13,11 @@ import Footer from "./Footer";
 import AddChannel from "./AddChannel";
 import AddTeamMembers from "./AddTeamMember";
 import MemberList from "./MemberList";
+import EditProfile from "./EditProfile";
 
 function Dashboard() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const { team, channel } = useParams();
   const [addChannel, setAddChannel] = useState(false);
   const [addMember, setAddMember] = useState(false);
@@ -45,11 +47,12 @@ function Dashboard() {
           />
           <div className="flex flex-col w-dashboard pl-4">
             <BoardNavigation setIsOpen={setIsOpen} />
-            <Chat />
+            <Chat setIsEdit={setIsEdit} />
             <Footer channel={channel} />
           </div>
         </div>
         {isOpen && <MemberList isOpen={isOpen} setIsOpen={setIsOpen} />}
+        {isEdit && <EditProfile isOpen={isEdit} setIsOpen={setIsEdit} />}
         <Modal
           isOpen={addMember}
           toggle={() => setAddMember(!addMember)}

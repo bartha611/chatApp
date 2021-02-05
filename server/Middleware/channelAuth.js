@@ -5,11 +5,20 @@ const channelAuth = async (req, res, next) => {
   const { channelId: shortid } = req.params;
   try {
     const channel = await db("channels AS c")
-      .select("c.id", "c.shortid", "c.name", "c.description")
+      .select(
+        "c.id",
+        "c.shortid",
+        "c.name",
+        "c.description",
+        "c.teamId",
+        "ut.role"
+      )
       .join("userteams AS ut", "ut.teamId", "=", "c.teamId")
       .where({ shortid, userId })
       .first();
     if (channel) {
+      req.role = channel.role;
+      delete channel.role;
       req.channel = channel;
       return next();
     }

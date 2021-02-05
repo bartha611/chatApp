@@ -7,7 +7,7 @@ const server = require("http").Server(app);
 const io = require("socket.io")(server);
 require("dotenv").config();
 
-const PORT = 8080;
+const { PORT } = process.env;
 
 const userRoutes = require("./Routes/userRoute");
 const teamRoutes = require("./Routes/teamRoute");

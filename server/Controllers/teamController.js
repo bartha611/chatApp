@@ -79,7 +79,7 @@ exports.delete = async (req, res) => {
 exports.get = async (req, res) => {
   try {
     const members = await db("userteams AS ut")
-      .select("u.id", "u.username", "u.email")
+      .select("u.id", "u.username", "u.email", "u.avatar")
       .join("users AS u", "u.id", "=", "ut.userId")
       .where("ut.teamId", req.team.id);
     const channels = await db("channels AS c")

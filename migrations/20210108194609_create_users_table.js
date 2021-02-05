@@ -4,9 +4,11 @@ exports.up = function(knex) {
       .unsigned()
       .notNullable()
       .primary();
+    t.string("fullName").notNullable();
     t.string("username")
       .unique()
       .notNullable();
+    t.string("avatar").nullable();
     t.string("email")
       .unique()
       .notNullable();

@@ -9,20 +9,30 @@ const getDates = (total) => {
   return sortedDates;
 };
 
-const createMessage = (date) => ({
-  message: faker.lorem.text(),
-  userId: Math.floor(Math.random() * 100) + 1,
-  created_at: date,
-  channelId: Math.floor(Math.random() * 500) + 1,
-});
+const createMessage = async (date, knex) => {
+  const channelId = Math.floor(Math.random() * 500) + 1;
+  const response = await knex("channels AS c")
+    .select("userId")
+    .join("teams AS t", "t.id", "=", "c.teamId")
+    .join("userteams AS ut", "ut.teamId", "=", "t.id")
+    .where("c.id", channelId);
+  const userIds = response.map((result) => result.userId);
+  return {
+    created_at: date,
+    message: faker.lorem.text(),
+    userId: userIds[Math.floor(Math.random() * userIds.length)],
+    channelId,
+  };
+};
 
 exports.seed = async function(knex) {
   await knex("messages").del();
   const totalMessages = 10000;
-  const fakeMessages = [];
   const dates = getDates(totalMessages);
+  const promises = [];
   for (let i = 0; i < totalMessages; i++) {
-    fakeMessages.push(createMessage(dates[i]));
+    promises.push(createMessage(dates[i], knex));
   }
+  const fakeMessages = await Promise.all(promises);
   await knex("messages").insert(fakeMessages);
 };

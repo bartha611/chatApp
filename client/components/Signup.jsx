@@ -8,6 +8,7 @@ import Navigation from "./Navigation";
 function Signup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const { error } = useSelector((state) => state.auth);
@@ -19,6 +20,7 @@ function Signup() {
         fetchAuth("/api/user/register", "POST", "LOGIN", {
           username,
           email,
+          fullName,
           password,
         })
       );
@@ -44,6 +46,14 @@ function Signup() {
               placeholder="Enter Username"
               onChange={(e) => setUsername(e.target.value)}
               name="username"
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label className="font-bold">Full Name</Label>
+            <Input
+              type="text"
+              placeholder="Enter Full Name"
+              onChange={(e) => setFullName(e.target.value)}
             />
           </FormGroup>
           <FormGroup>

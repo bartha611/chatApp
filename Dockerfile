@@ -1,9 +1,8 @@
-FROM node:10.13-alpine
-RUN mkdir -p /home/adam/chatapp/node_modules && chown -R adam:adam /home/adam/chatapp
-WORKDIR /home/adam/chatapp
+FROM node:14
+RUN mkdir -p /usr/src/flack
+WORKDIR /usr/src/flack
 COPY package*.json ./
-USER adam
 RUN npm install
-COPY --chown=adam:adam . .
-EXPOSE 8080
-CMD ["node", "app.js"]
+COPY . .
+EXPOSE 3000
+CMD ["node", "server/server.js"]

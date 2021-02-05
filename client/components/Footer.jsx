@@ -25,19 +25,26 @@ const Footer = ({ channel }) => {
     }
   };
 
-  const keydownHandler = async (e) => {
+  const keydownHandler = (e) => {
     if (e.keyCode === 13) {
       e.preventDefault();
-      await handleSubmit();
+      handleSubmit();
     }
+  };
+
+  const keyupHandler = () => {
     setIsBold(document.queryCommandState("bold"));
     setIsItalics(document.queryCommandState("italic"));
     setIsStrikeThrough(document.queryCommandState("strikeThrough"));
   };
 
   useEffect(() => {
-    window.addEventListener("keyup", keydownHandler);
-    return () => window.removeEventListener("keyup", keydownHandler);
+    window.addEventListener("keydown", keydownHandler);
+    window.addEventListener("keyup", keyupHandler);
+    return () => {
+      window.removeEventListener("keydown", keydownHandler);
+      window.removeEventListener("keyup", keyupHandler);
+    };
   }, []);
 
   return (
@@ -94,6 +101,7 @@ const Footer = ({ channel }) => {
           <button
             type="submit"
             className="focus:outline-none hover:bg-green-700 w-7"
+            onClick={handleSubmit}
           >
             <FontAwesomeIcon icon={faPlay} color="white" />
           </button>

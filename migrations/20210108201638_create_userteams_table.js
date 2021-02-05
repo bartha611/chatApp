@@ -8,6 +8,7 @@ exports.up = function(knex) {
       .unsigned()
       .notNullable()
       .index();
+    t.string("role").nullable();
     t.integer("teamId")
       .unsigned()
       .notNullable()

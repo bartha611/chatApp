@@ -13,7 +13,8 @@ exports.create = async (req, res) => {
       })
       .returning(["id", "message", "created_at"])
       .then((row) => row[0]);
-    response.username = req.user.username;
+    response.user = req.user;
+    response.user.role = req.role;
     return res.status(200).send({ message: response });
   } catch (err) {
     return res.status(500).send(err);
@@ -23,9 +24,19 @@ exports.create = async (req, res) => {
 exports.read = async (req, res) => {
   try {
     const messages = await db("messages AS m")
-      .select("m.id", "m.message", "m.created_at", "u.username")
+      .select(
+        "m.id",
+        "m.message",
+        "m.created_at",
+        "u.username",
+        "u.avatar",
+        "u.fullName",
+        "ut.role"
+      )
       .join("users AS u", "u.id", "=", "m.userId")
-      .where({ channelId: req.channel.id });
+      .join("userteams AS ut", "ut.userId", "=", "u.id")
+      .where({ channelId: req.channel.id, teamId: req.channel.teamId })
+      .orderBy("m.id");
     return res.status(200).send({ messages, channel: req.channel });
   } catch (err) {
     return res.status(500).send(err);
