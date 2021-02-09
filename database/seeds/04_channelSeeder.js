@@ -1,9 +1,9 @@
 const faker = require("faker");
-const shortid = require("shortid");
+const { nanoid } = require("nanoid");
 
 const createChannel = () => ({
   name: faker.random.word(),
-  shortid: shortid.generate(),
+  shortid: nanoid(14),
   description: faker.random.words(),
   teamId: Math.floor(Math.random() * 50) + 1,
 });

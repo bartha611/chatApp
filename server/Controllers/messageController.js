@@ -11,11 +11,23 @@ exports.create = async (req, res) => {
         channelId,
         userId,
       })
-      .returning(["id", "message", "created_at"])
+      .returning("id")
       .then((row) => row[0]);
-    response.user = req.user;
-    response.user.role = req.role;
-    return res.status(200).send({ message: response });
+    const newMessage = await db("messages AS m")
+      .select(
+        "m.id",
+        "m.message",
+        "m.created_at",
+        "m.userId",
+        "p.fullName",
+        "p.displayName",
+        "p.avatar",
+        "p.role"
+      )
+      .join("profiles AS p", "p.id", "=", "m.profileId")
+      .where("m.id", response.id)
+      .first();
+    return res.status(200).send({ message: newMessage });
   } catch (err) {
     return res.status(500).send(err);
   }
@@ -28,14 +40,13 @@ exports.read = async (req, res) => {
         "m.id",
         "m.message",
         "m.created_at",
-        "u.username",
-        "u.avatar",
-        "u.fullName",
-        "ut.role"
+        "p.fullName",
+        "p.displayName",
+        "p.avatar",
+        "p.role"
       )
-      .join("users AS u", "u.id", "=", "m.userId")
-      .join("userteams AS ut", "ut.userId", "=", "u.id")
-      .where({ channelId: req.channel.id, teamId: req.channel.teamId })
+      .join("profiles AS p", "p.id", "=", "m.profileId")
+      .where("m.channelId", req.channel.id)
       .orderBy("m.id");
     return res.status(200).send({ messages, channel: req.channel });
   } catch (err) {

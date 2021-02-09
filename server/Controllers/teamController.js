@@ -1,8 +1,8 @@
-const shortid = require("shortid");
+const { nanoid } = require("nanoid");
 const db = require("../utils/db");
 
 exports.create = async (req, res) => {
-  const { id: administrator } = req.user;
+  const { id: administrator, email } = req.user;
   const { name } = req.body;
   try {
     return db.transaction(async (trx) => {
@@ -11,20 +11,25 @@ exports.create = async (req, res) => {
           .insert({
             name,
             administrator,
-            shortid: shortid.generate(),
+            shortid: nanoid(14),
           })
           .returning("*")
           .then((row) => row[0]);
-        await trx("userteams").insert({
-          teamId: team.id,
-          userId: administrator,
-        });
+        const profile = await trx("profiles")
+          .insert({
+            teamId: team.id,
+            userId: administrator,
+            fullName: email.split("@")[0],
+            shortid: nanoid(14),
+          })
+          .returning("*")
+          .then((row) => row[0]);
         const channel = await trx("channels")
           .insert({
             name: "random",
             teamId: team.id,
             description: "random channel",
-            shortid: shortid.generate(),
+            shortid: nanoid(14),
           })
           .returning("*")
           .then((row) => row[0]);
@@ -32,18 +37,16 @@ exports.create = async (req, res) => {
           .insert({
             message: "Joined random",
             channelId: channel.id,
-            userId: administrator,
+            profileId: profile.id,
           })
           .returning("*")
           .then((row) => row[0]);
         return res.status(200).send({ team });
       } catch (err) {
-        console.log(err);
         return res.status(500).send(err);
       }
     });
   } catch (err) {
-    console.log(err);
     return res.status(500).send(err);
   }
 };
@@ -51,10 +54,10 @@ exports.create = async (req, res) => {
 exports.list = async (req, res) => {
   const { id: userId } = req.user;
   try {
-    const teams = await db("userteams AS ut")
+    const teams = await db("profiles AS p")
       .select("t.id", "t.name", "t.shortid")
-      .join("teams AS t", "ut.teamId", "=", "t.id")
-      .where("ut.userId", userId);
+      .join("teams AS t", "p.teamId", "=", "t.id")
+      .where("p.userId", userId);
     return res.status(200).send({ teams });
   } catch (err) {
     return res.status(500).send(err);
@@ -78,10 +81,9 @@ exports.delete = async (req, res) => {
 
 exports.get = async (req, res) => {
   try {
-    const members = await db("userteams AS ut")
-      .select("u.id", "u.username", "u.email", "u.avatar")
-      .join("users AS u", "u.id", "=", "ut.userId")
-      .where("ut.teamId", req.team.id);
+    const members = await db("profiles AS P")
+      .select("p.id", "p.fullName", "p.avatar", "p.displayName")
+      .where("p.teamId", req.team.id);
     const channels = await db("channels AS c")
       .select("c.id", "c.name", "c.shortid", "c.description")
       .where("c.teamId", req.team.id);

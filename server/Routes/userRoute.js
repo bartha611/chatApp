@@ -27,6 +27,7 @@ const userController = require("./../Controllers/userController");
 router.post("/login", userController.login);
 router.post("/register", userController.register);
 router.get("/", userAuth, userController.list);
+router.get("/confirmation/:token", userController.confirmation);
 router.post("/photo", userAuth, upload.single("avatar"), userController.photo);
 
 module.exports = router;

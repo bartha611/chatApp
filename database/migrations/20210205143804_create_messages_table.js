@@ -1,3 +1,10 @@
+// eslint-disable-next-line no-unused-vars
+const Knex = require("knex");
+/**
+ *
+ * @param {Knex} knex
+ */
+
 exports.up = function(knex) {
   return knex.schema.createTable("messages", function(t) {
     t.increments("id")
@@ -5,8 +12,7 @@ exports.up = function(knex) {
       .notNullable()
       .primary();
     t.text("message").notNullable();
-    t.timestamp("created_at").defaultTo(knex.fn.now());
-    t.integer("userId")
+    t.integer("profileId")
       .unsigned()
       .notNullable()
       .index();
@@ -14,17 +20,22 @@ exports.up = function(knex) {
       .unsigned()
       .notNullable()
       .index();
+    t.timestamps(true, true);
 
-    t.foreign("userId")
-      .onDelete("CASCADE")
+    t.foreign("profileId")
       .references("id")
-      .inTable("users");
+      .inTable("profiles")
+      .onDelete("CASCADE");
     t.foreign("channelId")
-      .onDelete("CASCADE")
       .references("id")
-      .inTable("channels");
+      .inTable("channels")
+      .onDelete("CASCADE");
   });
 };
+/**
+ *
+ * @param {Knex} knex
+ */
 
 exports.down = function(knex) {
   return knex.schema.dropTable("messages");

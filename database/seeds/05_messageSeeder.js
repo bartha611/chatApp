@@ -12,15 +12,15 @@ const getDates = (total) => {
 const createMessage = async (date, knex) => {
   const channelId = Math.floor(Math.random() * 500) + 1;
   const response = await knex("channels AS c")
-    .select("userId")
+    .select("p.id")
     .join("teams AS t", "t.id", "=", "c.teamId")
-    .join("userteams AS ut", "ut.teamId", "=", "t.id")
+    .join("profiles AS p", "p.teamId", "=", "t.id")
     .where("c.id", channelId);
-  const userIds = response.map((result) => result.userId);
+  const profileIds = response.map((result) => result.id);
   return {
     created_at: date,
     message: faker.lorem.text(),
-    userId: userIds[Math.floor(Math.random() * userIds.length)],
+    profileId: profileIds[Math.floor(Math.random() * profileIds.length)],
     channelId,
   };
 };

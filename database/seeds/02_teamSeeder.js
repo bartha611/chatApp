@@ -1,9 +1,9 @@
 const faker = require("faker");
-const shortid = require("shortid");
+const { nanoid } = require("nanoid");
 
 const createTeam = () => ({
   name: faker.random.word(),
-  shortid: shortid.generate(),
+  shortid: nanoid(14),
   administrator: Math.floor(Math.random() * 100) + 1,
 });
 

@@ -13,7 +13,7 @@ const userRoutes = require("./Routes/userRoute");
 const teamRoutes = require("./Routes/teamRoute");
 const channelRoutes = require("./Routes/channelRoute");
 const messageRoutes = require("./Routes/messageRoute");
-const memberRoutes = require("./Routes/memberRoute");
+const profileRoutes = require("./Routes/ProfileRoute");
 
 io.on("connect", (socket) => {
   socket.on("join", (channel) => {
@@ -32,9 +32,9 @@ app.use(express.static("dist"));
 
 app.use("/api/user", userRoutes);
 app.use("/api/teams", teamRoutes);
+app.use("/api/teams/:teamId/profiles", profileRoutes);
 app.use("/api/teams/:teamId/channels", channelRoutes);
 app.use("/api/channels/:channelId/messages", messageRoutes);
-app.use("/api/teams/:teamId/members", memberRoutes);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../dist/index.html"));

@@ -1,10 +1,10 @@
-const shortid = require("shortid");
+const { nanoid } = require("nanoid");
 const db = require("../utils/db");
 
 exports.create = async (req, res) => {
-  const { name, teamId, description } = req.body;
+  const { name, description } = req.body;
   const channel = await db("channels")
-    .insert({ name, teamId, description })
+    .insert({ name, teamId: req.team.id, description, shortid: nanoid(14) })
     .returning(["id", "name", "shortid", "description"])
     .then((row) => row[0]);
   return res.status(200).send({ channel });

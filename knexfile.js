@@ -10,4 +10,10 @@ module.exports = {
     port: process.env.DB_POST,
     password: process.env.DB_PASSWORD,
   },
+  migrations: {
+    directory: "./database/migrations",
+  },
+  seeds: {
+    directory: "./database/seeds",
+  },
 };

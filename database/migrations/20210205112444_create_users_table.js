@@ -1,20 +1,33 @@
+// eslint-disable-next-line no-unused-vars
+const Knex = require("knex");
+
+/**
+ *
+ * @param {Knex} knex
+ */
+
 exports.up = function(knex) {
   return knex.schema.createTable("users", function(t) {
     t.increments("id")
       .unsigned()
       .notNullable()
       .primary();
-    t.string("fullName").notNullable();
-    t.string("username")
-      .unique()
-      .notNullable();
-    t.string("avatar").nullable();
     t.string("email")
-      .unique()
-      .notNullable();
+      .notNullable()
+      .index();
+    t.boolean("confirmed")
+      .notNullable()
+      .defaultTo(false);
     t.string("password").notNullable();
+
+    t.unique("email");
   });
 };
+
+/**
+ *
+ * @param {Knex} knex
+ */
 
 exports.down = function(knex) {
   return knex.schema.dropTable("users");
