@@ -6,7 +6,7 @@ const sendMail = async (mailOptions) => {
     service: "gmail",
     auth: {
       user: "adambarth611@gmail.com",
-      password: process.env.EMAIL_PASSWORD,
+      pass: process.env.EMAIL_PASSWORD,
     },
   });
 
@@ -14,4 +14,4 @@ const sendMail = async (mailOptions) => {
   return info;
 };
 
-export default sendMail;
+module.exports = sendMail;

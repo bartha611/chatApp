@@ -5,6 +5,7 @@
  * @param {String} message.avatar - Avatar image of user
  * @param {String} message.username - Username of user
  * @param {String} message.created_at - Time message was created
+ * @param {Number} message.profileId - Profile id of person who wrote the message
  * @param {String} message.role - Userteam role
  */
 
@@ -13,11 +14,12 @@ const MessageCollection = (message) => ({
   message: message.message,
   created_at: message.created_at,
   user: {
-    username: message.username,
+    id: message.profileId,
     avatar: message.avatar,
+    displayName: message.displayName,
     fullName: message.fullName,
     role: message.role,
   },
 });
 
-export default MessageCollection;
+module.exports = MessageCollection;

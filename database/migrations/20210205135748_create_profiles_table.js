@@ -18,6 +18,9 @@ exports.up = function(knex) {
     t.string("avatar")
       .nullable()
       .defaultTo("https://flack611.s3.amazonaws.com/images/nightsky.jpg");
+    t.boolean("confirmed")
+      .notNullable()
+      .defaultTo(false);
     t.string("shortid", 14)
       .notNullable()
       .index();

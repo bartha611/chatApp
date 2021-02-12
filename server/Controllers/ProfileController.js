@@ -1,4 +1,5 @@
 const aws = require("aws-sdk");
+const { nanoid } = require("nanoid");
 const jwt = require("jsonwebtoken");
 const db = require("../utils/db");
 const sendMail = require("../utils/sendMail");
@@ -26,13 +27,14 @@ exports.create = async (req, res) => {
       .insert({
         userId: user.id,
         teamId: req.team.id,
+        shortid: nanoid(14),
         fullName: email.split("@")[0],
       })
       .returning("*")
       .then((row) => row[0]);
     const confirmation = jwt.sign({ id }, process.env.ACCESS_SECRET_TOKEN);
     const url = `${req.protocol}://${req.get("host")}/api/teams/${
-      req.team.id
+      req.team.shortid
     }/profiles/confirmation/${confirmation}`;
     const mailOptions = {
       to: email,
@@ -42,6 +44,7 @@ exports.create = async (req, res) => {
     await sendMail(mailOptions);
     return res.status(200).send("User has been sent a confirmation email");
   } catch (err) {
+    console.log(err);
     return res.status(500).send(err);
   }
 };
@@ -100,6 +103,18 @@ exports.confirmation = async (req, res) => {
       .update({ confirmed: true })
       .where({ id });
     return res.status(200).send("You have successfully joined team");
+  } catch (err) {
+    return res.status(500).send(err);
+  }
+};
+
+exports.delete = async (req, res) => {
+  const { profileId: id } = req.params;
+  try {
+    await db("profiles")
+      .where({ id })
+      .del();
+    return res.status(200).send({ id });
   } catch (err) {
     return res.status(500).send(err);
   }

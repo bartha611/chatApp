@@ -32,7 +32,7 @@ const MemberList = ({ isOpen, setIsOpen }) => {
                   />
                 </div>
                 <span className="font-semibold font-sans ml-2 text-sm">
-                  {member.username}
+                  {member.fullName}
                 </span>
               </div>
             );

@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { updateAuth } from "../auth/authSlice";
-import MessageCollection from "../../../utils/MessageCollection";
 
 const initialState = {
   loading: false,
@@ -27,17 +26,12 @@ const messageSlice = createSlice({
     readMessage(state, action) {
       state.loading = false;
       state.cursor = action.payload.cursor;
-      state.messages = action.payload.messages.map((message) =>
-        MessageCollection(message)
-      );
+      state.messages = action.payload.messages;
     },
     paginateMessage(state, action) {
       state.loading = false;
       state.cursor = action.payload.cursor;
-      state.messages = [
-        ...state.messages,
-        ...action.payload.messages.map((message) => MessageCollection(message)),
-      ];
+      state.messages = [...state.messages, ...action.payload.messages];
     },
     updateMessage(state, action) {
       state.loading = false;

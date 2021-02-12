@@ -45,7 +45,7 @@ function Dashboard() {
             setMember={setAddMember}
             team={team}
           />
-          <div className="flex flex-col w-dashboard pl-4">
+          <div className="flex flex-col w-dashboard pl-4" id="dashboard">
             <BoardNavigation setIsOpen={setIsOpen} />
             <Chat setIsEdit={setIsEdit} />
             <Footer channel={channel} />
@@ -53,22 +53,9 @@ function Dashboard() {
         </div>
         {isOpen && <MemberList isOpen={isOpen} setIsOpen={setIsOpen} />}
         {isEdit && <EditProfile isOpen={isEdit} setIsOpen={setIsEdit} />}
-        <Modal
-          isOpen={addMember}
-          toggle={() => setAddMember(!addMember)}
-          className="w-96 mt-24"
-        >
-          <ModalHeader toggle={() => setAddMember(!addMember)}>
-            Add Team Member
-          </ModalHeader>
-          <ModalBody>
-            <AddTeamMembers
-              setMember={setAddMember}
-              team={team}
-              channel={channel}
-            />
-          </ModalBody>
-        </Modal>
+        {addMember && (
+          <AddTeamMembers isOpen={addMember} setIsOpen={setAddMember} />
+        )}
         <Modal
           isOpen={addChannel}
           toggle={() => setAddChannel(!addChannel)}

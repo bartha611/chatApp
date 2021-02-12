@@ -8,6 +8,7 @@ const createProfile = (userId, teamId) => ({
   displayName: faker.internet.userName(),
   shortid: nanoid(14),
   role: faker.name.jobTitle(),
+  confirmed: true,
   userId,
   teamId,
 });

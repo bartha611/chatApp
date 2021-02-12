@@ -1,28 +1,32 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { Label, Form, FormGroup, Input, Button, Alert } from "reactstrap";
 import { fetchAuth } from "../state/ducks/auth";
 import Navigation from "./Navigation";
 
 function Signup() {
-  const [username, setUsername] = useState("");
+  const history = useHistory();
   const [email, setEmail] = useState("");
-  const [fullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const { error } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const handleSubmit = () => {
-    if (confirmPassword === password) {
+    if (confirmPassword === password && password !== "") {
       dispatch(
-        fetchAuth("/api/user/register", "POST", "LOGIN", {
-          username,
-          email,
-          fullName,
-          password,
-        })
+        fetchAuth(
+          "/api/user/register",
+          "POST",
+          "SIGNUP",
+          {
+            email,
+            password,
+          },
+          history
+        )
       );
     }
   };
@@ -36,26 +40,6 @@ function Signup() {
         </Helmet>
         <h2 className="text-center my-0 text-2xl font-bold">Sign-Up</h2>
         <Form>
-          <FormGroup>
-            <Label for="username" className="font-bold">
-              Username
-            </Label>
-            <Input
-              id="username"
-              type="text"
-              placeholder="Enter Username"
-              onChange={(e) => setUsername(e.target.value)}
-              name="username"
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label className="font-bold">Full Name</Label>
-            <Input
-              type="text"
-              placeholder="Enter Full Name"
-              onChange={(e) => setFullName(e.target.value)}
-            />
-          </FormGroup>
           <FormGroup>
             <Label for="email" className="font-bold">
               Email

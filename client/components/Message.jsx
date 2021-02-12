@@ -7,6 +7,7 @@ import EditProfile from "./EditProfile";
 const Message = ({ message }) => {
   const [isView, setIsView] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+
   const formatTime = (date) => {
     return new Date(date)
       .toLocaleTimeString([], {
@@ -27,13 +28,23 @@ const Message = ({ message }) => {
         alt="User avatar"
       />
       <div className="ml-2 w-auto">
-        <span className="font-bold">{message.user.username}</span>
+        <span className="font-bold">
+          {message.user.displayName
+            ? message.user.displayName
+            : message.user.fullName}
+        </span>
         <span className="ml-2 text-gray-500 text-sm">
           {formatTime(message.created_at)}
         </span>
         <div>{ReactHTMLParser(message.message)}</div>
       </div>
-      {isView && <ViewProfile user={message.user} setIsEdit={setIsEdit} />}
+      {isView && (
+        <ViewProfile
+          profile={message.user}
+          setIsEdit={setIsEdit}
+          scrollHeight={document.getElementById("chat").scrollHeight}
+        />
+      )}
       {isEdit && <EditProfile isOpen={isEdit} setIsOpen={setIsEdit} />}
     </div>
   );
@@ -48,6 +59,7 @@ Message.propTypes = {
       username: PropTypes.string.isRequired,
       avatar: PropTypes.string.isRequired,
       fullName: PropTypes.string.isRequired,
+      displayName: PropTypes.string,
     }).isRequired,
   }).isRequired,
 };

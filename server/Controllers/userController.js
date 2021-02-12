@@ -22,7 +22,7 @@ exports.login = async (req, res) => {
     }
     const teams = await db("profiles AS p")
       .select("t.id", "t.shortid", "t.name")
-      .join("teams AS t", "t.id", "=", "ut.teamId")
+      .join("teams AS t", "t.id", "=", "p.teamId")
       .where("p.userId", user.id);
     delete user.password;
     const token = jwt.sign({ user }, process.env.ACCESS_SECRET_TOKEN, {
@@ -35,11 +35,11 @@ exports.login = async (req, res) => {
 };
 
 exports.register = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { email, password } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await db("users")
-      .insert({ username, email, password: hashedPassword })
+      .insert({ email, password: hashedPassword })
       .returning(["email", "id"])
       .then((row) => row[0]);
     const token = jwt.sign({ id: user.id }, process.env.ACCESS_SECRET_TOKEN);
@@ -54,6 +54,7 @@ exports.register = async (req, res) => {
     await sendMail(mailOptions);
     return res.status(200).send("User has been sent a confirmation email");
   } catch (err) {
+    console.log(err);
     return res.status(500).send("Error");
   }
 };

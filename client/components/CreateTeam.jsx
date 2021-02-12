@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Helmet from "react-helmet";
@@ -25,6 +25,18 @@ function createTeam() {
       dispatch(fetchTeams(`/api/teams`, "POST", "CREATE", { name }, history));
     }
   };
+
+  useEffect(() => {
+    const handleEnter = (e) => {
+      if (e.keyCode === 13) {
+        e.preventDefault();
+        handleSubmit();
+      }
+      return;
+    };
+    window.addEventListener("keydown", handleEnter);
+    return () => window.removeEventListener("keydown", handleEnter);
+  });
 
   return (
     <div>

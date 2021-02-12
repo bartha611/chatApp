@@ -79,7 +79,7 @@ const Sidebar = ({ setChannel, team, setMember }) => {
         {members.map((m) => {
           return (
             <div className="block pl-10 py-1 cursor-pointer hover:bg-gray-600">
-              {m.username}
+              {m.fullName}
             </div>
           );
         })}

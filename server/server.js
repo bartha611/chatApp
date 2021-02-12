@@ -35,7 +35,6 @@ app.use("/api/teams", teamRoutes);
 app.use("/api/teams/:teamId/profiles", profileRoutes);
 app.use("/api/teams/:teamId/channels", channelRoutes);
 app.use("/api/channels/:channelId/messages", messageRoutes);
-
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../dist/index.html"));
 });

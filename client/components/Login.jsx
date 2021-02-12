@@ -8,7 +8,7 @@ import Navigation from "./Navigation";
 
 function Login() {
   const history = useHistory();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { error } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -19,7 +19,7 @@ function Login() {
         "/api/user/login",
         "POST",
         "LOGIN",
-        { username, password },
+        { email, password },
         history
       )
     );
@@ -46,15 +46,15 @@ function Login() {
           <h2 className="text-center font-serif font-bold text-2xl">Login</h2>
           <Form method="post">
             <FormGroup>
-              <Label className="font-bold">Username</Label>
+              <Label className="font-bold">Email</Label>
               <Input
-                id="username"
+                id="email"
                 onChange={(e) => {
-                  setUsername(e.target.value);
+                  setEmail(e.target.value);
                 }}
                 type="text"
-                placeholder="Enter Username"
-                name="username"
+                placeholder="Enter Email"
+                name="email"
               />
             </FormGroup>
             <FormGroup>
@@ -82,7 +82,7 @@ function Login() {
           </Form>
           {error && (
             <Alert className="my-3" color="danger">
-              Username or Password invalid
+              Email or Password invalid
             </Alert>
           )}
           <div className="mt-4 text-sm text-center">

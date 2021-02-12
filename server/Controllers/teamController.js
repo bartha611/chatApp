@@ -81,14 +81,17 @@ exports.delete = async (req, res) => {
 
 exports.get = async (req, res) => {
   try {
-    const members = await db("profiles AS P")
+    const members = await db("profiles AS p")
       .select("p.id", "p.fullName", "p.avatar", "p.displayName")
       .where("p.teamId", req.team.id);
     const channels = await db("channels AS c")
       .select("c.id", "c.name", "c.shortid", "c.description")
       .where("c.teamId", req.team.id);
-    return res.status(200).send({ team: req.team, members, channels });
+    return res
+      .status(200)
+      .send({ team: req.team, members, channels, profile: req.profile });
   } catch (err) {
+    console.log(err);
     return res.status(500).send(err);
   }
 };

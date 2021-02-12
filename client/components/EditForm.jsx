@@ -4,9 +4,9 @@ import { Form, FormGroup, Input, Label } from "reactstrap";
 import PropTypes from "prop-types";
 
 const EditForm = ({ setFile }) => {
-  const { user } = useSelector((state) => state.auth);
-  const [fullName, setFullName] = useState(user?.fullName);
-  const [username, setUsername] = useState(user?.username);
+  const { profile } = useSelector((state) => state.members);
+  const [fullName, setFullName] = useState(profile?.fullName);
+  const [displayName, setDisplayName] = useState(profile?.displayName);
   const [role, setRole] = useState(null);
 
   const handleFileChange = (e) => {
@@ -29,11 +29,11 @@ const EditForm = ({ setFile }) => {
           />
         </FormGroup>
         <FormGroup>
-          <Label>Username</Label>
+          <Label>Display Name</Label>
           <Input
-            value={username}
+            value={displayName}
             placeholder="Username"
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => setDisplayName(e.target.value)}
           />
         </FormGroup>
         <FormGroup>
@@ -47,7 +47,7 @@ const EditForm = ({ setFile }) => {
       </Form>
       <div className="ml-10">
         <img
-          src={user?.avatar}
+          src={profile?.avatar}
           alt="User avatar"
           className="w-44 h-44 rounded-md"
         />

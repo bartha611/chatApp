@@ -12,6 +12,9 @@ const fetchAuth = (url, method, operation, data = null, history) => async (
       dispatch(actions.loginAuth(response.data));
       localStorage.setItem("token", response.data.token);
       history.push("/");
+    } else if (operation === "SIGNUP") {
+      await api({ url, method, data });
+      history.push("/");
     } else if (operation === "UPDATE") {
       const response = await api({
         url,
@@ -26,7 +29,6 @@ const fetchAuth = (url, method, operation, data = null, history) => async (
       history.push("/");
     }
   } catch (err) {
-    console.log(err);
     dispatch(actions.errorAuth());
   }
 };

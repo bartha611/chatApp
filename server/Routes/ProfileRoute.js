@@ -3,7 +3,7 @@ const userAuth = require("../Middleware/userAuth");
 const teamAuth = require("../Middleware/teamAuth");
 const ProfileController = require("./../Controllers/ProfileController");
 
-const ProfileRouter = express.Router();
+const ProfileRouter = express.Router({ mergeParams: true });
 
 ProfileRouter.post("/", userAuth, teamAuth, ProfileController.create);
 
@@ -14,11 +14,6 @@ ProfileRouter.delete(
   ProfileController.delete
 );
 
-ProfileRouter.get(
-  "/confirmation/:token",
-  userAuth,
-  teamAuth,
-  ProfileController.confirmation
-);
+ProfileRouter.get("/confirmation/:token", ProfileController.confirmation);
 
 module.exports = ProfileRouter;

@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { readChannel } from "../channels/channelSlice";
+import { readTeam } from "../teams/teamSlice";
 
 const initialState = {
   loading: false,
   members: [],
+  profile: false,
   error: false,
 };
 
@@ -43,6 +45,10 @@ const memberSlice = createSlice({
   extraReducers: {
     [readChannel]: (state, action) => {
       state.members = action.payload.members;
+      state.profile = action.payload.profile;
+    },
+    [readTeam]: (state, action) => {
+      state.profile = action.payload.profile;
     },
   },
 });

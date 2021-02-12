@@ -6,7 +6,8 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import EditForm from "./EditForm";
 import CropPicture from "./CropPicture";
 
-const EditProfile = ({ isOpen, setIsOpen }) => {
+const EditProfile = ({ isOpen, setIsOpen, scrollHeight }) => {
+  console.log(scrollHeight);
   const [file, setFile] = useState(null);
 
   const CropPictureHeader = (
@@ -43,6 +44,7 @@ const EditProfile = ({ isOpen, setIsOpen }) => {
 EditProfile.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func.isRequired,
+  scrollHeight: PropTypes.number.isRequired,
 };
 
 export default EditProfile;

@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 
 const createUser = (password) => ({
   email: faker.internet.email(),
+  confirmed: true,
   password,
 });
 
@@ -12,7 +13,7 @@ exports.seed = async function(knex) {
   const fakeUsers = [];
   const totalUsers = 99;
   const user = {
-    email: "adambarth611@gmail.com",
+    email: "adambarth@gmail.com",
     password,
   };
   fakeUsers.push(user);

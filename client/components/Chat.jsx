@@ -34,7 +34,7 @@ const Chat = () => {
             ""
           );
         return (
-          <div className="mt-2 break-words">
+          <div className="mt-2 break-words" id={message.id}>
             {divider}
             <Message
               message={message}
