@@ -5,10 +5,12 @@ import { useSelector } from "react-redux";
 const ViewProfile = ({ profile, setIsEdit, scrollHeight }) => {
   const { profile: auth } = useSelector((state) => state.members);
   const [marginTop, setMarginTop] = useState(0);
+
   useEffect(() => {
     const { scrollHeight: newScroll } = document.getElementById("chat");
     setMarginTop(newScroll > scrollHeight ? scrollHeight - newScroll : 0);
   }, []);
+
   return (
     <div
       className="absolute ml-10 z-10 border-2 w-64 rounded-md"

@@ -56,7 +56,7 @@ Message.propTypes = {
     message: PropTypes.string.isRequired,
     created_at: PropTypes.string.isRequired,
     user: PropTypes.shape({
-      username: PropTypes.string.isRequired,
+      role: PropTypes.string.isRequired,
       avatar: PropTypes.string.isRequired,
       fullName: PropTypes.string.isRequired,
       displayName: PropTypes.string,

@@ -7,7 +7,10 @@ import { fetchAuth } from "../state/ducks/auth";
 
 const CropPicture = ({ file, setFile }) => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
+  const { profile } = useSelector((state) => state.members);
+  const {
+    currentTeam: { shortid },
+  } = useSelector((state) => state.teams);
   const [completedCrop, setCompletedCrop] = useState(null);
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [initialCrop, setInitialCrop] = useState({
@@ -75,11 +78,18 @@ const CropPicture = ({ file, setFile }) => {
       const data = new FormData();
       const profileImage = DataUrlToFile(
         profilePhoto,
-        `${user.username}_${new Date().toISOString().replace(/\./, "")}.png`
+        `${profile.fullName}_${new Date().toISOString().replace(/\./, "")}.png`
       );
+      console.log(profileImage);
       data.append("avatar", profileImage);
       await dispatch(
-        fetchAuth(`/api/user/photo`, "POST", "UPDATE", data, null)
+        fetchAuth(
+          `/api/teams/${shortid}/profiles/${profile.shortid}/photo`,
+          "POST",
+          "PHOTO",
+          data,
+          null
+        )
       );
       setFile(null);
     }
@@ -98,7 +108,7 @@ const CropPicture = ({ file, setFile }) => {
       />
       <div
         className="text-center w-44 py-2 border-2 cursor-pointer mx-auto"
-        onClick={() => handleSubmit()}
+        onClick={handleSubmit}
       >
         <span>Upload Photo</span>
       </div>

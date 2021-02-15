@@ -24,13 +24,24 @@ const MemberList = ({ isOpen, setIsOpen }) => {
                 key={member.id}
                 className="flex items-center py-2 hover:bg-gray-100 px-4 cursor-pointer"
               >
-                <div className="h-7 w-7 text-y flex bg-purple-50 justify-center items-end">
-                  <FontAwesomeIcon
-                    icon={faUserAlt}
-                    color={randomColor()}
-                    size="lg"
-                  />
-                </div>
+                {member.avatar && (
+                  <div className="h-7 w-7">
+                    <img
+                      className="h-full w-full rounded-sm"
+                      src={member.avatar}
+                      alt={`${member.fullName} profile avatar`}
+                    />
+                  </div>
+                )}
+                {!member.avatar && (
+                  <div className="h-7 w-7 text-y flex bg-purple-50 justify-center items-end rounded-sm">
+                    <FontAwesomeIcon
+                      icon={faUserAlt}
+                      color={randomColor()}
+                      size="lg"
+                    />
+                  </div>
+                )}
                 <span className="font-semibold font-sans ml-2 text-sm">
                   {member.fullName}
                 </span>

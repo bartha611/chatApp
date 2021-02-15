@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { readChannel } from "../channels/channelSlice";
 import { readTeam } from "../teams/teamSlice";
+import { updateAuth } from "../auth/authSlice";
 
 const initialState = {
   loading: false,
@@ -49,6 +50,14 @@ const memberSlice = createSlice({
     },
     [readTeam]: (state, action) => {
       state.profile = action.payload.profile;
+    },
+    [updateAuth]: (state, action) => {
+      state.profile = action.payload.profile;
+      state.members = state.members.map((member) => {
+        return member.id === action.payload.profile.id
+          ? action.payload.profile
+          : member;
+      });
     },
   },
 });

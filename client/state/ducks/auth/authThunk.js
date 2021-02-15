@@ -15,12 +15,15 @@ const fetchAuth = (url, method, operation, data = null, history) => async (
     } else if (operation === "SIGNUP") {
       await api({ url, method, data });
       history.push("/");
-    } else if (operation === "UPDATE") {
+    } else if (operation === "UPDATE" || operation === "PHOTO") {
       const response = await api({
         url,
         method,
         data,
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          "Content-Type":
+            operation === "UPDATE" ? "application/json" : "multipart/form-data",
+        },
       });
       dispatch(actions.updateAuth(response.data));
     } else {
@@ -29,6 +32,7 @@ const fetchAuth = (url, method, operation, data = null, history) => async (
       history.push("/");
     }
   } catch (err) {
+    console.log(err);
     dispatch(actions.errorAuth());
   }
 };

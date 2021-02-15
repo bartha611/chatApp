@@ -3,6 +3,7 @@ const { nanoid } = require("nanoid");
 const jwt = require("jsonwebtoken");
 const db = require("../utils/db");
 const sendMail = require("../utils/sendMail");
+const ProfileCollection = require("../Collections/ProfileCollection");
 require("dotenv").config();
 
 const s3 = new aws.S3({});
@@ -50,12 +51,12 @@ exports.create = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
-  const { fullName, displayName } = req.body;
+  const { fullName, displayName, role } = req.body;
   try {
     const profile = await db("profiles")
-      .where({ userId: req.user.id })
-      .update({ fullName, displayName })
-      .returning("*")
+      .where("id", req.profile.id)
+      .update({ fullName, displayName, role })
+      .returning(["id", "avatar", "fullName", "displayName", "role"])
       .then((row) => row[0]);
     return res.status(200).send({ profile });
   } catch (err) {
@@ -87,10 +88,11 @@ exports.photo = async (req, res) => {
     const profile = await db("profiles")
       .where({ userId: req.user.id })
       .update({ avatar: req.file.location })
-      .returning(["id", "username", "fullName", "avatar"])
+      .returning(["id", "avatar", "fullName", "role", "displayName"])
       .then((row) => row[0]);
     return res.status(200).send({ profile });
   } catch (err) {
+    console.log(err);
     return res.status(500).send(err);
   }
 };

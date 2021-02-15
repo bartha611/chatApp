@@ -19,12 +19,20 @@ const Navigation = () => {
   const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
   const { teams } = useSelector((state) => state.teams);
-  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const handleClick = () => {
     dispatch(fetchAuth("/api/user/signup", "POST", "LOGOUT", null, history));
   };
+
+  const isAuthenticated = () => {
+    const token = localStorage.getItem("token");
+    if (!token) return false;
+    const { exp } = JSON.parse(atob(token.split(".")[1]));
+    return exp > new Date().getTime() / 1000;
+  };
+
+  const isAuth = isAuthenticated();
 
   return (
     <div className="h-navigation">
@@ -35,17 +43,17 @@ const Navigation = () => {
             <NavLink href="/">Flack</NavLink>
           </Nav>
           <Nav className="ml-auto" navbar>
-            {!user && (
+            {!isAuth && (
               <NavItem className="cursor-pointer">
                 <NavLink href="/login">Login</NavLink>
               </NavItem>
             )}
-            {!user && (
+            {!isAuth && (
               <NavItem className="cursor-pointer">
                 <NavLink href="/signup">SignUp</NavLink>
               </NavItem>
             )}
-            {user && (
+            {isAuth && (
               <NavItem className="cursor-pointer">
                 <NavLink
                   onClick={() => {
@@ -56,12 +64,12 @@ const Navigation = () => {
                 </NavLink>
               </NavItem>
             )}
-            {user && (
+            {isAuth && (
               <NavItem>
                 <NavLink href="/createteam">Create Team</NavLink>
               </NavItem>
             )}
-            {user && (
+            {isAuth && (
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
                   Teams

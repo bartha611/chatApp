@@ -6,8 +6,7 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import EditForm from "./EditForm";
 import CropPicture from "./CropPicture";
 
-const EditProfile = ({ isOpen, setIsOpen, scrollHeight }) => {
-  console.log(scrollHeight);
+const EditProfile = ({ isOpen, setIsOpen }) => {
   const [file, setFile] = useState(null);
 
   const CropPictureHeader = (
@@ -29,7 +28,7 @@ const EditProfile = ({ isOpen, setIsOpen, scrollHeight }) => {
       </ModalHeader>
       {!file && (
         <ModalBody className="px-4 py-2">
-          <EditForm setFile={setFile} />
+          <EditForm setFile={setFile} setIsOpen={setIsOpen} />
         </ModalBody>
       )}
       {file && (
@@ -44,7 +43,6 @@ const EditProfile = ({ isOpen, setIsOpen, scrollHeight }) => {
 EditProfile.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func.isRequired,
-  scrollHeight: PropTypes.number.isRequired,
 };
 
 export default EditProfile;

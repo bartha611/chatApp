@@ -52,8 +52,8 @@ const messageSlice = createSlice({
     [updateAuth]: (state, action) => {
       state.messages.map((message) => {
         message.user =
-          message.user.username === action.payload.user.username
-            ? action.payload.user
+          message.user.fullName === action.payload.profile.fullName
+            ? action.payload.profile
             : message.user;
         return message;
       });
