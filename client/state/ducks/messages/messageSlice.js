@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { updateAuth } from "../auth/authSlice";
+import { updateProfile } from "../common";
 
 const initialState = {
   loading: false,
@@ -31,7 +31,7 @@ const messageSlice = createSlice({
     paginateMessage(state, action) {
       state.loading = false;
       state.cursor = action.payload.cursor;
-      state.messages = [...state.messages, ...action.payload.messages];
+      state.messages = [...action.payload.messages, ...state.messages];
     },
     updateMessage(state, action) {
       state.loading = false;
@@ -49,10 +49,10 @@ const messageSlice = createSlice({
     },
   },
   extraReducers: {
-    [updateAuth]: (state, action) => {
+    [updateProfile]: (state, action) => {
       state.messages.map((message) => {
         message.user =
-          message.user.fullName === action.payload.profile.fullName
+          message.user.id === action.payload.profile.id
             ? action.payload.profile
             : message.user;
         return message;

@@ -1,10 +1,11 @@
 import * as actions from "./memberSlice";
+import { updateProfile } from "../common";
 import api from "../../utils/api";
 
 const populateData = (results) => ({
   READ: actions.readMember(results),
   CREATE: actions.createMember(results),
-  UPDATE: actions.updateMember(results),
+  UPDATE: updateProfile(results),
   DELETE: actions.deleteMember(results),
 });
 
@@ -20,6 +21,7 @@ const fetchMembers = (url, method, operation, data = null) => async (
     });
     dispatch(populateData(response.data)[operation]);
   } catch (err) {
+    console.log(err);
     dispatch(actions.errorMember());
   }
 };

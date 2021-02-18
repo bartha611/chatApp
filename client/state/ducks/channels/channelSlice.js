@@ -4,6 +4,7 @@ import { readMessage } from "../messages/messageSlice";
 const initialState = {
   loading: false,
   currentChannel: null,
+  shortid: null,
   channels: [],
   error: false,
 };
@@ -18,13 +19,18 @@ const channelSlice = createSlice({
     },
     createChannel(state, action) {
       state.loading = false;
-      state.currentChannel = action.payload;
-      state.channels = [...state.channels, action.payload];
+      state.currentChannel = action.payload.channel;
+      state.shortid = action.payload.channel.shortid;
+      state.channels = [...state.channels, action.payload.channel];
     },
     readChannel(state, action) {
       state.loading = false;
       state.currentChannel =
         action.payload.channels.length > 0 ? action.payload.channels[0] : null;
+      state.shortid =
+        action.payload.channels.length > 0
+          ? action.payload.channels[0].shortid
+          : null;
       state.channels = action.payload.channels;
     },
     updateChannel(state, action) {
@@ -47,6 +53,7 @@ const channelSlice = createSlice({
   extraReducers: {
     [readMessage]: (state, action) => {
       state.currentChannel = action.payload.channel;
+      state.shortid = action.payload.channel.shortid;
     },
   },
 });

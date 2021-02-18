@@ -56,9 +56,9 @@ exports.update = async (req, res) => {
     const profile = await db("profiles")
       .where("id", req.profile.id)
       .update({ fullName, displayName, role })
-      .returning(["id", "avatar", "fullName", "displayName", "role"])
+      .returning("*")
       .then((row) => row[0]);
-    return res.status(200).send({ profile });
+    return res.status(200).send({ profile: ProfileCollection(profile) });
   } catch (err) {
     return res.status(500).send(err);
   }
@@ -66,18 +66,16 @@ exports.update = async (req, res) => {
 
 exports.photo = async (req, res) => {
   try {
-    const userAvatar = await db("profiles")
+    const { avatar } = await db("profiles")
       .select("avatar")
       .where("userId", req.user.id)
       .first();
-    if (
-      userAvatar !== "https://flack611.s3.amazonaws.com/images/nightsky.jpg"
-    ) {
+    if (avatar !== "https://flack611.s3.amazonaws.com/images/nightsky.jpg") {
       await s3
         .deleteObject({
           Bucket: "flack611",
           Key: `${decodeURIComponent(
-            userAvatar.avatar
+            avatar
               .split("/")
               .slice(3, 5)
               .join("/")
@@ -88,11 +86,10 @@ exports.photo = async (req, res) => {
     const profile = await db("profiles")
       .where({ userId: req.user.id })
       .update({ avatar: req.file.location })
-      .returning(["id", "avatar", "fullName", "role", "displayName"])
+      .returning("*")
       .then((row) => row[0]);
-    return res.status(200).send({ profile });
+    return res.status(200).send({ profile: ProfileCollection(profile) });
   } catch (err) {
-    console.log(err);
     return res.status(500).send(err);
   }
 };

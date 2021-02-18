@@ -13,6 +13,7 @@ exports.create = async (req, res) => {
       })
       .returning("*")
       .then((row) => row[0]);
+    delete req.profile.id;
     return res
       .status(200)
       .send({ message: MessageCollection({ ...response, ...req.profile }) });
@@ -23,7 +24,7 @@ exports.create = async (req, res) => {
 
 exports.read = async (req, res) => {
   try {
-    const messages = await db("messages AS m")
+    let messages = await db("messages AS m")
       .select(
         "m.id",
         "m.message",
@@ -36,10 +37,19 @@ exports.read = async (req, res) => {
       )
       .join("profiles AS p", "p.id", "=", "m.profileId")
       .where("m.channelId", req.channel.id)
-      .orderBy("m.id");
+      .modify(function(queryBuilder) {
+        if (req.query.cursor) {
+          queryBuilder.andWhere("m.id", "<=", req.query.cursor);
+        }
+      })
+      .orderBy("m.id", "desc")
+      .limit(51);
+    const cursor = messages.length > 50 ? messages[50].id : null;
+    messages = messages.length > 50 ? messages.slice(0, 49) : messages;
     return res.status(200).send({
-      messages: messages.map((message) => MessageCollection(message)),
+      messages: messages.reverse().map((message) => MessageCollection(message)),
       channel: req.channel,
+      cursor,
     });
   } catch (err) {
     return res.status(500).send(err);

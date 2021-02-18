@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Form, FormGroup, Input, Label, Button } from "reactstrap";
 import PropTypes from "prop-types";
-import { fetchAuth } from "../state/ducks/auth";
+import { fetchMembers } from "../state/ducks/members";
 
 const EditForm = ({ setFile, setIsOpen }) => {
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ const EditForm = ({ setFile, setIsOpen }) => {
 
   const handleClick = async () => {
     await dispatch(
-      fetchAuth(
+      fetchMembers(
         `/api/teams/${shortid}/profiles/${profile.id}`,
         "PUT",
         "UPDATE",
@@ -55,7 +55,7 @@ const EditForm = ({ setFile, setIsOpen }) => {
         <FormGroup>
           <Label>Full Name</Label>
           <Input
-            value={fullName}
+            value={fullName || ""}
             type="text"
             placeholder="Full name"
             onChange={(e) => setFullName(e.target.value)}
@@ -64,7 +64,7 @@ const EditForm = ({ setFile, setIsOpen }) => {
         <FormGroup>
           <Label>Display Name</Label>
           <Input
-            value={displayName}
+            value={displayName || ""}
             type="text"
             placeholder="Username"
             onChange={(e) => setDisplayName(e.target.value)}
@@ -73,7 +73,7 @@ const EditForm = ({ setFile, setIsOpen }) => {
         <FormGroup>
           <Label>What do you do</Label>
           <Input
-            value={role}
+            value={role || ""}
             type="text"
             placeholder="What do you do"
             onChange={(e) => setRole(e.target.value)}

@@ -13,22 +13,20 @@ const fetchChannels = (url, method, operation, data = null, history) => async (
 ) => {
   dispatch(actions.loadChannel());
   try {
-    console.log("aljslkfajskfd");
     const response = await api({
       url,
       method,
       data,
     });
-    console.log(response);
     dispatch(populateData(response.data)[operation]);
     if (operation === "READ") {
-      console.log("hello there ");
       history.push(
         `${response.data.team.shortid}/${response.data.channels[0].shortid}`
       );
+    } else if (operation === "CREATE") {
+      history.push(`/${data.teamId}/${response.data.channel.shortid}`);
     }
   } catch (err) {
-    console.log(err);
     dispatch(actions.errorChannel());
   }
 };

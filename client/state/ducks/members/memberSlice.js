@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { readChannel } from "../channels/channelSlice";
 import { readTeam } from "../teams/teamSlice";
-import { updateAuth } from "../auth/authSlice";
+import { updateProfile } from "../common";
 
 const initialState = {
   loading: false,
@@ -28,8 +28,11 @@ const memberSlice = createSlice({
     },
     updateMember(state, action) {
       state.loading = false;
+      state.profile = action.payload.profile;
       state.members = state.members.map((member) =>
-        member.id === action.payload.id ? action.payload : member
+        member.id === action.payload.profile.id
+          ? action.payload.profile
+          : member
       );
     },
     deleteMember(state, action) {
@@ -51,13 +54,8 @@ const memberSlice = createSlice({
     [readTeam]: (state, action) => {
       state.profile = action.payload.profile;
     },
-    [updateAuth]: (state, action) => {
+    [updateProfile]: (state, action) => {
       state.profile = action.payload.profile;
-      state.members = state.members.map((member) => {
-        return member.id === action.payload.profile.id
-          ? action.payload.profile
-          : member;
-      });
     },
   },
 });

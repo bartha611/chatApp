@@ -9,11 +9,12 @@ const ViewProfile = ({ profile, setIsEdit, scrollHeight }) => {
   useEffect(() => {
     const { scrollHeight: newScroll } = document.getElementById("chat");
     setMarginTop(newScroll > scrollHeight ? scrollHeight - newScroll : 0);
+    console.log(marginTop);
   }, []);
 
   return (
     <div
-      className="absolute ml-10 z-10 border-2 w-64 rounded-md"
+      className="absolute ml-10 z-20 border-2 w-64 rounded-md"
       id="view"
       style={{ marginTop }}
       onMouseDown={(e) => e.preventDefault()}

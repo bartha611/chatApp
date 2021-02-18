@@ -14,6 +14,7 @@ exports.seed = async function(knex) {
   const totalUsers = 99;
   const user = {
     email: "adambarth@gmail.com",
+    confirmed: true,
     password,
   };
   fakeUsers.push(user);

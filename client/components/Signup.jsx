@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -30,6 +30,17 @@ function Signup() {
       );
     }
   };
+
+  useEffect(() => {
+    const handleEnter = (e) => {
+      if (e.keyCode === 13) {
+        e.preventDefault();
+        handleSubmit();
+      }
+    };
+    window.addEventListener("keydown", handleEnter);
+    return () => window.removeEventListener("keydown", handleEnter);
+  });
 
   return (
     <div>

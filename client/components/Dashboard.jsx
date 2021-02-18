@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { Modal, ModalBody, ModalHeader } from "reactstrap";
 import { Helmet } from "react-helmet";
 import { useDispatch } from "react-redux";
 import { fetchMessages } from "../state/ducks/messages";
@@ -21,15 +20,20 @@ function Dashboard() {
   const { team, channel } = useParams();
   const [addChannel, setAddChannel] = useState(false);
   const [addMember, setAddMember] = useState(false);
+  const messageEnd = useRef(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (channel) {
-      dispatch(
-        fetchMessages(`/api/channels/${channel}/messages`, "GET", "READ")
-      );
-      dispatch({ type: "STORE_JOIN", channel });
-    }
+    const handleFetch = async () => {
+      if (channel) {
+        await dispatch(
+          fetchMessages(`/api/channels/${channel}/messages`, "GET", "READ")
+        );
+        dispatch({ type: "STORE_JOIN", channel });
+        messageEnd.current.scrollIntoView({ behavior: "smooth" });
+      }
+    };
+    handleFetch();
   }, [team, channel]);
 
   return (
@@ -47,8 +51,8 @@ function Dashboard() {
           />
           <div className="flex flex-col w-dashboard pl-4" id="dashboard">
             <BoardNavigation setIsOpen={setIsOpen} />
-            <Chat setIsEdit={setIsEdit} />
-            <Footer channel={channel} />
+            <Chat setIsEdit={setIsEdit} messageEnd={messageEnd} />
+            <Footer channel={channel} messageEnd={messageEnd} />
           </div>
         </div>
         {isOpen && <MemberList isOpen={isOpen} setIsOpen={setIsOpen} />}
@@ -56,18 +60,13 @@ function Dashboard() {
         {addMember && (
           <AddTeamMembers isOpen={addMember} setIsOpen={setAddMember} />
         )}
-        <Modal
-          isOpen={addChannel}
-          toggle={() => setAddChannel(!addChannel)}
-          className="w-96 mt-24"
-        >
-          <ModalHeader toggle={() => setAddChannel(!addChannel)}>
-            Add Channels
-          </ModalHeader>
-          <ModalBody>
-            <AddChannel team={team} />
-          </ModalBody>
-        </Modal>
+        {addChannel && (
+          <AddChannel
+            team={team}
+            isOpen={addChannel}
+            setIsOpen={setAddChannel}
+          />
+        )}
       </div>
     </div>
   );

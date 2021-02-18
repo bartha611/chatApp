@@ -29,9 +29,7 @@ const Message = ({ message }) => {
       />
       <div className="ml-2 w-auto">
         <span className="font-bold">
-          {message.user.displayName
-            ? message.user.displayName
-            : message.user.fullName}
+          {message.user.displayName ?? message.user.fullName}
         </span>
         <span className="ml-2 text-gray-500 text-sm">
           {formatTime(message.created_at)}

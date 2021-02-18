@@ -8,7 +8,7 @@ module.exports = {
         navigation: "8%",
       }),
       width: (theme) => ({
-        dashboard: "calc(100% - 288px)",
+        dashboard: "calc(100% - 240px)",
       }),
     },
   },

@@ -7,7 +7,7 @@ exports.create = async (req, res) => {
     .insert({ name, teamId: req.team.id, description, shortid: nanoid(14) })
     .returning(["id", "name", "shortid", "description"])
     .then((row) => row[0]);
-  return res.status(200).send({ channel });
+  return res.status(200).send({ channel, team: req.team });
 };
 
 exports.read = async (req, res) => {

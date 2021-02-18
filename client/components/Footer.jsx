@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { Form } from "reactstrap";
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
 import { fetchMessages } from "../state/ducks/messages";
 
-const Footer = ({ channel }) => {
+const Footer = ({ messageEnd, channel }) => {
   const inputRef = useRef();
   const [isBold, setIsBold] = useState(false);
   const [isItalics, setIsItalics] = useState(false);
@@ -22,6 +22,7 @@ const Footer = ({ channel }) => {
         })
       );
       element.innerHTML = "";
+      messageEnd.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -45,7 +46,7 @@ const Footer = ({ channel }) => {
       window.removeEventListener("keydown", keydownHandler);
       window.removeEventListener("keyup", keyupHandler);
     };
-  }, []);
+  }, [channel]);
 
   return (
     <div className="mb-2 mr-4 border-2 border-gray-600 rounded-md h-auto">
@@ -113,6 +114,10 @@ const Footer = ({ channel }) => {
 
 Footer.propTypes = {
   channel: PropTypes.string.isRequired,
+  messageEnd: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.elementType }),
+  ]),
 };
 
 export default Footer;

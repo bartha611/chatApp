@@ -42,6 +42,7 @@ exports.up = function(knex) {
       .inTable("teams")
       .onDelete("CASCADE");
     t.unique(["teamId", "userId"]);
+    t.unique(["displayName", "teamId"]);
   });
 };
 

@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { Alert } from "reactstrap/dist/reactstrap";
+import { usePaginate } from "../lib/usePaginate";
 import Message from "./Message";
 
-const Chat = () => {
-  const messageEnd = useRef(null);
+const Chat = ({ messageEnd }) => {
   const [isDropdown, setIsDropdown] = useState(false);
   const { messages, error } = useSelector((state) => state.messages);
 
@@ -16,12 +17,10 @@ const Chat = () => {
       .join(" ");
   };
 
-  useEffect(() => {
-    messageEnd.current.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  usePaginate();
 
   return (
-    <div className="overflow-y-scroll" id="chat">
+    <div className="overflow-y-scroll" id="chat" style={{ minHeight: "550px" }}>
       {messages.map((message, index) => {
         const divider =
           index === 0 ||
@@ -52,6 +51,13 @@ const Chat = () => {
       <div id="messageEnd" ref={messageEnd} />
     </div>
   );
+};
+
+Chat.propTypes = {
+  messageEnd: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.elementType }),
+  ]),
 };
 
 export default Chat;

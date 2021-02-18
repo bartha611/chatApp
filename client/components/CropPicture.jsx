@@ -3,7 +3,7 @@ import ReactCrop from "react-image-crop";
 import PropTypes from "prop-types";
 import "react-image-crop/dist/ReactCrop.css";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAuth } from "../state/ducks/auth";
+import { fetchMembers } from "../state/ducks/members";
 
 const CropPicture = ({ file, setFile }) => {
   const dispatch = useDispatch();
@@ -78,15 +78,16 @@ const CropPicture = ({ file, setFile }) => {
       const data = new FormData();
       const profileImage = DataUrlToFile(
         profilePhoto,
-        `${profile.fullName}_${new Date().toISOString().replace(/\./, "")}.png`
+        `${encodeURI(profile.fullName)}_${new Date()
+          .toISOString()
+          .replace(/\./, "")}.png`
       );
-      console.log(profileImage);
       data.append("avatar", profileImage);
       await dispatch(
-        fetchAuth(
+        fetchMembers(
           `/api/teams/${shortid}/profiles/${profile.shortid}/photo`,
           "POST",
-          "PHOTO",
+          "UPDATE",
           data,
           null
         )
