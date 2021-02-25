@@ -17,7 +17,7 @@ const channelRoutes = require("./server/routes/channelRoute");
 const messageRoutes = require("./server/routes/messageRoute");
 const memberRoutes = require("./server/routes/memberRoute");
 
-const PORT = 8080;
+const PORT = 3000;
 // middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

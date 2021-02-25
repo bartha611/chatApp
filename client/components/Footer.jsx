@@ -8,10 +8,10 @@ import { fetchMessages } from "../state/ducks/messages";
 
 const Footer = ({ messageEnd, channel }) => {
   const inputRef = useRef();
+  const dispatch = useDispatch();
   const [isBold, setIsBold] = useState(false);
   const [isItalics, setIsItalics] = useState(false);
   const [isStrikeThrough, setIsStrikeThrough] = useState(false);
-  const dispatch = useDispatch();
 
   const handleSubmit = async () => {
     const element = document.getElementById("input");

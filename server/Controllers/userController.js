@@ -1,10 +1,12 @@
 const bcrypt = require("bcryptjs");
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
+const sgMail = require("@sendgrid/mail");
 const db = require("../utils/db");
-const sendMail = require("../utils/sendMail");
 
 dotenv.config();
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
@@ -37,25 +39,38 @@ exports.login = async (req, res) => {
 exports.register = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await db("users")
-      .insert({ email, password: hashedPassword })
-      .returning(["email", "id"])
-      .then((row) => row[0]);
-    const token = jwt.sign({ id: user.id }, process.env.ACCESS_SECRET_TOKEN);
-    const confirmation = `${req.protocol}://${req.get(
-      "host"
-    )}/api/user/confirmation/${token}`;
-    const mailOptions = {
-      to: email,
-      from: process.env.EMAIL,
-      html: `Click here to confirm email <a href=${confirmation}>${confirmation}</a>`,
-    };
-    await sendMail(mailOptions);
-    return res.status(200).send("User has been sent a confirmation email");
+    return db.transaction(async (trx) => {
+      try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = await trx("users")
+          .insert({ email, password: hashedPassword })
+          .returning(["email", "id"])
+          .then((row) => row[0]);
+        const token = jwt.sign(
+          { id: user.id },
+          process.env.ACCESS_SECRET_TOKEN
+        );
+        const confirmation = `${req.protocol}://${req.get(
+          "host"
+        )}/api/user/confirmation/${token}`;
+        const mailOptions = {
+          to: email,
+          from: process.env.EMAIL,
+          subject: "Join Flack",
+          html: `Click here to confirm email <a href=${confirmation}>${confirmation}</a>`,
+        };
+        await sgMail.send(mailOptions);
+        await trx.commit();
+        return res.status(200).send("User has been sent a confirmation email");
+      } catch (err) {
+        console.log(err);
+        await trx.rollback();
+        return res.status(500).send(err);
+      }
+    });
   } catch (err) {
     console.log(err);
-    return res.status(500).send("Error");
+    return res.status(500).send(err);
   }
 };
 

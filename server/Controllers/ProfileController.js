@@ -1,10 +1,12 @@
 const aws = require("aws-sdk");
 const { nanoid } = require("nanoid");
 const jwt = require("jsonwebtoken");
+const sgMail = require("@sendgrid/mail");
 const db = require("../utils/db");
-const sendMail = require("../utils/sendMail");
 const ProfileCollection = require("../Collections/ProfileCollection");
 require("dotenv").config();
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const s3 = new aws.S3({});
 
@@ -40,9 +42,10 @@ exports.create = async (req, res) => {
     const mailOptions = {
       to: email,
       from: process.env.EMAIL,
+      subject: `Join ${req.team.name}`,
       html: `Click this to join team <a href=${url}>${url}</a>`,
     };
-    await sendMail(mailOptions);
+    await sgMail.send(mailOptions);
     return res.status(200).send("User has been sent a confirmation email");
   } catch (err) {
     console.log(err);
