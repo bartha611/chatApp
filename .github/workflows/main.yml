@@ -2,7 +2,7 @@
 
 name: CI
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
@@ -23,12 +23,12 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       - name: SCP to digitalocean
-      # Copies code to digitalocean droplet
+        # Copies code to digitalocean droplet
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: root
           port: 22
           key: ${{ secrets.SSHKEY }}
-          script: |
-            whoami
+          source: "*"
+          target: "/var/flack/"
