@@ -25,11 +25,12 @@ jobs:
       - name: SCP to digitalocean
       # Copies code to digitalocean droplet
         uses: appleboy/scp-action@master
-        with:
+        env:
           host: ${{ secrets.HOST }}
           port: ${{ secrets.PORT }} 
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
+        with:
           source: "client/*, server/*"
           target: "test"
           
