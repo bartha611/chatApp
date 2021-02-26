@@ -31,5 +31,5 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           source: "client/*, server/*"
-          target: "/var/test/"
+          target: "/var/flack/"
           
