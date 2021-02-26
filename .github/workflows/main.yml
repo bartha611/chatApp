@@ -24,13 +24,12 @@ jobs:
       - uses: actions/checkout@v2
       - name: SCP to digitalocean
       # Copies code to digitalocean droplet
-        uses: appleboy/ssh-action@master
+        uses: garygrossgarten/github-action-ssh@release
         with:
           host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          port: ${{ secrets.PORT }}
-          key: ${{ secrets.SSHKEY }}
+          username: root
+          privatekey: ${{ secrets.SSHKEY }}
           passphrase: ${{ secrets.passphrase }}
-          script: |
-            whoami
-            ls -la
+          command: ls -a
+            whoa
+        
