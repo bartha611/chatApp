@@ -30,5 +30,6 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
+          passphrase: ${{ secrets.passphrase }}
           script: echo "Fuck you"
           
