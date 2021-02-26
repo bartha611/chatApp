@@ -87,7 +87,7 @@ exports.photo = async (req, res) => {
         .promise();
     }
     const profile = await db("profiles")
-      .where({ userId: req.user.id })
+      .where({ userId: req.user.id, teamId: req.team.id })
       .update({ avatar: req.file.location })
       .returning("*")
       .then((row) => row[0]);
