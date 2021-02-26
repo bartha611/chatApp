@@ -30,5 +30,6 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
+          source: "client/*, server/*"
           target: "/var/flack/"
           
