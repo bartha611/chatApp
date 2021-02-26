@@ -28,9 +28,8 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          port: 22
+          port: ${{ secrets.PORT }}
           key: ${{ secrets.KEY }}
-          passphrase: ""
           source: "*"
           target: "flack"
           
