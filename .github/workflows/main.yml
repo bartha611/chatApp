@@ -30,4 +30,4 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          target: "/var/flack/
+          target: "/var/flack/"
