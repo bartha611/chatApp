@@ -31,5 +31,6 @@ jobs:
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
           passphrase: ${{ secrets.passphrase }}
-          script: echo ${{ secrets.SSHKEY }}
-          
+          script: |
+            whoami
+            ls -la
