@@ -26,9 +26,9 @@ jobs:
       # Copies code to digitalocean droplet
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          port: ${{ secrets.PORT }}
+          host: 104.248.124.163
+          username: root
+          port: 22
           key: ${{ secrets.SSHKEY }}
           script: echo "Fuck you"
           
