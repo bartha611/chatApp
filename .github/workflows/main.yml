@@ -31,5 +31,5 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           source: "client/*, server/*"
-          target: "/var/flack/"
+          target: "test"
           
