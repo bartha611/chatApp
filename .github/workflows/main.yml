@@ -29,4 +29,6 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
           target: "/var/flack/"
+          
