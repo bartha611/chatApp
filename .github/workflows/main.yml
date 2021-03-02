@@ -44,4 +44,7 @@ jobs:
           key: ${{ secrets.SSHKEY }}
           script: |
             cd test/
+            npm install
+            npm run build
             docker-compose build
+            docker-compose up -d
