@@ -15,10 +15,15 @@ const persistConfig = {
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
+const middleware = [thunk, SocketMiddleware];
+
+if (process.env.NODE_ENV === "development") {
+  middleware.push(logger);
+}
 
 const store = configureStore({
   reducer: persistedReducer,
-  middleware: [thunk, logger, SocketMiddleware],
+  middleware,
 });
 
 const persistor = persistStore(store);
