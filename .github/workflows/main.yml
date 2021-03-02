@@ -33,6 +33,9 @@ jobs:
           overwrite: true
       - name: Deploy
         uses: appleboy/ssh-action@master
+        env:
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         with:
           host: ${{ secrets.HOST }}
           username: root
