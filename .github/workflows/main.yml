@@ -34,6 +34,7 @@ jobs:
           key: ${{ secrets.SSHKEY }}
           source: "*"
           target: "test"
+          overwrite: true
       - name: Deploy
         uses: appleboy/ssh-action@master
         with:
@@ -42,4 +43,5 @@ jobs:
           port: 22
           key: ${{ secrets.SSHKEY }}
           script: |
+            cd test/
             docker-compose build
