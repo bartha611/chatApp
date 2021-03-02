@@ -29,6 +29,7 @@ jobs:
           username: root
           port: 22
           key: ${{ secrets.SSHKEY }}
+          source: "*"
           target: "test"
           overwrite: true
       - name: Deploy
