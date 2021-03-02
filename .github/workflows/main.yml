@@ -36,7 +36,6 @@ jobs:
           target: "test"
       - name: Deploy
         uses: appleboy/ssh-action@master
-        env:
         with:
           host: ${{ secrets.HOST }}
           username: root
