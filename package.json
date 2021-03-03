@@ -6,8 +6,8 @@
   "scripts": {
     "dev-server": "nodemon server/server.js",
     "dev-client": "webpack serve --port 3000",
-    "build": "webpack",
-    "start": "node server/server.js",
+    "build": "NODE_ENV=production webpack",
+    "start": "NODE_ENV=production node server/server.js",
     "test": "jest --watch",
     "up": "knex migrate:up",
     "down": "knex migrate:down",
@@ -49,6 +49,7 @@
     "redux-mock-store": "^1.5.3",
     "style-loader": "^2.0.0",
     "webpack": "^4.44.1",
+    "webpack-bundle-analyzer": "^4.4.0",
     "webpack-cli": "^4.4.0",
     "webpack-dev-server": "^3.11.2"
   },

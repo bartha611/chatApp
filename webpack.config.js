@@ -1,8 +1,8 @@
 const HTMLWebpackPlugin = require("html-webpack-plugin");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 module.exports = {
   entry: ["babel-polyfill", "./client/index.jsx"],
-  mode: "development",
   output: {
     filename: "bundle.js",
     chunkFilename: "[name].bundle.js",
@@ -16,16 +16,12 @@ module.exports = {
     host: "localhost",
     port: 3000,
     proxy: {
-      "^/api/*": {
-        target: "http://localhost:8080/api/",
-        secure: false,
-      },
+      "/api": "http://localhost:8080",
     },
   },
   resolve: {
     extensions: [".js", ".jsx"],
   },
-  devtool: "source-map",
   module: {
     rules: [
       {

@@ -15,6 +15,7 @@ import MemberList from "./MemberList";
 import EditProfile from "./EditProfile";
 
 function Dashboard() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const { team, channel } = useParams();
@@ -37,20 +38,49 @@ function Dashboard() {
   }, [team, channel]);
 
   return (
-    <div className="h-screen">
+    <div
+      className="h-screen"
+      onClick={() => {
+        if (sidebarOpen) {
+          setSidebarOpen(false);
+        }
+      }}
+    >
       <Navigation />
       <div className="h-dashboard">
         <Helmet>
           <title>Dashboard</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Helmet>
         <div className="flex flex-row h-full">
-          <Sidebar
-            setChannel={setAddChannel}
-            setMember={setAddMember}
-            team={team}
-          />
-          <div className="flex flex-col w-dashboard pl-4" id="dashboard">
-            <BoardNavigation setIsOpen={setIsOpen} />
+          {sidebarOpen && (
+            <div
+              className="absolute block sm:hidden z-10 h-dashboard"
+              onMouseDown={(e) => e.preventDefault()}
+            >
+              <Sidebar
+                setChannel={setAddChannel}
+                setMember={setAddMember}
+                team={team}
+              />
+            </div>
+          )}
+          <div className="hidden sm:block">
+            <Sidebar
+              setChannel={setAddChannel}
+              setMember={setAddMember}
+              team={team}
+            />
+          </div>
+          <div
+            className="flex flex-col sm:w-dashboard w-full pl-4"
+            id="dashboard"
+          >
+            <BoardNavigation
+              setIsOpen={setIsOpen}
+              sidebarOpen={sidebarOpen}
+              setSidebarOpen={setSidebarOpen}
+            />
             <Chat setIsEdit={setIsEdit} messageEnd={messageEnd} />
             <Footer channel={channel} messageEnd={messageEnd} />
           </div>

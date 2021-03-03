@@ -20,7 +20,7 @@ const Sidebar = ({ setChannel, team, setMember }) => {
   const toggle = () => setDropdownOpen(!dropdownOpen);
 
   return (
-    <div className="bg-indigo-900 text-gray-300 w-60 font-serif h-dashboard-screen">
+    <div className="bg-indigo-900 text-gray-300 w-60 font-serif h-full">
       <ul className="sidebar__teams">
         <Dropdown isOpen={dropdownOpen} toggle={toggle}>
           <DropdownToggle

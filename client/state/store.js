@@ -18,6 +18,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 const middleware = [thunk, SocketMiddleware];
 
 if (process.env.NODE_ENV === "development") {
+  console.log(process.env.NODE_ENV);
   middleware.push(logger);
 }
 
