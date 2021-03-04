@@ -49,7 +49,7 @@ const Footer = ({ messageEnd, channel }) => {
   }, [channel]);
 
   return (
-    <div className="mb-2 mr-4 border-2 border-gray-600 rounded-md h-auto">
+    <div className="mb-2 border-2 w-full border-gray-600 ml-auto mr-auto rounded-md h-auto">
       <Form className="w-full pr-6 rounded-md pl-3 relative py-1">
         <div
           contentEditable="true"

@@ -1,74 +1,92 @@
 const supertest = require("supertest");
+const sgMail = require("@sendgrid/mail");
+const jwt = require("jsonwebtoken");
 const http = require("http");
-const app = require("../../app");
+const app = require("../../server/server");
+const db = require("../../server/utils/db");
+
+const token = jwt.sign({ id: 1 }, process.env.ACCESS_SECRET_TOKEN);
+const userToken = jwt.sign(
+  { email: "fake@gmail.com", id: 1 },
+  process.env.ACCESS_SECRET_TOKEN
+);
+
+jest.mock("@sendgrid/mail", () => {
+  return {
+    setApiKey: jest.fn(),
+    send: jest.fn(),
+  };
+});
 
 describe("user controller is working properly", () => {
   let server;
   let request;
-  let token;
-  beforeAll(done => {
+  beforeAll(async (done) => {
     server = http.createServer(app);
     server.listen();
     request = supertest(server);
+    await db.migrate.latest();
     done();
   });
-  afterAll(done => {
+  afterAll(async (done) => {
+    await db.migrate.rollback();
     server.close();
     done();
   });
   describe("registration working properly", () => {
     it("registers user properly", async () => {
       const query = {
-        username: "fakeUser",
         password: "fakePassword",
-        email: "fake@gmail.com"
+        email: "fake@gmail.com",
       };
+      sgMail.send = jest.fn();
+      jwt.sign = jest.fn().mockReturnValue(token);
       const result = await request
-        .post("/user/create")
+        .post("/api/user/register")
         .set("Content-Type", "application/x-www-form-urlencoded")
         .send(query);
+      expect(sgMail.send).toHaveBeenCalledWith({
+        to: "fake@gmail.com",
+        from: "adambarth611@gmail.com",
+        subject: "Join Flack",
+        html: `Click here to confirm email <a href=http://127.0.0.1:${
+          server.address().port
+        }/api/user/confirmation/${token}>http://127.0.0.1:${
+          server.address().port
+        }/api/user/confirmation/${token}</a>`,
+      });
       expect(result.status).toBe(200);
-      const data = JSON.parse(result.text);
-      token = data.jwt;
-      expect(data.user).toEqual("fakeUser");
+    });
+    it("should confirm user after email", async () => {
+      const result = await request
+        .get(`/api/user/confirmation/${token}`)
+        .set("Content-Type", "application/x-www-form-urlencoded");
+      expect(result.status).toBe(200);
     });
   });
-  describe("delete route working properly", () => {
-    it("properly deletes fake user", async () => {
+  describe("Login works successfully", () => {
+    it("should send jwt token when login successful", async () => {
+      const query = { email: "fake@gmail.com", password: "fakePassword" };
+      jwt.sign = jest.fn().mockReturnValue(userToken);
       const result = await request
-        .del("/user/delete")
-        .set("authorization", `Bearer ${token}`);
-      expect(result.status).toBe(200);
-    });
-  });
-  describe("login route properly logs in user", () => {
-    it("logs in given correct credentials", async () => {
-      const query = { username: "eric", password: "a" };
-      const result = await request
-        .post("/user/login")
+        .post("/api/user/login")
         .set("Content-Type", "application/x-www-form-urlencoded")
         .send(query);
       expect(result.status).toBe(200);
-      const data = JSON.parse(result.text);
-      expect(data.user).toEqual("eric");
+      expect(result.body.token).toEqual(userToken);
+      expect(result.body.user).toEqual({
+        email: "fake@gmail.com",
+        id: 1,
+        confirmed: 1,
+      });
     });
-    it("rejects login given incorrect username and password", async () => {
-      const query = { username: "fake", password: "fakePassword" };
+    it("should send a 404 when login credentials are incorrect", async () => {
+      const query = { email: "fake1@gmail.com", password: "fakePassword" };
       const result = await request
-        .post("/user/login")
-        .set("Content-type", "application/x-www-form-urlencoded")
-        .send(query);
-      expect(result.status).toBe(400);
-      expect(result.text).toEqual("No user exists");
-    });
-    it("rejects login given correct username and incorrect password", async () => {
-      const query = { username: "eric", password: "fakePassword" };
-      const result = await request
-        .post("/user/login")
+        .post("/api/user/login")
         .set("Content-Type", "application/x-www-form-urlencoded")
         .send(query);
-      expect(result.status).toBe(400);
-      expect(result.text).toEqual("Username or Password is incorrect");
+      expect(result.status).toBe(404);
     });
   });
 });

@@ -63,13 +63,11 @@ exports.register = async (req, res) => {
         await trx.commit();
         return res.status(200).send("User has been sent a confirmation email");
       } catch (err) {
-        console.log(err);
         await trx.rollback();
         return res.status(500).send(err);
       }
     });
   } catch (err) {
-    console.log(err);
     return res.status(500).send(err);
   }
 };

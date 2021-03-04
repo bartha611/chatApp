@@ -2,18 +2,32 @@
 require("dotenv").config();
 
 module.exports = {
-  client: "pg",
-  connection: {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    database: process.env.DB_DATABASE,
-    port: process.env.DB_POST,
-    password: process.env.DB_PASSWORD,
+  production: {
+    client: "pg",
+    connection: {
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      database: process.env.DB_DATABASE,
+      port: process.env.DB_POST,
+      password: process.env.DB_PASSWORD,
+    },
+    migrations: {
+      directory: "./database/migrations",
+    },
+    seeds: {
+      directory: "./database/seeds",
+    },
   },
-  migrations: {
-    directory: "./database/migrations",
-  },
-  seeds: {
-    directory: "./database/seeds",
+  development: {
+    client: "sqlite3",
+    connection: {
+      filename: "./dev.sqlite3",
+    },
+    migrations: {
+      directory: "./database/migrations",
+    },
+    seeds: {
+      directory: "./database/seeds",
+    },
   },
 };

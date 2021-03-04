@@ -73,7 +73,7 @@ function Dashboard() {
             />
           </div>
           <div
-            className="flex flex-col sm:w-dashboard w-full pl-4"
+            className="flex flex-col sm:w-dashboard w-full px-4"
             id="dashboard"
           >
             <BoardNavigation
