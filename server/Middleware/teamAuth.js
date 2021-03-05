@@ -30,7 +30,6 @@ const teamAuth = async (req, res, next) => {
     }
     return res.status(403).send("Not authorized");
   } catch (error) {
-    console.log(error);
     return res.status(500).send(error);
   }
 };

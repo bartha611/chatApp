@@ -4,52 +4,50 @@ const db = require("../utils/db");
 exports.create = async (req, res) => {
   const { id: administrator, email } = req.user;
   const { name } = req.body;
-  try {
-    return db.transaction(async (trx) => {
-      try {
-        const team = await trx("teams")
-          .insert({
-            name,
-            administrator,
-            shortid: nanoid(14),
-          })
-          .returning("*")
-          .then((row) => row[0]);
-        const profile = await trx("profiles")
-          .insert({
-            teamId: team.id,
-            userId: administrator,
-            fullName: email.split("@")[0],
-            confirmed: true,
-            shortid: nanoid(14),
-          })
-          .returning("*")
-          .then((row) => row[0]);
-        const channel = await trx("channels")
-          .insert({
-            name: "random",
-            teamId: team.id,
-            description: "random channel",
-            shortid: nanoid(14),
-          })
-          .returning("*")
-          .then((row) => row[0]);
-        await trx("messages")
-          .insert({
-            message: "Joined random",
-            channelId: channel.id,
-            profileId: profile.id,
-          })
-          .returning("*")
-          .then((row) => row[0]);
-        return res.status(200).send({ team });
-      } catch (err) {
-        return res.status(500).send(err);
-      }
+  return db
+    .transaction(async (trx) => {
+      const id = await trx("teams")
+        .insert({
+          name,
+          administrator,
+          shortid: nanoid(14),
+        })
+        .returning("id")
+        .then((row) => row[0]);
+      const team = await trx("teams")
+        .select("*")
+        .where("id", id)
+        .then((row) => row[0]);
+      const profile = await trx("profiles")
+        .insert({
+          teamId: team.id,
+          userId: administrator,
+          fullName: email.split("@")[0],
+          confirmed: true,
+          shortid: nanoid(14),
+        })
+        .returning("id")
+        .then((row) => row[0]);
+      const channel = await trx("channels")
+        .insert({
+          name: "random",
+          teamId: team.id,
+          description: "random channel",
+          shortid: nanoid(14),
+        })
+        .returning("id")
+        .then((row) => row[0]);
+      await trx("messages").insert({
+        message: "Joined random",
+        channelId: channel,
+        profileId: profile,
+      });
+      return res.status(200).send({ team });
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).send(err);
     });
-  } catch (err) {
-    return res.status(500).send(err);
-  }
 };
 
 exports.list = async (req, res) => {
@@ -67,16 +65,18 @@ exports.list = async (req, res) => {
 };
 
 exports.delete = async (req, res) => {
-  const { teamId } = req.query;
+  const { teamId } = req.params;
   if (req.user.id !== req.team.administrator) {
+    console.log(`user not admin`);
     return res.status(403).send("Forbidden");
   }
   try {
     await db("teams")
-      .where({ teamId })
+      .where("shortid", teamId)
       .del();
     return res.status(200).send({ id: teamId });
   } catch (err) {
+    console.log(err);
     return res.status(500).send(err);
   }
 };

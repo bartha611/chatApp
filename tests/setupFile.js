@@ -1,5 +1,4 @@
-import { configure } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
-import "babel-polyfill";
+const db = require("../server/utils/db");
 
-configure({ adapter: new Adapter() });
+module.exports = () =>
+  db.migrate.latest().then(() => db.seed.run({ specific: "06_testSeeder.js" }));

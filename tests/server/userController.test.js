@@ -5,7 +5,11 @@ const http = require("http");
 const app = require("../../server/server");
 const db = require("../../server/utils/db");
 
-const token = jwt.sign({ id: 1 }, process.env.ACCESS_SECRET_TOKEN);
+const token = jwt.sign(
+  { email: "fake@gmail.com" },
+  process.env.ACCESS_SECRET_TOKEN
+);
+
 const userToken = jwt.sign(
   { email: "fake@gmail.com", id: 1 },
   process.env.ACCESS_SECRET_TOKEN
@@ -29,7 +33,6 @@ describe("user controller is working properly", () => {
     done();
   });
   afterAll(async (done) => {
-    await db.migrate.rollback();
     server.close();
     done();
   });
@@ -41,10 +44,7 @@ describe("user controller is working properly", () => {
       };
       sgMail.send = jest.fn();
       jwt.sign = jest.fn().mockReturnValue(token);
-      const result = await request
-        .post("/api/user/register")
-        .set("Content-Type", "application/x-www-form-urlencoded")
-        .send(query);
+      const result = await request.post("/api/user/register").send(query);
       expect(sgMail.send).toHaveBeenCalledWith({
         to: "fake@gmail.com",
         from: "adambarth611@gmail.com",
@@ -58,35 +58,43 @@ describe("user controller is working properly", () => {
       expect(result.status).toBe(200);
     });
     it("should confirm user after email", async () => {
-      const result = await request
-        .get(`/api/user/confirmation/${token}`)
-        .set("Content-Type", "application/x-www-form-urlencoded");
+      const result = await request.get(`/api/user/confirmation/${token}`);
       expect(result.status).toBe(200);
+    });
+    it("should prevent a different user from registering with same email", async () => {
+      const query = { email: "fake@gmail.com", password: "fakePassword1" };
+      const result = await request.post("/api/user/register").send(query);
+      expect(result.status).toBe(500);
     });
   });
-  describe("Login works successfully", () => {
-    it("should send jwt token when login successful", async () => {
-      const query = { email: "fake@gmail.com", password: "fakePassword" };
-      jwt.sign = jest.fn().mockReturnValue(userToken);
-      const result = await request
-        .post("/api/user/login")
-        .set("Content-Type", "application/x-www-form-urlencoded")
-        .send(query);
-      expect(result.status).toBe(200);
-      expect(result.body.token).toEqual(userToken);
-      expect(result.body.user).toEqual({
-        email: "fake@gmail.com",
-        id: 1,
-        confirmed: 1,
-      });
+  it("should send jwt token when login successful", async () => {
+    const query = { email: "fake@gmail.com", password: "fakePassword" };
+    jwt.sign = jest.fn().mockReturnValue(userToken);
+    const result = await request.post("/api/user/login").send(query);
+    expect(result.status).toBe(200);
+    expect(result.body.token).toEqual(userToken);
+    expect(result.body.user).toMatchObject({
+      email: "fake@gmail.com",
+      confirmed: 1,
     });
-    it("should send a 404 when login credentials are incorrect", async () => {
-      const query = { email: "fake1@gmail.com", password: "fakePassword" };
-      const result = await request
-        .post("/api/user/login")
-        .set("Content-Type", "application/x-www-form-urlencoded")
-        .send(query);
-      expect(result.status).toBe(404);
-    });
+    expect(result.body.teams).toMatchObject({});
+  });
+  it("should send a 404 when login credentials are incorrect", async () => {
+    const query = { email: "faker@gmail.com", password: "fakePassword" };
+    const result = await request
+      .post("/api/user/login")
+      .set("Content-Type", "application/x-www-form-urlencoded")
+      .send(query);
+    expect(result.status).toBe(404);
+  });
+  it("should send the correct user teams when user signs in", async () => {
+    const query = { email: "faker@gmail.com", password: "a" };
+    jwt.sign = jest.fn().mockReturnValue(userToken);
+    const result = await request.post("/api/user/login").send(query);
+    expect(result.status).toBe(200);
+    expect(result.body.token).toBe(userToken);
+    expect(result.body.teams).toEqual([
+      { name: "team1", shortid: "shortid1", id: 1 },
+    ]);
   });
 });

@@ -11,12 +11,17 @@ exports.create = async (req, res) => {
         channelId,
         profileId: req.profile.id,
       })
-      .returning("*")
+      .returning("id")
+      .then((row) => row[0]);
+    const newMessage = await db("messages")
+      .select("*")
+      .where("id", response)
+      .limit(1)
       .then((row) => row[0]);
     delete req.profile.id;
     return res
       .status(200)
-      .send({ message: MessageCollection({ ...response, ...req.profile }) });
+      .send({ message: MessageCollection({ ...newMessage, ...req.profile }) });
   } catch (err) {
     return res.status(500).send(err);
   }

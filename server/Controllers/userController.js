@@ -38,38 +38,26 @@ exports.login = async (req, res) => {
 
 exports.register = async (req, res) => {
   const { email, password } = req.body;
-  try {
-    return db.transaction(async (trx) => {
-      try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await trx("users")
-          .insert({ email, password: hashedPassword })
-          .returning(["email", "id"])
-          .then((row) => row[0]);
-        const token = jwt.sign(
-          { id: user.id },
-          process.env.ACCESS_SECRET_TOKEN
-        );
-        const confirmation = `${req.protocol}://${req.get(
-          "host"
-        )}/api/user/confirmation/${token}`;
-        const mailOptions = {
-          to: email,
-          from: process.env.EMAIL,
-          subject: "Join Flack",
-          html: `Click here to confirm email <a href=${confirmation}>${confirmation}</a>`,
-        };
-        await sgMail.send(mailOptions);
-        await trx.commit();
-        return res.status(200).send("User has been sent a confirmation email");
-      } catch (err) {
-        await trx.rollback();
-        return res.status(500).send(err);
-      }
+  return db
+    .transaction(async (trx) => {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      await trx("users").insert({ email, password: hashedPassword });
+      const token = jwt.sign({ email }, process.env.ACCESS_SECRET_TOKEN);
+      const confirmation = `${req.protocol}://${req.get(
+        "host"
+      )}/api/user/confirmation/${token}`;
+      const mailOptions = {
+        to: email,
+        from: process.env.EMAIL,
+        subject: "Join Flack",
+        html: `Click here to confirm email <a href=${confirmation}>${confirmation}</a>`,
+      };
+      await sgMail.send(mailOptions);
+      return res.status(200).send("User has been sent a confirmation email");
+    })
+    .catch((err) => {
+      return res.status(500).send(err);
     });
-  } catch (err) {
-    return res.status(500).send(err);
-  }
 };
 
 exports.list = async (req, res) => {
@@ -88,10 +76,10 @@ exports.list = async (req, res) => {
 exports.confirmation = async (req, res) => {
   const { token } = req.params;
   try {
-    const { id } = jwt.verify(token, process.env.ACCESS_SECRET_TOKEN);
+    const { email } = jwt.verify(token, process.env.ACCESS_SECRET_TOKEN);
     await db("users AS u")
       .update({ confirmed: true })
-      .where({ id });
+      .where({ email });
     return res.status(200).send("You have successfully registered");
   } catch (err) {
     return res.status(500).send(err);

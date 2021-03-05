@@ -3,9 +3,14 @@ const db = require("../utils/db");
 
 exports.create = async (req, res) => {
   const { name, description } = req.body;
-  const channel = await db("channels")
+  const id = await db("channels")
     .insert({ name, teamId: req.team.id, description, shortid: nanoid(14) })
-    .returning(["id", "name", "shortid", "description"])
+    .returning(id)
+    .then((row) => row[0]);
+  const channel = await db("channels")
+    .select(["id", "name", "shortid", "description"])
+    .where({ id })
+    .limit(1)
     .then((row) => row[0]);
   return res.status(200).send({ channel, team: req.team });
 };

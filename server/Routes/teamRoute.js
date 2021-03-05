@@ -6,7 +6,7 @@ const teamRouter = express.Router();
 const teamController = require("./../Controllers/teamController");
 
 teamRouter.post("/", userAuth, teamController.create);
-teamRouter.get("/", userAuth, teamAuth, teamController.list);
+teamRouter.get("/", userAuth, teamController.list);
 teamRouter.delete("/:teamId", userAuth, teamAuth, teamController.delete);
 teamRouter.get("/:teamId", userAuth, teamAuth, teamController.get);
 
