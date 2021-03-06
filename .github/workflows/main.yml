@@ -14,6 +14,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Setup node
         uses: actions/setup-node@v2
+        env:
+          ACCESS_SECRET_TOKEN: ${{ secrets.ACCESS_SECRET_TOKEN }}
         with:
           node-version: "15"
       - run: npm install
