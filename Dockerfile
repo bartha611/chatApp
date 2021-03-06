@@ -1,4 +1,4 @@
-FROM node:15
+FROM node:14
 RUN mkdir -p /usr/src/flack
 WORKDIR /usr/src/flack
 COPY package*.json ./

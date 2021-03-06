@@ -32,6 +32,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: SCP to DO
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: root
+          port: 22
+          key: ${{ secrets.SSHKEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          source: "*"
+          target: "Flack"
       - name: Deploy
         uses: appleboy/ssh-action@master
         with:
@@ -42,7 +52,6 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             cd Flack/
-            git pull
             npm install
             export NODE_ENV=production
             npm run build
