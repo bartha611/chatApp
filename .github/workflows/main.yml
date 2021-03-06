@@ -18,8 +18,12 @@ jobs:
           ACCESS_SECRET_TOKEN: ${{ secrets.ACCESS_SECRET_TOKEN }}
         with:
           node-version: "15"
-      - run: npm install
-      - run: npm test
+        run: npm ci
+      - name: Test
+        run: |
+          npm test
+        env:
+          ACCESS_SECRET_TOKEN: ${{ secrets.ACCESS_SECRET_TOKEN }}
 
   build:
     runs-on: ubuntu-latest
