@@ -39,6 +39,7 @@ jobs:
           username: root
           port: 22
           key: ${{ secrets.SSHKEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
           source: "*"
           target: "test"
           overwrite: true
@@ -49,6 +50,7 @@ jobs:
           username: root
           port: 22
           key: ${{ secrets.SSHKEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             cd Flack/
             export NODE_ENV=production
