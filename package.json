@@ -8,7 +8,7 @@
     "dev-client": "webpack serve --port 3000",
     "build": "NODE_ENV=production webpack",
     "start": "NODE_ENV=production node server/server.js",
-    "test": "jest --detectOpenHandles",
+    "test": "jest",
     "test:watch": "jest --watch",
     "up": "knex migrate:up",
     "down": "knex migrate:down",
