@@ -41,7 +41,7 @@ jobs:
           key: ${{ secrets.SSHKEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           source: "*"
-          target: "test"
+          target: "Flack"
           overwrite: true
       - name: Deploy
         uses: appleboy/ssh-action@master

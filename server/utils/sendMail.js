@@ -1,5 +1,3 @@
-const nodemailer = require("nodemailer");
-const sgTransport = require("nodemailer-sendgrid-transport");
 const sgMail = require("@sendgrid/mail");
 require("dotenv").config();
 
