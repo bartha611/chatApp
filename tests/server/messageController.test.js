@@ -43,5 +43,26 @@ describe("channel controller is working properly", () => {
         .send(query);
       expect(result.status).toBe(403);
     });
+    it("should get list of messages if authorized", async () => {
+      const user = { id: 1, email: "faker@gmail.com" };
+      const token = jwt.sign({ user }, process.env.ACCESS_SECRET_TOKEN);
+      const result = await request
+        .get("/api/channels/shortid5/messages")
+        .set("Authorization", `Bearer ${token}`);
+      expect(result.status).toBe(200);
+      expect(result.body.messages).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            message: "message 1",
+          }),
+          expect.objectContaining({
+            message: "message 2",
+          }),
+          expect.objectContaining({
+            message: "I hate testing",
+          }),
+        ])
+      );
+    });
   });
 });
