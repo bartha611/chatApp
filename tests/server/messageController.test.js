@@ -4,7 +4,7 @@ const http = require("http");
 const app = require("../../server/server");
 const db = require("../../server/utils/db");
 
-describe("channel controller is working properly", () => {
+describe("Message Controller", () => {
   let server;
   let request;
   beforeAll(async (done) => {
@@ -54,15 +54,19 @@ describe("channel controller is working properly", () => {
         expect.arrayContaining([
           expect.objectContaining({
             message: "message 1",
+            user: expect.objectContaining({ id: 1, fullName: "faker" }),
           }),
           expect.objectContaining({
             message: "message 2",
+            user: expect.objectContaining({ id: 1, fullName: "faker" }),
           }),
           expect.objectContaining({
             message: "I hate testing",
+            user: expect.objectContaining({ id: 1, fullName: "faker" }),
           }),
         ])
       );
+      expect(result.body.cursor).toBeNull();
     });
   });
 });

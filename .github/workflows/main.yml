@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/head/master'
 
     steps:
       - uses: actions/checkout@v2
@@ -23,7 +24,6 @@ jobs:
           target: "test"
           overwrite: true
       - name: Deploy
-        if: github.event_name == 'push' && github.ref == 'refs/head/master'
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -31,7 +31,7 @@ jobs:
           port: 22
           key: ${{ secrets.SSHKEY }}
           script: |
-            cd test/
+            cd Flack/
             export NODE_ENV=production
             npm install
             npm run build
