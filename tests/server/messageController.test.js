@@ -11,7 +11,6 @@ describe("Message Controller", () => {
     server = http.createServer(app);
     server.listen();
     request = supertest(server);
-    await db.migrate.latest();
     done();
   });
   afterAll(async (done) => {
