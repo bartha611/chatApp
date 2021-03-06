@@ -21,6 +21,8 @@ jobs:
         run: |
           touch .env
           echo ACCESS_SECRET_TOKEN=${{ secrets.ACCESS_SECRET_TOKEN }} >> .env
+          echo SENDGRID_API_KEY=${{ secrets.SENDGRID_API_KEY }} >> .env
+          echo EMAIL=${{ secrets.EMAIL }} >> .env
       - name: Test
         run: npm test
 
@@ -30,7 +32,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: SCP to digitalocean
+      - name: SCP to DO
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
