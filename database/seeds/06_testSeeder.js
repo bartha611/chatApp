@@ -62,13 +62,22 @@ exports.seed = async function(knex) {
       },
     ]);
 
+    // create 101 messages for channel 3 to test cursor
+    const messages = [];
+    for (let i = 0; i < 101; i++) {
+      messages.push({
+        message: `message ${i + 1}`,
+        channelId: 3,
+        profileId: 2,
+      });
+    }
+    await knex("messages").insert(messages);
+
     // create messages
     await knex("messages").insert([
       { message: "message 1", channelId: 1, profileId: 1 },
       { message: "message 2", channelId: 1, profileId: 1 },
       { message: "message 3", channelId: 2, profileId: 1 },
-      { message: "message 4", channelId: 3, profileId: 2 },
-      { message: "message 5", channelId: 3, profileId: 2 },
     ]);
   }
 };

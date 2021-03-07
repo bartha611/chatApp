@@ -20,7 +20,7 @@ const Chat = ({ messageEnd }) => {
   usePaginate();
 
   return (
-    <div className="overflow-y-scroll" id="chat" style={{ minHeight: "550px" }}>
+    <div className="overflow-y-scroll" id="chat" style={{ minHeight: "520px" }}>
       {messages.map((message, index) => {
         const divider =
           index === 0 ||

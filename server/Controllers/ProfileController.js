@@ -72,6 +72,7 @@ exports.photo = async (req, res) => {
     const { avatar } = await db("profiles")
       .select("avatar")
       .where("userId", req.user.id)
+      .andWhere("teamId", req.team.id)
       .first();
     if (avatar !== "https://flack611.s3.amazonaws.com/images/nightsky.jpg") {
       await s3
@@ -87,7 +88,7 @@ exports.photo = async (req, res) => {
         .promise();
     }
     const profile = await db("profiles")
-      .where({ userId: req.user.id })
+      .where({ userId: req.user.id, teamId: req.team.id })
       .update({ avatar: req.file.location })
       .returning("*")
       .then((row) => row[0]);

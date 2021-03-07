@@ -50,35 +50,12 @@ exports.read = async (req, res) => {
       .orderBy("m.id", "desc")
       .limit(51);
     const cursor = messages.length > 50 ? messages[50].id : null;
-    messages = messages.length > 50 ? messages.slice(0, 49) : messages;
+    messages = messages.length > 50 ? messages.slice(0, 50) : messages;
     return res.status(200).send({
       messages: messages.reverse().map((message) => MessageCollection(message)),
       channel: req.channel,
       cursor,
     });
-  } catch (err) {
-    return res.status(500).send(err);
-  }
-};
-
-exports.update = async (req, res) => {
-  const { message } = req.body;
-  try {
-    const response = await req.db("messages").update({ message }, ["*"]);
-    return res.status(200).send({ message: response });
-  } catch (err) {
-    return res.status(500).send(err);
-  }
-};
-
-exports.delete = async (req, res) => {
-  const { messageId: id } = req.query;
-  try {
-    await req
-      .db("messages")
-      .where({ id })
-      .del();
-    return res.status(200).send({ id });
   } catch (err) {
     return res.status(500).send(err);
   }

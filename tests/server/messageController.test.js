@@ -2,7 +2,6 @@ const supertest = require("supertest");
 const jwt = require("jsonwebtoken");
 const http = require("http");
 const app = require("../../server/server");
-const db = require("../../server/utils/db");
 
 describe("Message Controller", () => {
   let server;
@@ -66,6 +65,38 @@ describe("Message Controller", () => {
         ])
       );
       expect(result.body.cursor).toBeNull();
+      expect(result.body.channel).toMatchObject({
+        shortid: "shortid5",
+        name: "channel1",
+      });
+    });
+    it("should get 50 messages when channel has greater than 50 messages and no cursor is provided", async () => {
+      const user = { email: "faker1@gmail.com", id: 2 };
+      const token = jwt.sign({ user }, process.env.ACCESS_SECRET_TOKEN);
+      const result = await request
+        .get("/api/channels/shortid7/messages")
+        .set("Authorization", `Bearer ${token}`);
+      expect(result.status).toBe(200);
+      expect(result.body.cursor).toBe(51);
+      expect(result.body.messages.length).toBe(50);
+    });
+    it("should get paginate with messages when cursor is supplied", async () => {
+      const user = { email: "faker1@gmail.com", id: 2 };
+      const token = jwt.sign({ user }, process.env.ACCESS_SECRET_TOKEN);
+      const result = await request
+        .get("/api/channels/shortid7/messages?cursor=51")
+        .set("Authorization", `Bearer ${token}`);
+      expect(result.status).toBe(200);
+      expect(result.body.cursor).toBe(1);
+      expect(result.body.messages.length).toBe(50);
+    });
+    it("should not allow user to get list of messages if not authorized", async () => {
+      const user = { email: "faker1@gmail.com", id: 2 };
+      const token = jwt.sign({ user }, process.env.ACCESS_SECRET_TOKEN);
+      const result = await request
+        .get("/api/channels/shortid5/messages")
+        .set("Authorization", `Bearer ${token}`);
+      expect(result.status).toBe(403);
     });
   });
 });

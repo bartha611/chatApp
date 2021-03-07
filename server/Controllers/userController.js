@@ -32,6 +32,7 @@ exports.login = async (req, res) => {
     });
     return res.status(200).send({ user, token, teams });
   } catch (err) {
+    console.log(err);
     return res.status(500).json(err);
   }
 };
