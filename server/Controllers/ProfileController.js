@@ -26,14 +26,14 @@ exports.create = async (req, res) => {
     if (profile) {
       return res.status(403).send("Profile already exists");
     }
-    const { id } = await db("profiles AS p")
+    const id = await db("profiles AS p")
       .insert({
         userId: user.id,
         teamId: req.team.id,
         shortid: nanoid(14),
         fullName: email.split("@")[0],
       })
-      .returning("*")
+      .returning("id")
       .then((row) => row[0]);
     const confirmation = jwt.sign({ id }, process.env.ACCESS_SECRET_TOKEN);
     const url = `${req.protocol}://${req.get("host")}/api/teams/${

@@ -1,13 +1,16 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { useSelector } from "react-redux";
-import { Button } from "reactstrap";
+import { Button, Alert } from "reactstrap";
 import Navigation from "./Navigation";
 
 const Home = () => {
   const { user } = useSelector((state) => state.auth);
   const history = useHistory();
+  const location = useLocation();
+  console.log(location.state);
+  console.log(location);
   return (
     <div>
       <Helmet>
@@ -20,6 +23,12 @@ const Home = () => {
           Flack is a communication website configured to organize information in
           a more digestible format.
         </p>
+        {location.state && (
+          <Alert color="primary">
+            You have been sent a confirmation email. Check spam folder if it
+            does not appear inbox
+          </Alert>
+        )}
         {!user && (
           <div id="getStarted">
             <h4>Get Started Today!</h4>

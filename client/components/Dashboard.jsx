@@ -50,7 +50,6 @@ function Dashboard() {
       <div className="h-dashboard">
         <Helmet>
           <title>Dashboard</title>
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Helmet>
         <div className="flex flex-row h-full">
           {sidebarOpen && (

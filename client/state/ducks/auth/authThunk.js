@@ -14,7 +14,10 @@ const fetchAuth = (url, method, operation, data = null, history) => async (
       history.push("/");
     } else if (operation === "SIGNUP") {
       await api({ url, method, data });
-      history.push("/");
+      history.push({
+        pathname: "/",
+        state: { message: "A confirmation email has been sent" },
+      });
     } else if (operation === "UPDATE" || operation === "PHOTO") {
       const response = await api({
         url,
