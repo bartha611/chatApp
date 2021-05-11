@@ -18,7 +18,7 @@ const BoardNavigation = ({ setIsOpen, setSidebarOpen, sidebarOpen }) => {
           >
             <FontAwesomeIcon icon={faChevronLeft} size="lg" />
           </span>
-          <div className="d-flex flex-column w-50">
+          <div className="d-flex flex-column">
             <span className="block font-bold text-sm">
               # {currentChannel.name}
             </span>
