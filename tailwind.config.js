@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {
       height: (theme) => ({
-        dashboard: "92%",
+        dashboard: "calc(100% - 55px)",
       }),
       width: (theme) => ({
         dashboard: "calc(100% - 240px)",
