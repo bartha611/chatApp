@@ -5,7 +5,7 @@ exports.create = async (req, res) => {
   const { name, description } = req.body;
   const id = await db("channels")
     .insert({ name, teamId: req.team.id, description, shortid: nanoid(14) })
-    .returning(id)
+    .returning("id")
     .then((row) => row[0]);
   const channel = await db("channels")
     .select(["id", "name", "shortid", "description"])
