@@ -25,6 +25,14 @@ const Navigation = () => {
     dispatch(fetchAuth("/api/user/signup", "POST", "LOGOUT", null, history));
   };
 
+  const guestLogin = () => {
+    const data = {
+      email: "adambarth@gmail.com",
+      password: "a",
+    };
+    dispatch(fetchAuth("/api/user/login", "POST", "LOGIN", data, history));
+  };
+
   const isAuthenticated = () => {
     const token = localStorage.getItem("token");
     if (!token) return false;
@@ -51,6 +59,11 @@ const Navigation = () => {
             {!isAuth && (
               <NavItem className="cursor-pointer">
                 <NavLink href="/signup">SignUp</NavLink>
+              </NavItem>
+            )}
+            {!isAuth && (
+              <NavItem className="cursor-pointer">
+                <NavLink onClick={guestLogin}>Guest</NavLink>
               </NavItem>
             )}
             {isAuth && (
